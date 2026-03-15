@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  sku           String   @unique
+  name          String
+  description   String?
+  category      String?
+  brand         String?
+  imageUrl      String?
+  costPrice     Decimal
+  sellPrice     Decimal
+  minimumMargin Decimal
+  stockLevel    Int      @default(0)
+  orders        Order[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Order {
+  id              String   @id @default(uuid())
+  stripeSessionId String   @unique
+  productId       String
+  product         Product  @relation(fields: [productId], references: [id])
+  customerEmail   String
+  amountTotal     Decimal
+  status          String   @default("PENDING") // PENDING, PAID, DELIVERED, REFUNDED
+
+  // Compliance & Gamification Fields
+  bgbWiderrufOptIn Boolean @default(false)
+  dsgvoOptIn       Boolean @default(false)
+  isWinner         Boolean @default(false)
+  refundStatus     String? // INITIATED, COMPLETED, FAILED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ApprovalItem {
+  id         String   @id @default(uuid())
+  agentId    String   // e.g. "Nestor", "Denny"
+  riskClass  Int      // Must be 2 or 4
+  actionType String   // e.g. "PURCHASE_KEYS", "PUBLISH_WINNER"
+  payload    Json     // The action to execute
+  status     String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  approvedBy String?  // Human Admin ID
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+/// The "Murmel-Beutel": 10 slots, 1 is the winner.
+/// When all slots are drawn, a new bag is created.
+model ShuffleBag {
+  id            String   @id @default(uuid())
+  slots         Int[]    // e.g. [0,0,1,0,0,0,0,0,0,0] — 1 = winner
+  currentIndex  Int      @default(0) // next slot to draw
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}

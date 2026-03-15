@@ -1,0 +1,33 @@
+{
+  "name": "@repo/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "@repo/policy": "workspace:*",
+    "class-variance-authority": "^0.7",
+    "clsx": "^2",
+    "lucide-react": "^0.460",
+    "next": "^15",
+    "react": "^19",
+    "react-dom": "^19",
+    "stripe": "^20.4.1",
+    "tailwind-merge": "^2",
+    "tailwindcss-animate": "^1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
