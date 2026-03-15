@@ -110,24 +110,23 @@ export default function HomePage() {
             <div className="space-y-6">
               <div>
                 <p className="mb-1 font-semibold">
-                  🎲 Wie funktioniert die Erstattung genau?
+                  🎲 Wie funktioniert die Erstattung?
                 </p>
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Als Dankeschön an unsere Kunden erstatten wir freiwillig jeden 10. Kauf vollständig — 9 weiße und
-                  1 goldene. Jeder Kauf zieht eine Kugel. Wer die goldene
-                  zieht, bekommt den vollen Kaufpreis zurück. Wenn alle 10
-                  Kugeln gezogen sind, wird der Beutel neu gefüllt. So ist
-                  garantiert, dass exakt jeder 10. Kauf kostenlos ist.
+                  Wir erstatten freiwillig jeden 10. Kauf in unserem Shop —
+                  über alle Kunden hinweg. Die Auswahl ist zufällig und fair.
+                  Ob dein Kauf erstattet wird, erfährst du sofort. Der
+                  angezeigte Preis ist immer der tatsächliche Kaufpreis.
                 </p>
               </div>
               <div>
                 <p className="mb-1 font-semibold">
-                  🏆 Was passiert wenn ich eine Erstattung bekomme?
+                  🏆 Was passiert bei einer Erstattung?
                 </p>
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Du behältst dein Produkt! Die Erstattung ist eine freiwillige Kulanzleistung von
-                  uns — dein Key bleibt gültig und aktiv. Du bekommst also
-                  Software zum Nulltarif.
+                  Du behältst dein Produkt — der Key bleibt gültig und aktiv.
+                  Die Erstattung ist eine freiwillige Kulanzleistung und
+                  erfolgt automatisch auf dein Zahlungsmittel.
                 </p>
               </div>
               <div>
@@ -135,11 +134,23 @@ export default function HomePage() {
                   🔒 Ist das Glücksspiel?
                 </p>
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Nein. Du kaufst ein Produkt und erhältst es garantiert. Die
-                  Erstattung ist eine freiwillige Rückzahlung von uns — kein
-                  Einsatz, kein Risiko für dich. Und weil wir garantieren,
-                  dass jeder 10. Kauf erstattet wird, ist es keine Lotterie,
-                  sondern ein festes Versprechen.
+                  Nein. Du kaufst ein Produkt zum angegebenen Preis und
+                  erhältst es garantiert. Die Erstattung ist eine einseitige,
+                  freiwillige Kulanzleistung des Verkäufers — kein Einsatz,
+                  kein Risiko, kein Gewinnspiel.
+                </p>
+              </div>
+              <div>
+                <p className="mb-1 font-semibold">
+                  📊 Kann ich das überprüfen?
+                </p>
+                <p className="text-sm text-[var(--muted-foreground)]">
+                  Ja. Auf unserer{" "}
+                  <Link href="/transparenz" className="underline text-[var(--primary)]">
+                    Transparenz-Seite
+                  </Link>{" "}
+                  siehst du live, wie viele Käufe erstattet wurden — echte
+                  Zahlen, direkt aus unserem System.
                 </p>
               </div>
               <div>
