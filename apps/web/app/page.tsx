@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WinnerTicker } from "./(shop)/products/winner-ticker";
 
 export default function HomePage() {
   return (
@@ -55,6 +56,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Winner Ticker — Social Proof */}
+      <WinnerTicker />
 
       {/* How it works */}
       <section id="so-funktionierts" className="scroll-mt-8 border-t border-b px-6 py-20">

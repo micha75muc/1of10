@@ -36,6 +36,12 @@ export default function ShopLayout({
               Produkte
             </Link>
             <Link
+              href="/blog"
+              className="text-sm font-medium hover:text-[var(--primary)] transition"
+            >
+              Ratgeber
+            </Link>
+            <Link
               href="/products"
               className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
             >

@@ -2,9 +2,39 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "1of10 — Software Licenses",
+  title: {
+    default: "1of10 — Wir erstatten jeden 10. Kauf",
+    template: "%s | 1of10",
+  },
   description:
-    "Buy software licenses with a 10% chance of a full refund. Gamified E-Commerce.",
+    "Digitale Produkte kaufen — Software, Tools, Plugins. Als freiwillige Kulanzleistung erstatten wir jeden 10. Kauf vollständig. Sofortige Lieferung per E-Mail.",
+  keywords: [
+    "Software kaufen",
+    "digitale Produkte",
+    "Erstattung",
+    "1of10",
+    "Plugins kaufen",
+    "Antivirus kaufen",
+    "VPN kaufen",
+  ],
+  openGraph: {
+    title: "1of10 — Wir erstatten jeden 10. Kauf",
+    description:
+      "Digitale Produkte kaufen. Wir erstatten freiwillig jeden 10. Kauf vollständig — dein Produkt behältst du.",
+    type: "website",
+    locale: "de_DE",
+    siteName: "1of10",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "1of10 — Wir erstatten jeden 10. Kauf",
+    description:
+      "Digitale Produkte kaufen. Wir erstatten freiwillig jeden 10. Kauf.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
