@@ -138,10 +138,27 @@ export default function DatenschutzPage() {
 
       <section>
         <h2 className="mb-3 text-xl font-semibold">10. Cookies</h2>
-        <p>
+        <p className="mb-3">
           Wir verwenden ausschließlich technisch notwendige Cookies, die für den
           Betrieb des Online-Shops erforderlich sind. Es findet kein Tracking
-          statt.
+          statt. Ein Cookie-Banner ist daher nicht erforderlich (TTDSG §25
+          Abs.&nbsp;2).
+        </p>
+        <p>
+          Bei der Zahlungsabwicklung über Stripe können technisch notwendige
+          Cookies von Stripe gesetzt werden. Diese dienen ausschließlich der
+          Betrugsprävention und Zahlungsabwicklung und erfordern keine
+          gesonderte Einwilligung (TTDSG §25 Abs.&nbsp;2). Weitere
+          Informationen finden Sie in der{" "}
+          <a
+            href="https://stripe.com/de/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-[var(--primary)]"
+          >
+            Datenschutzerklärung von Stripe
+          </a>
+          .
         </p>
       </section>
     </div>
