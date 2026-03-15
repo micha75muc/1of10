@@ -6,13 +6,13 @@ export default function DatenschutzPage() {
       <section>
         <h2 className="mb-3 text-xl font-semibold">1. Verantwortlicher</h2>
         <p>
-          [Firmenname]
+          Michael Hahnel
           <br />
-          [Straße Nr.]
+          Nederlinger Str. 83
           <br />
-          [PLZ Ort]
+          80638 München
           <br />
-          E-Mail: [email@example.de]
+          E-Mail: info@medialess.de
         </p>
       </section>
 
@@ -115,7 +115,7 @@ export default function DatenschutzPage() {
           <li>Widerspruchsrecht (Art.&nbsp;21 DSGVO)</li>
         </ul>
         <p className="mt-3">
-          Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: [email@example.de]
+          Zur Ausübung Ihrer Rechte wenden Sie sich bitte an: info@medialess.de
         </p>
       </section>
 

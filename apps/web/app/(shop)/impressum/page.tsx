@@ -5,12 +5,12 @@ export default function ImpressumPage() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-semibold">Angaben gemäß DDG §5</h2>
-        <p className="mb-1">[Firmenname]</p>
-        <p className="mb-1">Vertreten durch: [Vorname Nachname]</p>
-        <p className="mb-1">[Straße Nr.]</p>
-        <p className="mb-4">[PLZ Ort]</p>
+        <p className="mb-1">Michael Hahnel</p>
+        <p className="mb-1">Vertreten durch: Michael Hahnel</p>
+        <p className="mb-1">Nederlinger Str. 83</p>
+        <p className="mb-4">80638 München</p>
         <p className="mb-1">
-          Handelsregister: [Registergericht], [HRB-Nummer]
+          Einzelunternehmen — kein Handelsregistereintrag
         </p>
         <p className="mb-1 text-sm text-[var(--muted-foreground)]">
           Kleinunternehmer gem. §19 UStG — es wird keine Umsatzsteuer
@@ -20,17 +20,17 @@ export default function ImpressumPage() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-semibold">Kontakt</h2>
-        <p className="mb-1">E-Mail: [email@example.de]</p>
-        <p className="mb-1">Telefon: [+49 000 0000000]</p>
+        <p className="mb-1">E-Mail: info@medialess.de</p>
+        <p className="mb-1">Telefon: 0152 25389619</p>
       </section>
 
       <section className="mb-8">
         <h2 className="mb-3 text-xl font-semibold">
           Verantwortlich für den Inhalt nach §18 Abs. 2 MStV
         </h2>
-        <p className="mb-1">[Vorname Nachname]</p>
-        <p className="mb-1">[Straße Nr.]</p>
-        <p className="mb-1">[PLZ Ort]</p>
+        <p className="mb-1">Michael Hahnel</p>
+        <p className="mb-1">Nederlinger Str. 83</p>
+        <p className="mb-1">80638 München</p>
       </section>
 
       <section className="mb-8">

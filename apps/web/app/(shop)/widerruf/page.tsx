@@ -11,8 +11,8 @@ export default function WiderrufPage() {
           ab dem Tag des Vertragsabschlusses.
         </p>
         <p className="mb-3">
-          Um Ihr Widerrufsrecht auszuüben, müssen Sie uns ([Firmenname],
-          [Straße Nr.], [PLZ Ort], E-Mail: [email@example.de]) mittels einer
+          Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Michael Hahnel,
+          Nederlinger Str. 83, 80638 München, E-Mail: info@medialess.de) mittels einer
           eindeutigen Erklärung (z.&nbsp;B. ein mit der Post versandter Brief
           oder eine E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen,
           informieren.
@@ -73,7 +73,7 @@ export default function WiderrufPage() {
         </p>
         <div className="rounded-lg border p-6 space-y-3">
           <p>
-            An: [Firmenname], [Straße Nr.], [PLZ Ort], [email@example.de]
+            An: Michael Hahnel, Nederlinger Str. 83, 80638 München, info@medialess.de
           </p>
           <p>
             Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*)
