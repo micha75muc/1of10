@@ -12,17 +12,11 @@ type BrandStyle = {
 };
 
 const BRAND_STYLES: Record<string, BrandStyle> = {
-  Microsoft: {
-    gradient: "from-blue-600 to-blue-800",
-    icon: "⊞",
+  NordVPN: {
+    gradient: "from-blue-700 to-indigo-900",
+    icon: "N",
     textColor: "text-blue-400",
-    label: "Microsoft",
-  },
-  Adobe: {
-    gradient: "from-red-600 to-red-900",
-    icon: "Cc",
-    textColor: "text-red-400",
-    label: "Adobe",
+    label: "NordVPN",
   },
   Norton: {
     gradient: "from-yellow-500 to-yellow-700",
@@ -30,30 +24,69 @@ const BRAND_STYLES: Record<string, BrandStyle> = {
     textColor: "text-yellow-400",
     label: "Norton",
   },
+  Bitdefender: {
+    gradient: "from-red-600 to-red-900",
+    icon: "B",
+    textColor: "text-red-400",
+    label: "Bitdefender",
+  },
   Kaspersky: {
     gradient: "from-emerald-500 to-emerald-800",
     icon: "K",
     textColor: "text-emerald-400",
     label: "Kaspersky",
   },
+  McAfee: {
+    gradient: "from-red-500 to-red-800",
+    icon: "M",
+    textColor: "text-red-400",
+    label: "McAfee",
+  },
+  Acronis: {
+    gradient: "from-blue-500 to-blue-800",
+    icon: "A",
+    textColor: "text-blue-400",
+    label: "Acronis",
+  },
+  AOMEI: {
+    gradient: "from-sky-500 to-sky-800",
+    icon: "AO",
+    textColor: "text-sky-400",
+    label: "AOMEI",
+  },
+  Serif: {
+    gradient: "from-purple-600 to-purple-900",
+    icon: "Af",
+    textColor: "text-purple-400",
+    label: "Affinity",
+  },
+  Nitro: {
+    gradient: "from-orange-500 to-orange-800",
+    icon: "N",
+    textColor: "text-orange-400",
+    label: "Nitro",
+  },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  Betriebssystem: "🪟 Betriebssystem",
-  "Office & Produktivität": "📊 Office",
-  "Kreativ-Software": "🎨 Kreativ",
+  VPN: "🔒 VPN",
   Sicherheit: "🛡️ Sicherheit",
-  Server: "🖥️ Server",
+  "Backup & Utility": "💾 Backup",
+  "Kreativ-Software": "🎨 Kreativ",
+  Produktivität: "📊 Produktivität",
 };
 
 function getProductIcon(name: string, brand: string | null): string {
-  if (name.includes("Windows 11")) return "⊞ 11";
-  if (name.includes("Windows Server")) return "⊞ SRV";
-  if (name.includes("365")) return "365";
-  if (name.includes("Office 2024")) return "⊞ 24";
-  if (name.includes("Adobe")) return "Cc";
-  if (name.includes("Norton")) return "N";
+  if (name.includes("NordVPN")) return "N";
+  if (name.includes("Norton")) return "🛡";
+  if (name.includes("Bitdefender")) return "B";
   if (name.includes("Kaspersky")) return "K";
+  if (name.includes("McAfee")) return "M";
+  if (name.includes("Acronis")) return "A";
+  if (name.includes("AOMEI")) return "AO";
+  if (name.includes("Affinity Photo")) return "Ap";
+  if (name.includes("Affinity Designer")) return "Ad";
+  if (name.includes("Nitro")) return "N";
   return brand?.charAt(0) ?? "?";
 }
 
