@@ -7,18 +7,18 @@ export default function HomePage() {
       <section className="relative flex flex-col items-center justify-center px-6 py-24 text-center">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--gold)] bg-[var(--gold)]/10 px-4 py-1.5 text-sm text-[var(--gold)]">
           <span>🏆</span>
-          <span className="font-semibold">Jeder 10. Kauf ist kostenlos</span>
+          <span className="font-semibold">Wir erstatten jeden 10. Kauf</span>
         </div>
         <h1 className="mb-6 text-5xl font-extrabold tracking-tight sm:text-7xl">
           Digitale Produkte.
           <br />
-          <span className="text-[var(--primary)]">Jeder 10. Kauf kostenlos.</span>
+          <span className="text-[var(--primary)]">Wir erstatten jeden 10. Kauf.</span>
         </h1>
         <p className="mb-10 max-w-xl text-lg text-[var(--muted-foreground)]">
           Software, Games, Guthaben &amp; mehr —{" "}
           <span className="font-semibold text-[var(--foreground)]">sofort per E-Mail</span>.
-          Bei jeder Bestellung hast du die Chance, dass dein Kauf komplett
-          erstattet wird — die Lizenz behältst du in jedem Fall.
+          Bei jeder Bestellung hast du die Möglichkeit, dass dein Kauf vollständig
+          erstattet wird — Dein Produkt behältst du in jedem Fall.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Link
@@ -51,7 +51,7 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[var(--gold)] text-lg">🎲</span>
-            <span>10 % Erstattungschance</span>
+            <span>Freiwillige Erstattung jeden 10. Kaufs</span>
           </div>
         </div>
       </section>
@@ -90,10 +90,10 @@ export default function HomePage() {
             <div className="rounded-xl bg-[var(--card)] border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-8 text-center">
               <div className="mb-2 text-5xl">🎉</div>
               <div className="mb-3 inline-block rounded-full bg-[var(--gold)]/15 px-3 py-1 text-xs font-bold text-[var(--gold)]">Schritt 3</div>
-              <h3 className="mb-2 text-lg font-semibold">Erstattungschance!</h3>
+              <h3 className="mb-2 text-lg font-semibold">Erstattung!</h3>
               <p className="text-sm text-[var(--muted-foreground)]">
-                Direkt nach dem Kauf erfährst du, ob du der Glückliche bist.
-                Wir garantieren: Jeder 10. Kauf wird komplett erstattet!
+                Direkt nach dem Kauf erfährst du, ob dein Kauf erstattet wird.
+                Wir erstatten freiwillig jeden 10. Kauf vollständig.
               </p>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function HomePage() {
                   🎲 Wie funktioniert die Erstattung genau?
                 </p>
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Stell dir einen Beutel mit 10 Kugeln vor — 9 weiße und
+                  Als Dankeschön an unsere Kunden erstatten wir freiwillig jeden 10. Kauf vollständig — 9 weiße und
                   1 goldene. Jeder Kauf zieht eine Kugel. Wer die goldene
                   zieht, bekommt den vollen Kaufpreis zurück. Wenn alle 10
                   Kugeln gezogen sind, wird der Beutel neu gefüllt. So ist
@@ -121,7 +121,7 @@ export default function HomePage() {
                   🏆 Was passiert wenn ich eine Erstattung bekomme?
                 </p>
                 <p className="text-sm text-[var(--muted-foreground)]">
-                  Du behältst dein Produkt! Die Erstattung ist ein Geschenk von
+                  Du behältst dein Produkt! Die Erstattung ist eine freiwillige Kulanzleistung von
                   uns — dein Key bleibt gültig und aktiv. Du bekommst also
                   Software zum Nulltarif.
                 </p>

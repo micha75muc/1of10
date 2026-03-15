@@ -76,7 +76,7 @@ export default function DatenschutzPage() {
           5. Kaufpreiserstattung (Gamified Refund)
         </h2>
         <p>
-          Exakt jeder 10. Kauf wird automatisch erstattet. Die Ermittlung
+          Der Anbieter gewährt als freiwillige Kulanzleistung die Erstattung jedes 10. Kaufs. Die Ermittlung
           erfolgt über ein faires Zufallsverfahren (nicht KI-gesteuert), bei dem
           die Position der Erstattung innerhalb einer Gruppe von 10 Käufen
           zufällig bestimmt wird. Es handelt sich nicht um eine automatisierte

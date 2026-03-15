@@ -142,7 +142,7 @@ export default function CheckoutForm({
 
       <div className="rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-4 text-center">
         <p className="text-sm font-semibold text-[var(--gold)]">
-          🎲 10 % Chance auf volle Erstattung!
+          🎲 Kulanz: Wir erstatten jeden 10. Kauf.
         </p>
         <p className="text-xs text-[var(--muted-foreground)]">
           Du behältst die Lizenz in jedem Fall.

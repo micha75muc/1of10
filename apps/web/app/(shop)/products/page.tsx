@@ -44,7 +44,7 @@ export default async function ProductsPage() {
           </div>
           <div>
             <p className="font-bold text-[var(--gold)]">
-              Garantiert: Jeder 10. Kauf ist kostenlos!
+              Garantiert: Wir erstatten jeden 10. Kauf!
             </p>
             <p className="text-sm text-[var(--muted-foreground)]">
               Nicht &ldquo;vielleicht&rdquo; oder &ldquo;mit etwas Glück&rdquo; —

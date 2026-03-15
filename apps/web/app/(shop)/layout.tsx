@@ -10,10 +10,10 @@ export default function ShopLayout({
       {/* Gamification Banner */}
       <div className="bg-[var(--gold)]/10 border-b border-[var(--gold)]/20 px-4 py-2 text-center text-sm">
         <span className="text-[var(--gold)] font-semibold">
-          🏆 Jeder 10. Kauf ist kostenlos
+          🏆 Wir erstatten jeden 10. Kauf
         </span>
         <span className="text-[var(--muted-foreground)]">
-          {" "}— 10 % Chance auf volle Kaufpreiserstattung!
+          {" "}— freiwillige Kulanzleistung für unsere Kunden
         </span>
       </div>
 

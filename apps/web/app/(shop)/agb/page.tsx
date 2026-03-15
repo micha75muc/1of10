@@ -61,10 +61,10 @@ export default function AGBPage() {
 
       <section>
         <h2 className="mb-3 text-xl font-semibold">
-          §5 Kaufpreiserstattung (Gamified Refund)
+          §5 Freiwillige Kaufpreiserstattung (Kulanz)
         </h2>
         <p className="mb-3">
-          Der Anbieter garantiert, dass exakt jeder 10. Kauf vollständig
+          Der Anbieter gewährt als einseitige, freiwillige Kulanzleistung ohne Rechtsanspruch die vollständige Erstattung jedes 10. Kaufs. Exakt jeder 10. Kauf wird
           erstattet wird. Die Ermittlung erfolgt über ein faires, nicht
           manipulierbares Verfahren: Jeweils 10 aufeinanderfolgende Käufe bilden
           eine Gruppe, in der genau ein Kauf für die Erstattung vorgesehen ist.
