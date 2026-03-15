@@ -1,22 +1,23 @@
-import { randomInt } from "crypto";
+import { randomInt, createHash } from "crypto";
 import { prisma } from "@repo/db";
 
-const BAG_SIZE = 10;
+const BAG_SIZE_MIN = 7;
+const BAG_SIZE_MAX = 13;
 const WINNERS_PER_BAG = 1;
 
 /**
- * Shuffle Bag ("Murmel-Beutel") — garantiert jeder 10. Kauf eine Erstattung.
+ * Shuffle Bag ("Murmel-Beutel") — erstattet ca. jeden 10. Kauf.
  *
  * Funktionsprinzip:
- * 1. Ein Beutel enthält 10 Lose: 1× Gewinner, 9× normal
- * 2. Die Position des Gewinners ist zufällig (kryptografisch sicher)
- * 3. Jeder Kauf zieht das nächste Los
- * 4. Wenn der Beutel leer ist, wird ein neuer erstellt
+ * 1. Ein Beutel enthält 7-13 Lose (variabel, Durchschnitt 10): 1× Erstattung, Rest normal
+ * 2. Die Position ist zufällig (kryptografisch sicher)
+ * 3. Variable Größe verhindert, dass Bots den Erstattungs-Slot vorhersagen
+ * 4. SHA-256 Hash bei Erstellung für Audit-Trail (Provably Fair)
  */
 
 function createShuffledSlots(): number[] {
-  // 10 slots: WINNERS_PER_BAG × 1 (winner), rest × 0 (normal)
-  const slots = Array(BAG_SIZE).fill(0);
+  const bagSize = randomInt(BAG_SIZE_MIN, BAG_SIZE_MAX + 1);
+  const slots = Array(bagSize).fill(0);
   for (let i = 0; i < WINNERS_PER_BAG; i++) {
     slots[i] = 1;
   }
@@ -30,6 +31,10 @@ function createShuffledSlots(): number[] {
   return slots;
 }
 
+function hashSlots(slots: number[]): string {
+  return createHash("sha256").update(JSON.stringify(slots)).digest("hex");
+}
+
 /**
  * Draw from the shuffle bag. Returns true if this purchase gets a refund.
  * Thread-safe via database transaction.
@@ -41,13 +46,15 @@ export async function drawFromShuffleBag(): Promise<boolean> {
       where: { isActive: true },
     });
 
-    // No active bag → create one
+    // No active bag → create one with hash
     if (!bag) {
+      const slots = createShuffledSlots();
       bag = await tx.shuffleBag.create({
         data: {
-          slots: createShuffledSlots(),
+          slots,
           currentIndex: 0,
           isActive: true,
+          slotsHash: hashSlots(slots),
         },
       });
     }
@@ -56,7 +63,7 @@ export async function drawFromShuffleBag(): Promise<boolean> {
     const isWinner = bag.slots[bag.currentIndex] === 1;
     const nextIndex = bag.currentIndex + 1;
 
-    if (nextIndex >= BAG_SIZE) {
+    if (nextIndex >= bag.slots.length) {
       // Bag is exhausted → mark as inactive, a new one will be created next time
       await tx.shuffleBag.update({
         where: { id: bag.id },

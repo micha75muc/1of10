@@ -55,12 +55,13 @@ model ApprovalItem {
   updatedAt  DateTime @updatedAt
 }
 
-/// The "Murmel-Beutel": 10 slots, 1 is the winner.
-/// When all slots are drawn, a new bag is created.
+/// The "Murmel-Beutel": variable size (7-13), 1 is the winner.
+/// Hash is computed at creation for provably-fair audit trail.
 model ShuffleBag {
   id            String   @id @default(uuid())
   slots         Int[]    // e.g. [0,0,1,0,0,0,0,0,0,0] — 1 = winner
   currentIndex  Int      @default(0) // next slot to draw
   isActive      Boolean  @default(true)
+  slotsHash     String?  // SHA-256 hash of slots array, computed at creation
   createdAt     DateTime @default(now())
 }
