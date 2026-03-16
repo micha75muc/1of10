@@ -26,7 +26,7 @@ async function sendRealEmail(params: EmailParams) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "1of10 <noreply@1of10.de>",
+      from: process.env.RESEND_FROM_EMAIL ?? "1of10 <onboarding@resend.dev>",
       to: params.to,
       subject: params.subject,
       html: params.html,
