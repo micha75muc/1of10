@@ -48,7 +48,7 @@ export function orderConfirmationEmail(order: {
   amountTotal: number;
   isWinner: boolean;
 }) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10-deploy.vercel.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
   const shareText = encodeURIComponent(
     `Gerade ${order.productName} bei 1of10 gekauft und den vollen Kaufpreis zurückbekommen! Die erstatten wirklich jeden 10. Kauf. 🎉`
   );
