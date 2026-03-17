@@ -38,6 +38,10 @@ export const metadata: Metadata = {
   verification: {
     google: "6uEPS0Bxcp2Wz-_Uc3_dpqYBLU5mTEdlgiPS7eZkEzY",
   },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
