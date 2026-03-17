@@ -45,9 +45,23 @@ export function LogoIcon({ size = 32 }: { size?: number }) {
 }
 
 export function LogoFull({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+  const sizes = {
+    sm: { width: 150, height: 40 },
+    md: { width: 220, height: 58 },
+    lg: { width: 320, height: 85 },
+  };
+  const s = sizes[size];
+
   return (
-    <span className="inline-flex flex-col items-start">
-      <Logo size={size} />
+    <span className="inline-flex flex-col items-center">
+      <Image
+        src="/logo.png"
+        alt="1of10 — Wir erstatten jeden 10. Kauf"
+        width={s.width}
+        height={s.height}
+        priority
+        className="object-contain"
+      />
       {size === "lg" && (
         <span className="mt-2 text-xs tracking-widest text-[var(--muted-foreground)] uppercase">
           Wir erstatten jeden 10. Kauf
