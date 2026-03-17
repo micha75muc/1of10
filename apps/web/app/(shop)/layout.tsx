@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "../components/logo";
 
 export default function ShopLayout({
   children,
@@ -20,13 +21,8 @@ export default function ShopLayout({
       {/* Header */}
       <header className="border-b px-6 py-4">
         <nav className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-xl font-extrabold">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--primary)] text-sm font-black text-[var(--primary-foreground)]">
-              1
-            </span>
-            <span>
-              of<span className="text-[var(--primary)]">10</span>
-            </span>
+          <Link href="/" className="hover:opacity-90 transition">
+            <Logo size="md" />
           </Link>
           <div className="flex items-center gap-6">
             <Link
@@ -82,6 +78,9 @@ export default function ShopLayout({
           <p className="mt-3 text-center text-[10px] text-[var(--muted-foreground)]">
             Alle Preise sind Endpreise. Gem. §19 UStG wird keine Umsatzsteuer erhoben.
           </p>
+          <div className="mt-4 flex justify-center">
+            <Logo size="sm" />
+          </div>
           <p className="mt-2 text-center text-xs text-[var(--muted-foreground)]">
             © 2026 1of10 — Alle Rechte vorbehalten.
           </p>

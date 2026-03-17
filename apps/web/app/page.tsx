@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { WinnerTicker } from "./(shop)/products/winner-ticker";
+import { LogoFull } from "./components/logo";
 
 export default function HomePage() {
   return (
@@ -9,6 +10,9 @@ export default function HomePage() {
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--gold)] bg-[var(--gold)]/10 px-4 py-1.5 text-sm text-[var(--gold)]">
           <span>🏆</span>
           <span className="font-semibold">Wir erstatten jeden 10. Kauf</span>
+        </div>
+        <div className="mb-8">
+          <LogoFull size="lg" />
         </div>
         <h1 className="mb-6 text-5xl font-extrabold tracking-tight sm:text-7xl">
           Digitale Produkte.
