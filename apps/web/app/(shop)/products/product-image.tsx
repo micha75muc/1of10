@@ -12,11 +12,11 @@ type BrandStyle = {
 };
 
 const BRAND_STYLES: Record<string, BrandStyle> = {
-  NordVPN: {
-    gradient: "from-blue-700 to-indigo-900",
-    icon: "N",
-    textColor: "text-blue-400",
-    label: "NordVPN",
+  McAfee: {
+    gradient: "from-red-600 to-red-900",
+    icon: "M",
+    textColor: "text-red-400",
+    label: "McAfee",
   },
   Norton: {
     gradient: "from-yellow-500 to-yellow-700",
@@ -25,7 +25,7 @@ const BRAND_STYLES: Record<string, BrandStyle> = {
     label: "Norton",
   },
   Bitdefender: {
-    gradient: "from-red-600 to-red-900",
+    gradient: "from-red-500 to-rose-800",
     icon: "B",
     textColor: "text-red-400",
     label: "Bitdefender",
@@ -36,11 +36,17 @@ const BRAND_STYLES: Record<string, BrandStyle> = {
     textColor: "text-emerald-400",
     label: "Kaspersky",
   },
-  McAfee: {
-    gradient: "from-red-500 to-red-800",
-    icon: "M",
-    textColor: "text-red-400",
-    label: "McAfee",
+  AVG: {
+    gradient: "from-green-500 to-green-800",
+    icon: "AVG",
+    textColor: "text-green-400",
+    label: "AVG",
+  },
+  Avast: {
+    gradient: "from-orange-500 to-orange-800",
+    icon: "A",
+    textColor: "text-orange-400",
+    label: "Avast",
   },
   Acronis: {
     gradient: "from-blue-500 to-blue-800",
@@ -48,23 +54,11 @@ const BRAND_STYLES: Record<string, BrandStyle> = {
     textColor: "text-blue-400",
     label: "Acronis",
   },
-  AOMEI: {
-    gradient: "from-sky-500 to-sky-800",
-    icon: "AO",
-    textColor: "text-sky-400",
-    label: "AOMEI",
-  },
-  Serif: {
-    gradient: "from-purple-600 to-purple-900",
-    icon: "Af",
-    textColor: "text-purple-400",
-    label: "Affinity",
-  },
-  Nitro: {
-    gradient: "from-orange-500 to-orange-800",
-    icon: "N",
-    textColor: "text-orange-400",
-    label: "Nitro",
+  Panda: {
+    gradient: "from-cyan-500 to-cyan-800",
+    icon: "🐼",
+    textColor: "text-cyan-400",
+    label: "Panda",
   },
 };
 
