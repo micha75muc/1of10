@@ -1,0 +1,26 @@
+{
+  "safe_edit_paths": [
+    "packages/policy/src/mappings.ts",
+    "packages/policy/src/enforce.ts",
+    "packages/policy/src/risk-classes.ts"
+  ],
+  "forbidden_paths": [
+    ".env",
+    "*.lock",
+    "prisma/",
+    "app/api/webhooks/",
+    "app/api/checkout/",
+    "lib/stripe.ts",
+    "lib/shuffle-bag.ts",
+    "docker-compose.yml",
+    ".github/",
+    ".vercel/"
+  ],
+  "build_command": "cd apps/web && npx next build",
+  "typecheck_command": "cd apps/web && npx tsc --noEmit",
+  "smoke_test_command": "node autoresearch/smoke-test.mjs",
+  "timeout_seconds": 120,
+  "max_experiments": 10,
+  "branch_prefix": "autoresearch",
+  "dry_run": true
+}
