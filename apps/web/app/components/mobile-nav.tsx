@@ -1,0 +1,51 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+
+export function MobileNav() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="md:hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-[var(--secondary)] transition"
+        aria-label="Menü öffnen"
+      >
+        {open ? (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        ) : (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        )}
+      </button>
+
+      {open && (
+        <div className="absolute left-0 right-0 top-full z-50 border-b bg-[var(--background)] px-6 py-4 animate-slide-in">
+          <div className="flex flex-col gap-4">
+            <Link href="/products" onClick={() => setOpen(false)} className="text-sm font-medium hover:text-[var(--primary)] transition">
+              Produkte
+            </Link>
+            <Link href="/blog" onClick={() => setOpen(false)} className="text-sm font-medium hover:text-[var(--primary)] transition">
+              Ratgeber
+            </Link>
+            <Link href="/transparenz" onClick={() => setOpen(false)} className="text-sm font-medium hover:text-[var(--primary)] transition">
+              Transparenz
+            </Link>
+            <Link
+              href="/products"
+              onClick={() => setOpen(false)}
+              className="rounded-lg bg-[var(--primary)] px-4 py-2 text-center text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
+            >
+              Jetzt kaufen
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

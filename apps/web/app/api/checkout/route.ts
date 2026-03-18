@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { stripe } from "../../../lib/stripe";
+import { rateLimit } from "../../../lib/rate-limit";
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+    const { ok } = rateLimit(ip, { maxRequests: 5, windowMs: 60_000 });
+    if (!ok) {
+      return NextResponse.json({ error: "Zu viele Anfragen. Bitte warte kurz." }, { status: 429 });
+    }
+
     const body = await req.json();
     const { productId, customerEmail, dsgvoOptIn, bgbWiderrufOptIn } = body;
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "../components/logo";
+import { MobileNav } from "../components/mobile-nav";
 
 export default function ShopLayout({
   children,
@@ -19,12 +20,12 @@ export default function ShopLayout({
       </div>
 
       {/* Header */}
-      <header className="border-b px-6 py-4">
+      <header className="relative border-b px-6 py-4">
         <nav className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="hover:opacity-90 transition">
             <Logo size="md" />
           </Link>
-          <div className="flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6">
             <Link
               href="/products"
               className="text-sm font-medium hover:text-[var(--primary)] transition"
@@ -50,6 +51,7 @@ export default function ShopLayout({
               Jetzt kaufen
             </Link>
           </div>
+          <MobileNav />
         </nav>
       </header>
 

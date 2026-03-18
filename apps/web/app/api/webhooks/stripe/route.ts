@@ -3,30 +3,41 @@ import { prisma } from "@repo/db";
 import { stripe } from "../../../../lib/stripe";
 import { sendEmail, orderConfirmationEmail } from "../../../../lib/email";
 import { drawFromShuffleBag } from "../../../../lib/shuffle-bag";
+import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    // Verify Stripe webhook signature — prevents fake webhook calls
+    const rawBody = await req.text();
+    const sig = req.headers.get("stripe-signature");
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-    // In production with real Stripe, verify webhook signature here:
-    // const sig = req.headers.get("stripe-signature");
-    // const event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    if (!sig || !webhookSecret) {
+      console.error("[Webhook] Missing signature or webhook secret");
+      return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+    }
 
-    const event = body;
+    let event: Stripe.Event;
+    try {
+      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    } catch (err) {
+      console.error("[Webhook] Signature verification failed:", err);
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    }
 
     if (event.type !== "checkout.session.completed") {
       return NextResponse.json({ received: true });
     }
 
-    const session = event.data?.object ?? event;
+    const session = event.data.object as Stripe.Checkout.Session;
 
-    const sessionId = session.id ?? session.stripeSessionId;
+    const sessionId = session.id;
     const metadata = session.metadata ?? {};
-    const customerEmail = session.customer_email ?? session.customerEmail;
-    const amountTotal = session.amount_total ?? session.amountTotal;
+    const customerEmail = session.customer_email;
+    const amountTotal = session.amount_total;
     const productId = metadata.productId;
 
-    if (!sessionId || !productId || !customerEmail) {
+    if (!sessionId || !productId || !customerEmail || !amountTotal) {
       return NextResponse.json(
         { error: "Missing required session data" },
         { status: 400 }
@@ -66,12 +77,15 @@ export async function POST(req: NextRequest) {
     });
 
     // If winner → initiate refund
-    if (isWinner) {
+    if (isWinner && session.payment_intent) {
       try {
+        const paymentIntentId = typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : session.payment_intent.id;
         await stripe.refunds.create({
-          payment_intent: session.payment_intent,
-          amount: amountTotal,
-          metadata: { orderId: order.id, reason: "gamified_refund" },
+          payment_intent: paymentIntentId,
+          amount: amountTotal ?? undefined,
+          metadata: { orderId: order.id, reason: "kulanz_erstattung" },
         });
 
         await prisma.order.update({
