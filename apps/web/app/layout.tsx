@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     url: BASE_URL,
     locale: "de_DE",
     siteName: "1of10",
-    images: [{ url: `${BASE_URL}/logo.png`, width: 1200, height: 630, alt: "1of10 Logo" }],
+    images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: "1of10 — Wir erstatten jeden 10. Kauf" }],
   },
   twitter: {
     card: "summary_large_image",
