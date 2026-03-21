@@ -232,6 +232,23 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           ← Alle Produkte anzeigen
         </Link>
       </div>
+      {/* Gregor (Growth): Sticky Mobile CTA */}
+      {product.stockLevel > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-[var(--background)]/95 backdrop-blur p-3 md:hidden">
+          <div className="flex items-center justify-between gap-3 mx-auto max-w-lg">
+            <div className="min-w-0">
+              <p className="text-sm font-semibold truncate">{product.name}</p>
+              <p className="text-lg font-extrabold text-[var(--primary)]">{Number(product.sellPrice).toFixed(2)} €</p>
+            </div>
+            <Link
+              href={`/checkout?productId=${product.id}`}
+              className="shrink-0 rounded-lg bg-[var(--primary)] px-5 py-3 text-sm font-bold text-[var(--primary-foreground)] hover:opacity-90 transition"
+            >
+              Kaufen
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
