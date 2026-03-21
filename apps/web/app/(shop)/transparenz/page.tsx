@@ -101,6 +101,15 @@ export default async function TransparenzPage() {
         />
       </div>
 
+      {/* Bea (Gamification): Next refund teaser */}
+      {totalOrders > 0 && (
+        <div className="mb-10 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-6 text-center">
+          <p className="text-sm text-[var(--muted-foreground)]">Seit der letzten Erstattung:</p>
+          <p className="text-4xl font-extrabold text-[var(--gold)]">{totalOrders > 0 ? totalOrders - (totalWinners * 10) : 0} Käufe</p>
+          <p className="mt-1 text-sm text-[var(--muted-foreground)]">Statistisch kommt die nächste Erstattung bald!</p>
+        </div>
+      )}
+
       {/* How it works — ShuffleBag */}
       <div className="mb-10 rounded-xl border bg-[var(--card)] p-6">
         <h2 className="mb-4 text-xl font-semibold">

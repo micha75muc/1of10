@@ -80,6 +80,13 @@ export default function ShopLayout({
           <p className="mt-3 text-center text-[10px] text-[var(--muted-foreground)]">
             Alle Preise sind Endpreise. Gem. §19 UStG wird keine Umsatzsteuer erhoben.
           </p>
+          {/* Uwe (UI): Payment + Trust Badges */}
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs text-[var(--muted-foreground)]">
+            <span className="rounded border px-2 py-1">💳 Stripe Payments</span>
+            <span className="rounded border px-2 py-1">🔒 256-bit SSL</span>
+            <span className="rounded border px-2 py-1">🇩🇪 Deutscher Anbieter</span>
+            <span className="rounded border px-2 py-1">📧 Sofort-Lieferung</span>
+          </div>
           <div className="mt-4 flex justify-center">
             <Logo size="sm" />
           </div>
