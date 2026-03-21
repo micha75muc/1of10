@@ -249,7 +249,8 @@ describe("POST /api/webhooks/stripe", () => {
     const res = await POST(makeWebhookRequest("{}"));
     const json = await res.json();
 
-    expect(json).toHaveProperty("isWinner", true);
+    expect(json).toHaveProperty("orderId", "order-1");
+    expect(json).not.toHaveProperty("isWinner"); // Security: isWinner not exposed
     expect(mockRefundCreate).toHaveBeenCalledWith(
       expect.objectContaining({
         payment_intent: "pi_test_123",

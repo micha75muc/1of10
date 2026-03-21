@@ -216,15 +216,13 @@ describe("Admin Approvals API", () => {
       expect(json.error).toContain("actionType");
     });
 
-    it("sollte ohne Auth funktionieren (POST ist Agent-Endpunkt)", async () => {
-      // POST /approvals wird von Agenten aufgerufen und hat keinen Auth-Check
-      mockEnforcePolicy.mockResolvedValue({ allowed: true, riskClass: 1 });
-
+    it("sollte ohne Auth 401 zurückgeben (POST ist jetzt auch geschützt)", async () => {
+      // POST /approvals wurde in Iteration 1 (Sven Security) mit Auth abgesichert
       const res = await POST(
         makePostRequest({ agentId: "Martin", actionType: "QUERY_KNOWLEDGE_BASE" })
       );
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(401);
     });
   });
 

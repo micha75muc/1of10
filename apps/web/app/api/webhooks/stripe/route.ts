@@ -3,10 +3,18 @@ import { prisma } from "@repo/db";
 import { stripe } from "../../../../lib/stripe";
 import { sendEmail, orderConfirmationEmail } from "../../../../lib/email";
 import { drawFromShuffleBag } from "../../../../lib/shuffle-bag";
+import { rateLimit } from "../../../../lib/rate-limit";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit webhooks (Stripe retries are max 3/event, so 30/min is generous)
+    const ip = req.headers.get("x-forwarded-for") ?? "stripe";
+    const { ok } = rateLimit(ip, { maxRequests: 30, windowMs: 60_000 });
+    if (!ok) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     // Verify Stripe webhook signature — prevents fake webhook calls
     const rawBody = await req.text();
     const sig = req.headers.get("stripe-signature");
@@ -120,11 +128,7 @@ export async function POST(req: NextRequest) {
       `[Webhook] Order ${order.id} created. Winner: ${isWinner}`
     );
 
-    return NextResponse.json({
-      received: true,
-      orderId: order.id,
-      isWinner,
-    });
+    return NextResponse.json({ received: true, orderId: order.id });
   } catch (err) {
     console.error("[Webhook] Error:", err);
     return NextResponse.json(

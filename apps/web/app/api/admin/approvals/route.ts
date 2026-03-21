@@ -26,6 +26,10 @@ export async function GET(req: NextRequest) {
 
 // POST /api/admin/approvals — Create a new approval item (called by agents)
 export async function POST(req: NextRequest) {
+  if (!checkAdminAuth(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const { agentId, actionType, payload } = body;
