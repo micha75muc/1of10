@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { WinnerTicker } from "./(shop)/products/winner-ticker";
 import { LogoFull } from "./components/logo";
+import { NewsletterSignup } from "./components/newsletter-signup";
 
 export default function HomePage() {
   return (
@@ -63,6 +64,35 @@ export default function HomePage() {
 
       {/* Winner Ticker — Social Proof */}
       <WinnerTicker />
+
+      {/* Inge + Clara: Warum 1of10? — Emotional USP Section */}
+      <section className="border-t px-6 py-16">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-4 text-3xl font-bold">
+            Warum bei <span className="text-[var(--gold)]">1of10</span> kaufen?
+          </h2>
+          <p className="mb-10 text-[var(--muted-foreground)]">
+            Gleiche Software. Gleiche Preise. Aber nur bei uns bekommst du eine echte Chance, dass dein Kauf erstattet wird.
+          </p>
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div className="rounded-xl border bg-[var(--card)] p-6 text-left">
+              <div className="mb-3 text-3xl">🏷️</div>
+              <h3 className="mb-2 font-bold">Faire Preise</h3>
+              <p className="text-sm text-[var(--muted-foreground)]">Autorisierte Software vom deutschen Distributor. Keine Graumarkt-Keys, keine Risiken.</p>
+            </div>
+            <div className="rounded-xl border-2 border-[var(--gold)]/40 bg-[var(--gold)]/5 p-6 text-left">
+              <div className="mb-3 text-3xl">🎲</div>
+              <h3 className="mb-2 font-bold text-[var(--gold)]">Jeder 10. Kauf erstattet</h3>
+              <p className="text-sm text-[var(--muted-foreground)]">Freiwillige Kulanzleistung — du zahlst den normalen Preis, aber statistisch bekommst du bei jedem 10. Kauf alles zurück.</p>
+            </div>
+            <div className="rounded-xl border bg-[var(--card)] p-6 text-left">
+              <div className="mb-3 text-3xl">⚡</div>
+              <h3 className="mb-2 font-bold">Sofort-Lieferung</h3>
+              <p className="text-sm text-[var(--muted-foreground)]">Dein Lizenzschlüssel kommt direkt per E-Mail. Kein Warten, kein Postweg.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* How it works */}
       <section id="so-funktionierts" className="scroll-mt-8 border-t border-b px-6 py-20">
@@ -168,6 +198,13 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter Signup — Gregor (Growth): Lead Capture */}
+      <section className="px-6 py-12">
+        <div className="mx-auto max-w-md">
+          <NewsletterSignup />
         </div>
       </section>
 

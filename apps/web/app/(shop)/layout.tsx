@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "../components/logo";
 import { MobileNav } from "../components/mobile-nav";
+import { NewsletterSignup } from "../components/newsletter-signup";
 
 export default function ShopLayout({
   children,
@@ -70,6 +71,10 @@ export default function ShopLayout({
             <div className="flex items-center gap-1.5">
               <span className="text-[var(--primary)]">🔒</span> SSL &amp; DSGVO
             </div>
+          </div>
+          {/* Newsletter in Footer */}
+          <div className="mx-auto mt-6 max-w-sm">
+            <NewsletterSignup variant="footer" />
           </div>
           <nav aria-label="Rechtliche Informationen" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
             <Link href="/impressum" className="hover:underline">Impressum</Link>

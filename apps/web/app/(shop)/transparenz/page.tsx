@@ -90,16 +90,27 @@ export default async function TransparenzPage() {
         geschönt. Diese Seite aktualisiert sich mit jedem Kauf automatisch.
       </p>
 
-      {/* Stats Grid */}
-      <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Gesamte Käufe" value={totalOrders.toString()} />
-        <StatCard label="Davon erstattet" value={totalWinners.toString()} />
-        <StatCard label="Erstattungsquote" value={`${refundRate} %`} highlight />
-        <StatCard
-          label="Erstattet (Gesamt)"
-          value={`${totalRefunded.toFixed(2)} €`}
-        />
-      </div>
+      {/* Stats Grid — Bea: nur anzeigen wenn Käufe existieren, sonst "Coming Soon" */}
+      {totalOrders > 0 ? (
+        <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Gesamte Käufe" value={totalOrders.toString()} />
+          <StatCard label="Davon erstattet" value={totalWinners.toString()} />
+          <StatCard label="Erstattungsquote" value={`${refundRate} %`} highlight />
+          <StatCard
+            label="Erstattet (Gesamt)"
+            value={`${totalRefunded.toFixed(2)} €`}
+          />
+        </div>
+      ) : (
+        <div className="mb-10 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-8 text-center">
+          <div className="text-4xl mb-4">🚀</div>
+          <h2 className="text-xl font-bold text-[var(--gold)]">Wir sind fast live!</h2>
+          <p className="mt-2 text-[var(--muted-foreground)]">
+            Sobald die ersten Käufe eingehen, siehst du hier in Echtzeit wie viele Käufe erstattet wurden.
+            Jeder 10. Kauf wird garantiert erstattet — transparent und nachvollziehbar.
+          </p>
+        </div>
+      )}
 
       {/* Bea (Gamification): Next refund teaser */}
       {totalOrders > 0 && (
