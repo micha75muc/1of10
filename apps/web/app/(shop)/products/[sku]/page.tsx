@@ -60,7 +60,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     sku: product.sku,
     description:
       product.description ??
-      `${product.name} — Software-Lizenz bei 1of10 kaufen.`,
+      `${product.name} — Software bei 1of10 kaufen.`,
     brand: product.brand
       ? { "@type": "Brand", name: product.brand }
       : undefined,
@@ -178,7 +178,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <span className="text-2xl">🎲</span>
               <div>
                 <p className="font-bold text-[var(--gold)]">
-                  10% Chance auf volle Erstattung!
+                  10% Erstattungswahrscheinlichkeit!
                 </p>
                 <p className="text-xs text-[var(--muted-foreground)]">
                   Freiwillige Kulanzleistung — du behältst dein Produkt in jedem

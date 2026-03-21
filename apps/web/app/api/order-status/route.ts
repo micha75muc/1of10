@@ -3,7 +3,7 @@ import { prisma } from "@repo/db";
 
 /**
  * GET /api/order-status?sessionId=cs_xxx
- * Gibt den Gewinner-Status einer Bestellung zurück.
+ * Gibt den Erstattungskunde-Status einer Bestellung zurück.
  * Öffentlich zugänglich (nur via stripeSessionId — kein Auth nötig).
  */
 export async function GET(req: Request) {

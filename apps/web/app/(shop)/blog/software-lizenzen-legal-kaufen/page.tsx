@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Software-Lizenzen legal und günstig kaufen — der komplette Guide 2026",
+    "Software legal und günstig kaufen — der komplette Guide 2026",
   description:
-    "Sind günstige Software-Lizenzen legal? Ja! Erfahre alles über ESD-Lizenzen, den EU-Erschöpfungsgrundsatz und worauf du beim Kauf achten musst.",
+    "Sind günstige Software legal? Ja! Erfahre alles über ESD-Lizenzen, den EU-Erschöpfungsgrundsatz und worauf du beim Kauf achten musst.",
   alternates: { canonical: "/blog/software-lizenzen-legal-kaufen" },
   openGraph: {
-    title: "Software-Lizenzen legal und günstig kaufen — Guide 2026",
+    title: "Software legal und günstig kaufen — Guide 2026",
     description:
       "ESD-Lizenzen, EU-Erschöpfungsgrundsatz und seriöse Shops: Alles was du über den legalen Kauf günstiger Software wissen musst.",
   },
@@ -19,9 +19,9 @@ export default function BlogPost() {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline:
-      "Software-Lizenzen legal und günstig kaufen — der komplette Guide 2026",
+      "Software legal und günstig kaufen — der komplette Guide 2026",
     description:
-      "Sind günstige Software-Lizenzen legal? Ja! Erfahre alles über ESD-Lizenzen, den EU-Erschöpfungsgrundsatz und worauf du beim Kauf achten musst.",
+      "Sind günstige Software legal? Ja! Erfahre alles über ESD-Lizenzen, den EU-Erschöpfungsgrundsatz und worauf du beim Kauf achten musst.",
     datePublished: "2026-03-21",
     author: {
       "@type": "Person",
@@ -59,7 +59,7 @@ export default function BlogPost() {
           </span>
         </div>
         <h1 className="text-3xl font-bold leading-tight">
-          Software-Lizenzen legal und günstig kaufen — der komplette Guide 2026
+          Software legal und günstig kaufen — der komplette Guide 2026
         </h1>
         <p className="mt-3 text-lg text-[var(--muted-foreground)]">
           Du willst Software kaufen, ohne ein Vermögen auszugeben — und ohne
@@ -71,7 +71,7 @@ export default function BlogPost() {
       <div className="prose-custom space-y-6 text-[var(--muted-foreground)]">
         <section>
           <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
-            Warum Software-Lizenzen so unterschiedlich viel kosten
+            Warum Software so unterschiedlich viel kosten
           </h2>
           <p>
             Du hast es bestimmt schon erlebt: Dieselbe Software, drei
@@ -81,7 +81,7 @@ export default function BlogPost() {
           </p>
           <p>
             Die Antwort ist einfacher als du denkst. Es gibt verschiedene Arten,
-            wie Software-Lizenzen in den Handel kommen — und der Weg bestimmt den
+            wie Software in den Handel kommen — und der Weg bestimmt den
             Preis. Die Lizenz selbst ist dabei in den meisten Fällen identisch.
             Der Unterschied liegt im Vertriebskanal.
           </p>
@@ -142,7 +142,7 @@ export default function BlogPost() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
-            Sind günstige Software-Lizenzen legal?
+            Sind günstige Software legal?
           </h2>
           <p>
             Die kurze Antwort:{" "}
@@ -173,7 +173,7 @@ export default function BlogPost() {
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
-              Der Erstverkauf einer Software-Lizenz in der EU erschöpft das
+              Der Erstverkauf einer Software in der EU erschöpft das
               Verbreitungsrecht des Herstellers.
             </li>
             <li>
@@ -186,7 +186,7 @@ export default function BlogPost() {
           </ul>
           <p>
             Der Bundesgerichtshof (BGH) hat dieses Prinzip in mehreren Urteilen
-            bestätigt und konkretisiert. Günstige Software-Lizenzen aus dem EU-Raum
+            bestätigt und konkretisiert. Günstige Software aus dem EU-Raum
             sind also nicht nur legal, sondern ausdrücklich durch das EU-Recht
             geschützt.
           </p>
@@ -225,7 +225,7 @@ export default function BlogPost() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
-            Worauf du beim Kauf von Software-Lizenzen achten solltest
+            Worauf du beim Kauf von Software achten solltest
           </h2>
           <p>
             Damit du sicher und legal einkaufst, hier unsere Checkliste:
@@ -333,7 +333,7 @@ export default function BlogPost() {
             >
               1of10 findest du eine wachsende Auswahl
             </Link>{" "}
-            an Software-Lizenzen — alle von autorisierten Distributoren, alle
+            an Software — alle von autorisierten Distributoren, alle
             sofort lieferbar.
           </p>
         </section>
@@ -343,7 +343,7 @@ export default function BlogPost() {
             Warum 1of10 anders ist
           </h2>
           <p>
-            Wir sind ein deutscher Online-Shop für Software-Lizenzen mit einer
+            Wir sind ein deutscher Online-Shop für Software mit einer
             Besonderheit:{" "}
             <strong className="text-[var(--foreground)]">
               Jeder 10. Kauf wird komplett erstattet.
@@ -400,7 +400,7 @@ export default function BlogPost() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
-            Häufige Fragen zum Kauf von Software-Lizenzen
+            Häufige Fragen zum Kauf von Software
           </h2>
 
           <div className="space-y-4">
@@ -411,7 +411,7 @@ export default function BlogPost() {
               <p className="mt-2">
                 Ja — solange sie aus einer legalen Quelle stammen. Der
                 EU-Erschöpfungsgrundsatz erlaubt den Weiterverkauf von
-                Software-Lizenzen, die erstmalig in der EU in Verkehr gebracht
+                Software, die erstmalig in der EU in Verkehr gebracht
                 wurden. Achte darauf, bei einem seriösen Anbieter mit Impressum
                 und Rechnung zu kaufen.
               </p>
@@ -494,7 +494,7 @@ export default function BlogPost() {
             Fazit: Günstige Software kaufen — aber richtig
           </h2>
           <p>
-            Software-Lizenzen günstig zu kaufen ist legal, sinnvoll und 2026
+            Digitale Produkte günstig zu kaufen ist legal, sinnvoll und 2026
             längst der Standard. Mit ESD-Lizenzen sparst du Geld und bekommst
             dein Produkt sofort. Achte einfach darauf, bei einem seriösen Shop
             mit nachvollziehbarer Herkunft der Keys zu kaufen.
@@ -515,7 +515,7 @@ export default function BlogPost() {
         {/* CTA */}
         <section className="rounded-xl border bg-[var(--card)] p-6 text-center">
           <p className="text-lg font-bold text-[var(--foreground)]">
-            Software-Lizenzen zum fairen Preis — jeder 10. Kauf kostenlos
+            Software zum fairen Preis — jeder 10. Kauf kostenlos
           </p>
           <p className="mt-2 text-sm">
             Original-Keys, sofortige Lieferung, und die Chance auf komplette
@@ -525,7 +525,7 @@ export default function BlogPost() {
             href="/products"
             className="mt-4 inline-block rounded-lg bg-[var(--primary)] px-8 py-3 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
           >
-            Jetzt Software-Lizenzen kaufen
+            Jetzt Digitale Produkte kaufen
           </Link>
         </section>
       </div>

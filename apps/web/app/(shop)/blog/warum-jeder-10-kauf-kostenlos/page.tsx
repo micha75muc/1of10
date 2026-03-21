@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Warum wir jedem 10. Kunden den Kaufpreis erstatten",
     description:
-      "Software-Lizenzen günstig kaufen — und jeder 10. Kauf ist komplett kostenlos. So funktioniert 1of10.",
+      "Digitale Produkte günstig kaufen — und jeder 10. Kauf ist komplett kostenlos. So funktioniert 1of10.",
   },
 };
 
@@ -79,7 +79,7 @@ export default function BlogPost() {
             wir ändern.
           </p>
           <p>
-            Bei 1of10 kaufst du Software-Lizenzen zum ganz normalen
+            Bei 1of10 kaufst du Software zum ganz normalen
             Marktpreis — kein Aufschlag, keine versteckten Kosten. Aber mit einem
             Unterschied, der alles verändert:{" "}
             <strong className="text-[var(--foreground)]">
@@ -118,7 +118,7 @@ export default function BlogPost() {
           </h2>
           <p>
             Ja. Und zwar aus einem einfachen Grund: Es ist kein Gewinnspiel. Du
-            zahlst den regulären Preis für eine echte Software-Lizenz. Die
+            zahlst den regulären Preis für eine echte Software. Die
             Erstattung ist eine{" "}
             <strong className="text-[var(--foreground)]">
               freiwillige Kulanzleistung
@@ -209,7 +209,7 @@ export default function BlogPost() {
             Bereit für deinen ersten Kauf?
           </p>
           <p className="mt-2 text-sm">
-            Software-Lizenzen zum normalen Preis — mit der Chance, dass dein
+            Software zum normalen Preis — mit der Chance, dass dein
             Kauf komplett erstattet wird. Kein Haken.
           </p>
           <Link

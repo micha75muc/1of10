@@ -195,7 +195,7 @@ export default async function TransparenzPage() {
             zahlst nie mehr als angezeigt.
           </p>
           <p>
-            Du kaufst eine Software-Lizenz zum regulären Preis. Wenn dein Kauf
+            Du kaufst eine Software zum regulären Preis. Wenn dein Kauf
             der Erstattungs-Slot ist, erstatten wir dir den kompletten
             Kaufpreis — aus Kulanz. Dein Produkt behältst du in jedem Fall.
           </p>
@@ -236,7 +236,7 @@ export default async function TransparenzPage() {
               {
                 name: "Inge",
                 role: "Marketing",
-                desc: "Erstellt Content-Entwürfe und bereitet Gewinner-Kommunikation vor",
+                desc: "Erstellt Content-Entwürfe und bereitet Erstattungskunde-Kommunikation vor",
               },
               {
                 name: "Martin",
@@ -330,7 +330,7 @@ export default async function TransparenzPage() {
           </div>
           <p className="text-xs">
             Alle Aktionen der Stufe 4 — wie der Einkauf neuer Lizenzschlüssel
-            oder die Veröffentlichung von Gewinnern — landen in einer
+            oder die Veröffentlichung von Erstattungskunden — landen in einer
             Genehmigungswarteschlange und werden erst nach menschlicher
             Freigabe ausgeführt.
           </p>

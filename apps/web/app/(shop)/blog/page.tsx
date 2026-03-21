@@ -27,9 +27,9 @@ const POSTS = [
   {
     slug: "software-lizenzen-legal-kaufen",
     title:
-      "Software-Lizenzen legal und günstig kaufen — der komplette Guide 2026",
+      "Software legal und günstig kaufen — der komplette Guide 2026",
     excerpt:
-      "Sind günstige Software-Lizenzen legal? Ja! ESD-Lizenzen, EU-Erschöpfungsgrundsatz und worauf du beim Kauf achten musst — der komplette Guide.",
+      "Sind günstige Software legal? Ja! ESD-Lizenzen, EU-Erschöpfungsgrundsatz und worauf du beim Kauf achten musst — der komplette Guide.",
     category: "Ratgeber",
     date: "2026-03-21",
     published: true,
@@ -37,7 +37,7 @@ const POSTS = [
   {
     slug: "gamified-commerce-zukunft",
     title:
-      "Gamified Commerce: Warum die Zukunft des Online-Shoppings spielerisch ist",
+      "Gamification-basierte Commerce: Warum die Zukunft des Online-Shoppings spielerisch ist",
     excerpt:
       "Von Spin-the-Wheel bis Kaufpreiserstattung: Wie Gamification den E-Commerce verändert — und warum 1of10 es fair und transparent macht.",
     category: "Trends",

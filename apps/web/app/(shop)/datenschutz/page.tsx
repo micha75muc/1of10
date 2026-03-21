@@ -128,7 +128,7 @@ export default function DatenschutzPage() {
 
       <section>
         <h2 className="mb-3 text-xl font-semibold">
-          6. Kaufpreiserstattung (Gamified Refund)
+          6. Kaufpreiserstattung (Freiwillige Kaufpreiserstattung)
         </h2>
         <p>
           Der Anbieter gewährt als freiwillige Kulanzleistung die Erstattung jedes 10. Kaufs. Die Ermittlung
@@ -149,7 +149,7 @@ export default function DatenschutzPage() {
           interne Geschäftsprozesse einsetzen, insbesondere für Beschaffung,
           Finanzanalyse, Marketing, IT-Support und Compliance-Prüfungen. Diese
           Systeme treffen keine automatisierten Entscheidungen gegenüber Kunden.
-          Die Kaufpreiserstattung (Gamified Refund) wird nicht durch KI gesteuert,
+          Die Kaufpreiserstattung (Freiwillige Kaufpreiserstattung) wird nicht durch KI gesteuert,
           sondern basiert auf einem kryptografisch sicheren Zufallsgenerator.
         </p>
       </section>

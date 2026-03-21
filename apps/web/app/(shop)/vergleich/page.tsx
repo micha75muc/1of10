@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Software-Shops im Vergleich — 1of10 vs. andere Anbieter",
   description:
-    "Vergleich von 1of10 mit anderen Software-Lizenz-Shops: Preise, Sicherheit, Erstattung, Lieferung und Transparenz im direkten Vergleich.",
+    "Vergleich von 1of10 mit anderen Software-Shops: Preise, Sicherheit, Erstattung, Lieferung und Transparenz im direkten Vergleich.",
   alternates: { canonical: "/vergleich" },
 };
 
@@ -25,7 +25,7 @@ export default function VergleichPage() {
     <div className="py-8">
       <h1 className="mb-2 text-3xl font-bold">Software-Shops im Vergleich</h1>
       <p className="mb-8 text-[var(--muted-foreground)]">
-        Was unterscheidet 1of10 von anderen Software-Lizenz-Shops?
+        Was unterscheidet 1of10 von anderen Software-Shops?
       </p>
 
       {/* Vergleichstabelle */}
@@ -86,7 +86,7 @@ export default function VergleichPage() {
             },
             {
               q: "Warum sollte ich bei 1of10 kaufen statt direkt beim Hersteller?",
-              a: "Hersteller-Shops bieten keine Erstattungsmechanik. Bei 1of10 sparst du gegenüber dem Listenpreis UND hast die Chance auf eine vollständige Erstattung. Alle Lizenzen sind original und autorisiert.",
+              a: "Hersteller-Shops bieten keine Erstattungsmechanik. Bei 1of10 sparst du gegenüber dem Listenpreis UND hast die Möglichkeit einer vollständigen Erstattung. Alle Lizenzen sind original und autorisiert.",
             },
             {
               q: "Ist 1of10 seriöser als günstige Key-Shops?",
@@ -124,7 +124,7 @@ export default function VergleichPage() {
                 name: "Wie unterscheidet sich 1of10 von anderen Software-Shops?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "1of10 bietet als einziger Software-Shop eine 10%-Erstattungsmechanik (Gamified Refund). Jeder 10. Kauf wird vollständig erstattet. Zusätzlich ist 1of10 ein deutsches Unternehmen mit DSGVO-Konformität und EU AI Act Transparenz.",
+                  text: "1of10 bietet als einziger Software-Shop eine 10%-Erstattungsmechanik (Freiwillige Kaufpreiserstattung). Jeder 10. Kauf wird vollständig erstattet. Zusätzlich ist 1of10 ein deutsches Unternehmen mit DSGVO-Konformität und EU AI Act Transparenz.",
                 },
               },
             ],

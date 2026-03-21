@@ -8,14 +8,14 @@ import { CategoryFilter } from "./category-filter";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Software-Lizenzen kaufen — Antivirus, VPN, Plugins & mehr",
+  title: "Digitale Produkte kaufen — Antivirus, VPN, Plugins & mehr",
   description:
-    "Günstige Software-Lizenzen bei 1of10 kaufen. Antivirus, VPN, Audio-Plugins, Foto-Software & Game Keys. Sofort per E-Mail — und jeder 10. Kauf wird erstattet.",
+    "Günstige Software bei 1of10 kaufen. Antivirus, VPN, Audio-Plugins, Foto-Software & Game Keys. Sofort per E-Mail — und jeder 10. Kauf wird erstattet.",
   alternates: { canonical: "/products" },
   openGraph: {
-    title: "Software-Lizenzen kaufen | 1of10",
+    title: "Digitale Produkte kaufen | 1of10",
     description:
-      "Günstige Software-Lizenzen. Sofort per E-Mail — jeder 10. Kauf wird vollständig erstattet.",
+      "Günstige Software. Sofort per E-Mail — jeder 10. Kauf wird vollständig erstattet.",
   },
 };
 
@@ -165,7 +165,7 @@ export default async function ProductsPage({
                     ⚡ Sofort per E-Mail
                   </span>
                   <span className="rounded-full bg-[var(--gold)]/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--gold)]">
-                    🎲 10% Chance
+                    🎲 Jeder 10. Kauf wird erstattet
                   </span>
                   {product.category && (
                     <span className="rounded-full bg-[var(--secondary)] px-2 py-0.5 text-[10px] font-medium text-[var(--muted-foreground)]">

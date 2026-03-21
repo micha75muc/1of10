@@ -154,7 +154,7 @@ export default async function HomePage() {
                   <td className="py-2">⚠️ UVP</td>
                 </tr>
                 <tr>
-                  <td className="py-2 pr-4 font-medium text-[var(--foreground)]">Erstattungschance</td>
+                  <td className="py-2 pr-4 font-medium text-[var(--foreground)]">Erstattung</td>
                   <td className="py-2 pr-4 text-[var(--gold)] font-bold">✅ Jeder 10. Kauf</td>
                   <td className="py-2 pr-4">❌ Nein</td>
                   <td className="py-2">❌ Nein</td>
@@ -184,7 +184,7 @@ export default async function HomePage() {
             So funktioniert <span className="text-[var(--gold)]">1of10</span>
           </h2>
           <p className="mb-12 text-center text-[var(--muted-foreground)]">
-            Drei einfache Schritte — und bei jedem Kauf eine echte Chance auf
+            Drei einfache Schritte — und bei jedem Kauf die Möglichkeit einer
             volle Kaufpreiserstattung.
           </p>
 

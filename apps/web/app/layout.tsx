@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "Digitale Produkte kaufen bei 1of10. Als freiwillige Kulanzleistung erstatten wir jeden 10. Kauf vollständig. Norton, McAfee, Bitdefender und mehr — sofort per E-Mail.",
   keywords: [
     "Software kaufen",
-    "Software-Lizenzen",
+    "Software",
     "digitale Produkte",
     "günstige Software",
     "Erstattung",
@@ -72,7 +72,7 @@ const organizationJsonLd = {
   url: BASE_URL,
   logo: `${BASE_URL}/logo.png`,
   description:
-    "Online-Shop für Software-Lizenzen mit Gamified Refund — jeder 10. Kauf wird erstattet.",
+    "Online-Shop für Software mit Freiwillige Kaufpreiserstattung — jeder 10. Kauf wird erstattet.",
   contactPoint: {
     "@type": "ContactPoint",
     email: "info@medialess.de",
@@ -101,7 +101,7 @@ const websiteJsonLd = {
   name: "1of10",
   url: BASE_URL,
   description:
-    "Software-Lizenzen günstig kaufen. Jeder 10. Kauf wird vollständig erstattet.",
+    "Digitale Produkte günstig kaufen. Jeder 10. Kauf wird vollständig erstattet.",
   potentialAction: {
     "@type": "SearchAction",
     target: `${BASE_URL}/products?q={search_term_string}`,

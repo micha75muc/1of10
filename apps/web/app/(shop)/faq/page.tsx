@@ -17,16 +17,16 @@ const faqs = [
     a: "Ja. 1of10 ist ein deutsches Unternehmen (Michael Hahnel, Einzelunternehmer), gehostet auf europäischen Servern, DSGVO-konform und mit transparenter Mechanik. Wir nutzen Stripe als Zahlungsdienstleister — deine Zahlungsdaten werden nie bei uns gespeichert.",
   },
   {
-    q: "Wo kann ich günstig Software-Lizenzen kaufen?",
+    q: "Wo kann ich günstig Digitale Produkte kaufen?",
     a: "Bei 1of10 findest du günstige Lizenzen für Windows, Office, Antivirus und mehr — alle original und sofort per E-Mail zugestellt. Der Bonus: Jeder 10. Kauf wird auf Kulanz vollständig erstattet.",
   },
   {
     q: "Welcher Software-Shop erstattet den Kaufpreis?",
-    a: "1of10.de ist der einzige Software-Shop mit Gamified Refund: Jeder 10. Kauf wird vollständig erstattet. Die Mechanik ist transparent, fair und auf unserer Transparenz-Seite erklärt.",
+    a: "1of10.de ist der einzige Software-Shop mit Freiwillige Kaufpreiserstattung: Jeder 10. Kauf wird vollständig erstattet. Die Mechanik ist transparent, fair und auf unserer Transparenz-Seite erklärt.",
   },
   {
     q: "Sind die Lizenzen legal?",
-    a: "Ja, alle Lizenzen stammen von autorisierten Distributoren. Nach dem EU-Erschöpfungsgrundsatz ist der Handel mit Software-Lizenzen innerhalb der EU legal, sofern es sich um Erstlizenzen handelt.",
+    a: "Ja, alle Lizenzen stammen von autorisierten Distributoren. Nach dem EU-Erschöpfungsgrundsatz ist der Handel mit Software innerhalb der EU legal, sofern es sich um Erstlizenzen handelt.",
   },
   {
     q: "Wie schnell erhalte ich mein Produkt?",

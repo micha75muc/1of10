@@ -3,12 +3,12 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Gamified Commerce: Warum die Zukunft des Online-Shoppings spielerisch ist",
+    "Gamification-basierte Commerce: Warum die Zukunft des Online-Shoppings spielerisch ist",
   description:
     "Gamification verändert den E-Commerce. Erfahre, wie spielerische Elemente das Einkaufserlebnis verbessern — und warum 1of10 anders ist als Mystery-Boxes.",
   alternates: { canonical: "/blog/gamified-commerce-zukunft" },
   openGraph: {
-    title: "Gamified Commerce: Die Zukunft des Online-Shoppings",
+    title: "Gamification-basierte Commerce: Die Zukunft des Online-Shoppings",
     description:
       "Von Spin-the-Wheel bis Kaufpreiserstattung: Wie Gamification den E-Commerce revolutioniert — fair und transparent.",
   },
@@ -19,7 +19,7 @@ export default function BlogPost() {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline:
-      "Gamified Commerce: Warum die Zukunft des Online-Shoppings spielerisch ist",
+      "Gamification-basierte Commerce: Warum die Zukunft des Online-Shoppings spielerisch ist",
     description:
       "Gamification verändert den E-Commerce. Erfahre, wie spielerische Elemente das Einkaufserlebnis verbessern.",
     datePublished: "2026-03-21",
@@ -59,7 +59,7 @@ export default function BlogPost() {
           </span>
         </div>
         <h1 className="text-3xl font-bold leading-tight">
-          Gamified Commerce: Warum die Zukunft des Online-Shoppings spielerisch
+          Gamification-basierte Commerce: Warum die Zukunft des Online-Shoppings spielerisch
           ist
         </h1>
         <p className="mt-3 text-lg text-[var(--muted-foreground)]">
@@ -72,10 +72,10 @@ export default function BlogPost() {
       <div className="prose-custom space-y-6 text-[var(--muted-foreground)]">
         <section>
           <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
-            Was ist Gamified Commerce?
+            Was ist Gamification-basierte Commerce?
           </h2>
           <p>
-            Gamified Commerce — oder Gamification im E-Commerce — bedeutet, dass
+            Gamification-basierte Commerce — oder Gamification im E-Commerce — bedeutet, dass
             spielerische Elemente in den Einkaufsprozess integriert werden. Das
             Ziel: Den Kauf nicht nur zur Transaktion machen, sondern zum
             Erlebnis.
@@ -98,7 +98,7 @@ export default function BlogPost() {
             Beispiele für Gamification im Online-Shop
           </h2>
           <p>
-            Gamified Commerce hat viele Gesichter. Hier sind die gängigsten
+            Gamification-basierte Commerce hat viele Gesichter. Hier sind die gängigsten
             Mechaniken:
           </p>
 
@@ -110,7 +110,7 @@ export default function BlogPost() {
             „Dreh und gewinne 10% Rabatt!" Die Mechanik ist simpel — du drehst,
             das Rad zeigt dir einen „Gewinn" (meistens den Rabatt, den der Shop
             sowieso geben wollte). Der psychologische Effekt: Du fühlst dich,
-            als hättest du etwas gewonnen. Dadurch steigt die
+            als hättest du etwas erstattet bekommen. Dadurch steigt die
             Kaufwahrscheinlichkeit.
           </p>
 
@@ -236,7 +236,7 @@ export default function BlogPost() {
                 Kein Risiko:
               </strong>{" "}
               Du verlierst nie. Im schlimmsten Fall bekommst du genau das,
-              wofür du bezahlt hast: eine Software-Lizenz zum Marktpreis.
+              wofür du bezahlt hast: eine Software zum Marktpreis.
             </li>
             <li>
               <strong className="text-[var(--foreground)]">
@@ -281,7 +281,7 @@ export default function BlogPost() {
             Die Zukunft: Spielerisches Einkaufen wird Standard
           </h2>
           <p>
-            Gamified Commerce ist kein kurzfristiger Trend. Laut einer Studie
+            Gamification-basierte Commerce ist kein kurzfristiger Trend. Laut einer Studie
             von Markets and Markets wächst der globale Gamification-Markt bis
             2028 auf über 30 Milliarden US-Dollar. Im E-Commerce wird
             Gamification zunehmend zum Differenzierungsmerkmal — weil reine
@@ -297,7 +297,7 @@ export default function BlogPost() {
             Tricks — nur ein ehrliches Kauferlebnis mit einem echten Bonus.
             Das nennen wir{" "}
             <strong className="text-[var(--foreground)]">
-              Gamified Commerce, wie es sein sollte
+              Gamification-basierte Commerce, wie es sein sollte
             </strong>
             .
           </p>
@@ -305,13 +305,13 @@ export default function BlogPost() {
 
         <section>
           <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
-            Häufige Fragen zu Gamified Commerce
+            Häufige Fragen zu Gamification-basierte Commerce
           </h2>
 
           <div className="space-y-4">
             <details className="rounded-lg border p-4">
               <summary className="cursor-pointer font-semibold text-[var(--foreground)]">
-                Ist Gamified Commerce das Gleiche wie ein Gewinnspiel?
+                Ist Gamification-basierte Commerce das Gleiche wie ein Gewinnspiel?
               </summary>
               <p className="mt-2">
                 Nein. Bei einem Gewinnspiel zahlst du einen Einsatz und hoffst
@@ -327,7 +327,7 @@ export default function BlogPost() {
               </summary>
               <p className="mt-2">
                 Grundsätzlich ja. Besonders gut funktioniert es bei digitalen
-                Produkten wie Software-Lizenzen, weil die Marginalkosten pro
+                Produkten wie Software, weil die Marginalkosten pro
                 Einheit niedrig sind und die Lieferung sofort erfolgt. Das
                 Überraschungselement kommt unmittelbar nach dem Kauf.
               </p>
@@ -350,10 +350,10 @@ export default function BlogPost() {
         {/* CTA */}
         <section className="rounded-xl border bg-[var(--card)] p-6 text-center">
           <p className="text-lg font-bold text-[var(--foreground)]">
-            Gamified Commerce erleben — nicht nur darüber lesen
+            Gamification-basierte Commerce erleben — nicht nur darüber lesen
           </p>
           <p className="mt-2 text-sm">
-            Software kaufen mit der Chance auf komplette Erstattung. Fair,
+            Software kaufen mit der Möglichkeit einer kompletten Erstattung. Fair,
             transparent, ohne Tricks.
           </p>
           <Link

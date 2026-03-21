@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Über uns — 1of10",
   description:
-    "Lerne 1of10 kennen: Ein AI-native Software-Shop aus Deutschland, betrieben von 22 KI-Agenten. Gründer Michael Hahnel über die Mission hinter Gamified Commerce.",
+    "Lerne 1of10 kennen: Ein AI-native Software-Shop aus Deutschland, betrieben von 22 KI-Agenten. Gründer Michael Hahnel über die Mission hinter Gamification-basierte Commerce.",
   alternates: { canonical: "/about" },
 };
 
@@ -26,7 +26,7 @@ export default function AboutPage() {
             Chance birgt, komplett kostenlos zu sein?
           </p>
           <p>
-            Das ist 1of10. Ein Software-Lizenz-Shop, der jedem 10. Kunden den
+            Das ist 1of10. Ein Software-Shop, der jedem 10. Kunden den
             vollen Kaufpreis erstattet — nicht als Marketing-Trick, sondern als
             faires System mit transparenter Mechanik.
           </p>
@@ -138,7 +138,7 @@ export default function AboutPage() {
               jobTitle: "Gründer",
             },
             description:
-              "AI-nativer Software-Lizenz-Shop mit Gamified Refund. Jeder 10. Kauf wird auf Kulanz erstattet.",
+              "AI-nativer Software-Shop mit Freiwillige Kaufpreiserstattung. Jeder 10. Kauf wird auf Kulanz erstattet.",
             contactPoint: {
               "@type": "ContactPoint",
               email: "info@medialess.de",

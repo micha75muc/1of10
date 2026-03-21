@@ -61,7 +61,7 @@ export default function AGBPage() {
           §4 Lieferung digitaler Inhalte
         </h2>
         <p>
-          Der Anbieter vertreibt digitale Produkte (Software-Lizenzen, Game-Keys,
+          Der Anbieter vertreibt digitale Produkte (Software, Game-Keys,
           Guthaben und vergleichbare digitale Inhalte). Die
           Bereitstellung erfolgt unverzüglich nach Zahlungseingang durch
           elektronische Übermittlung (E-Mail). Mit der Bereitstellung der Lizenz

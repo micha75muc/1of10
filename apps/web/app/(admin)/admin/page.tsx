@@ -15,7 +15,7 @@ export default async function AdminDashboard() {
 
   const stats = [
     { label: "Bestellungen", value: orderCount, href: null },
-    { label: "Gewinner (10%)", value: winnerCount, href: null },
+    { label: "Erstattungskunde (10%)", value: winnerCount, href: null },
     {
       label: "Umsatz",
       value: `${Number(totalRevenue._sum.amountTotal ?? 0).toFixed(2)} €`,
