@@ -15,11 +15,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "1of10 — Jeder 10. Kauf ist kostenlos | Software-Lizenzen",
+    default: "1of10 — Wir erstatten jeden 10. Kauf | Digitale Produkte",
     template: "%s | 1of10",
   },
   description:
-    "Software-Lizenzen günstig kaufen bei 1of10. Jeder 10. Kauf wird vollständig erstattet — dein Produkt behältst du. Sofortige Lieferung per E-Mail. Antivirus, VPN, Audio-Plugins & mehr.",
+    "Digitale Produkte kaufen bei 1of10. Als freiwillige Kulanzleistung erstatten wir jeden 10. Kauf vollständig. Norton, McAfee, Bitdefender und mehr — sofort per E-Mail.",
   keywords: [
     "Software kaufen",
     "Software-Lizenzen",

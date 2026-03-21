@@ -17,7 +17,16 @@ export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | 
     setStatus("loading");
 
     try {
-      // Store locally as backup
+      // Send to API for server-side persistence
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
+      // Also store locally as backup
       const existing = JSON.parse(localStorage.getItem("1of10_newsletter_signups") ?? "[]");
       if (!existing.includes(email)) {
         existing.push(email);

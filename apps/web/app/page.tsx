@@ -91,6 +91,46 @@ export default function HomePage() {
               <p className="text-sm text-[var(--muted-foreground)]">Dein Lizenzschlüssel kommt direkt per E-Mail. Kein Warten, kein Postweg.</p>
             </div>
           </div>
+
+          {/* Inge: Competitor comparison */}
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b text-left">
+                  <th className="py-3 pr-4 font-semibold"></th>
+                  <th className="py-3 pr-4 font-semibold text-[var(--gold)]">1of10</th>
+                  <th className="py-3 pr-4 font-semibold">Amazon</th>
+                  <th className="py-3 font-semibold">MediaMarkt</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y text-[var(--muted-foreground)]">
+                <tr>
+                  <td className="py-2 pr-4 font-medium text-[var(--foreground)]">Preis</td>
+                  <td className="py-2 pr-4">✅ Günstig</td>
+                  <td className="py-2 pr-4">⚠️ Oft teurer</td>
+                  <td className="py-2">⚠️ UVP</td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4 font-medium text-[var(--foreground)]">Erstattungschance</td>
+                  <td className="py-2 pr-4 text-[var(--gold)] font-bold">✅ Jeder 10. Kauf</td>
+                  <td className="py-2 pr-4">❌ Nein</td>
+                  <td className="py-2">❌ Nein</td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4 font-medium text-[var(--foreground)]">Sofort-Download</td>
+                  <td className="py-2 pr-4">✅ Per E-Mail</td>
+                  <td className="py-2 pr-4">✅ Ja</td>
+                  <td className="py-2">⚠️ Teils</td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4 font-medium text-[var(--foreground)]">Deutscher Anbieter</td>
+                  <td className="py-2 pr-4">✅ München</td>
+                  <td className="py-2 pr-4">❌ Luxembourg</td>
+                  <td className="py-2">✅ Ingolstadt</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -197,6 +237,30 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mehr entdecken — Blog/FAQ/Transparenz Links */}
+      <section className="border-t px-6 py-12">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-8 text-center text-2xl font-bold">Mehr erfahren</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Link href="/blog" className="rounded-xl border bg-[var(--card)] p-6 hover:border-[var(--primary)] transition">
+              <div className="mb-2 text-2xl">📝</div>
+              <h3 className="font-bold">Ratgeber & Vergleiche</h3>
+              <p className="mt-1 text-sm text-[var(--muted-foreground)]">Norton vs. Bitdefender vs. McAfee — objective Vergleiche und Tipps.</p>
+            </Link>
+            <Link href="/faq" className="rounded-xl border bg-[var(--card)] p-6 hover:border-[var(--primary)] transition">
+              <div className="mb-2 text-2xl">❓</div>
+              <h3 className="font-bold">Häufige Fragen</h3>
+              <p className="mt-1 text-sm text-[var(--muted-foreground)]">Wie funktioniert die Erstattung? Ist das seriös? Alle Antworten.</p>
+            </Link>
+            <Link href="/transparenz" className="rounded-xl border bg-[var(--card)] p-6 hover:border-[var(--primary)] transition">
+              <div className="mb-2 text-2xl">📊</div>
+              <h3 className="font-bold">Transparenz</h3>
+              <p className="mt-1 text-sm text-[var(--muted-foreground)]">Echte Zahlen aus unserem System — live und nachvollziehbar.</p>
+            </Link>
           </div>
         </div>
       </section>
