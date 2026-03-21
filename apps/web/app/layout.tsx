@@ -37,19 +37,20 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "1of10 — Jeder 10. Kauf ist kostenlos | Software-Lizenzen",
+    title: "1of10 — Wir erstatten jeden 10. Kauf",
     description:
-      "Software-Lizenzen günstig kaufen. Wir erstatten freiwillig jeden 10. Kauf vollständig — dein Produkt behältst du. Sofort per E-Mail.",
+      "Digitale Produkte kaufen. Wir erstatten freiwillig jeden 10. Kauf vollständig — dein Produkt behältst du. Sofort per E-Mail.",
     type: "website",
     url: BASE_URL,
     locale: "de_DE",
     siteName: "1of10",
+    images: [{ url: `${BASE_URL}/logo.png`, width: 1200, height: 630, alt: "1of10 Logo" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "1of10 — Jeder 10. Kauf ist kostenlos",
+    title: "1of10 — Wir erstatten jeden 10. Kauf",
     description:
-      "Software-Lizenzen günstig kaufen. Wir erstatten jeden 10. Kauf vollständig.",
+      "Digitale Produkte kaufen. Wir erstatten freiwillig jeden 10. Kauf vollständig.",
   },
   robots: {
     index: true,
@@ -85,6 +86,13 @@ const organizationJsonLd = {
     postalCode: "80638",
     addressCountry: "DE",
   },
+  foundingDate: "2026",
+  founder: {
+    "@type": "Person",
+    name: "Michael Hahnel",
+  },
+  sameAs: [],
+  keywords: "Software kaufen, Antivirus, VPN, Erstattung, 1of10",
 };
 
 const websiteJsonLd = {
