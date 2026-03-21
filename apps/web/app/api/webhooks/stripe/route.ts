@@ -124,13 +124,24 @@ export async function POST(req: NextRequest) {
     });
     await sendEmail(emailParams);
 
-    console.log(
-      `[Webhook] Order ${order.id} created. Winner: ${isWinner}`
-    );
+    console.log(JSON.stringify({
+      level: "info",
+      event: "webhook.order.created",
+      orderId: order.id,
+      productId,
+      isWinner,
+      amount: amountTotal,
+      timestamp: new Date().toISOString(),
+    }));
 
     return NextResponse.json({ received: true, orderId: order.id });
   } catch (err) {
-    console.error("[Webhook] Error:", err);
+    console.error(JSON.stringify({
+      level: "error",
+      event: "webhook.processing.failed",
+      error: err instanceof Error ? err.message : String(err),
+      timestamp: new Date().toISOString(),
+    }));
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }

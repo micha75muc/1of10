@@ -54,6 +54,24 @@ const POSTS = [
     published: true,
   },
   {
+    slug: "norton-vs-bitdefender-vs-mcafee",
+    title: "Norton vs. Bitdefender vs. McAfee 2026 — Welcher Antivirus ist der beste?",
+    excerpt:
+      "Ehrlicher Vergleich der drei besten Antivirus-Programme 2026: Funktionen, Preise, Vor- und Nachteile.",
+    category: "Sicherheit",
+    date: "2026-03-21",
+    published: true,
+  },
+  {
+    slug: "braucht-man-antivirus-2026",
+    title: "Braucht man 2026 noch Antivirus-Software?",
+    excerpt:
+      "Reicht der Windows Defender 2026 aus? Wir erklären, wann du zusätzlichen Antivirus-Schutz brauchst — und wann nicht.",
+    category: "Ratgeber",
+    date: "2026-03-21",
+    published: true,
+  },
+  {
     slug: "beste-antivirus-software-2026",
     title: "Die beste Antivirus-Software 2026 im Vergleich",
     excerpt:
