@@ -1,13 +1,55 @@
 import { prisma } from "@repo/db";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ProductImage, getCategoryLabel } from "./product-image";
+import { WinnerTicker } from "./winner-ticker";
+import { SearchBar } from "./search-bar";
+import { CategoryFilter } from "./category-filter";
+import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Software-Lizenzen kaufen — Antivirus, VPN, Plugins & mehr",
+  description:
+    "Günstige Software-Lizenzen bei 1of10 kaufen. Antivirus, VPN, Audio-Plugins, Foto-Software & Game Keys. Sofort per E-Mail — und jeder 10. Kauf wird erstattet.",
+  alternates: { canonical: "/products" },
+  openGraph: {
+    title: "Software-Lizenzen kaufen | 1of10",
+    description:
+      "Günstige Software-Lizenzen. Sofort per E-Mail — jeder 10. Kauf wird vollständig erstattet.",
+  },
+};
 
 export const dynamic = "force-dynamic";
 
-export default async function ProductsPage() {
-  const products = await prisma.product.findMany({
-    orderBy: { name: "asc" },
-  });
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; category?: string; sort?: string }>;
+}) {
+  const params = await searchParams;
+  const q = params.q?.trim() ?? "";
+  const category = params.category ?? "";
+  const sort = params.sort ?? "";
+
+  // Prisma-Query mit URL-basiertem Filter
+  const where: Record<string, unknown> = {};
+  if (q) {
+    where.OR = [
+      { name: { contains: q, mode: "insensitive" } },
+      { sku: { contains: q, mode: "insensitive" } },
+      { brand: { contains: q, mode: "insensitive" } },
+    ];
+  }
+  if (category) {
+    where.category = category;
+  }
+
+  const orderBy: Record<string, string> =
+    sort === "price-asc" ? { sellPrice: "asc" }
+    : sort === "price-desc" ? { sellPrice: "desc" }
+    : { name: "asc" };
+
+  const products = await prisma.product.findMany({ where, orderBy });
 
   if (products.length === 0) {
     return (
@@ -24,6 +66,11 @@ export default async function ProductsPage() {
 
   return (
     <div className="py-4">
+      {/* Winner Ticker — Social Proof */}
+      <div className="mb-8">
+        <WinnerTicker />
+      </div>
+
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="mb-3 text-3xl font-bold">Alle Produkte</h1>
@@ -36,6 +83,14 @@ export default async function ProductsPage() {
         </p>
       </div>
 
+      {/* Suche + Filter */}
+      <div className="mb-6 space-y-4">
+        <Suspense>
+          <SearchBar />
+          <CategoryFilter />
+        </Suspense>
+      </div>
+
       {/* Gamification Banner */}
       <div className="mb-8 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-6">
         <div className="flex flex-col items-center gap-4 sm:flex-row">
@@ -44,25 +99,41 @@ export default async function ProductsPage() {
           </div>
           <div>
             <p className="font-bold text-[var(--gold)]">
-              Garantiert: Wir erstatten jeden 10. Kauf!
+              Kulanz: Wir erstatten jeden 10. Kauf!
             </p>
             <p className="text-sm text-[var(--muted-foreground)]">
-              Nicht &ldquo;vielleicht&rdquo; oder &ldquo;mit etwas Glück&rdquo; —
-              wir garantieren, dass jeder 10. Kauf komplett erstattet wird.
-              Du behältst dein Produkt trotzdem.
+              Freiwillige Kulanzleistung — statistisch wird jeder 10. Kauf
+              komplett erstattet. Du behältst dein Produkt in jedem Fall.
+              Es besteht kein Rechtsanspruch.
             </p>
           </div>
         </div>
       </div>
 
       {/* Product Grid */}
+      {products.length === 0 && (q || category) ? (
+        <div className="py-12 text-center">
+          <div className="mb-4 text-5xl">🔍</div>
+          <p className="text-lg font-medium">Keine Produkte gefunden</p>
+          <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+            Versuche einen anderen Suchbegriff oder entferne den Filter.
+          </p>
+          <Link
+            href="/products"
+            className="mt-4 inline-block rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)]"
+          >
+            Alle Produkte anzeigen
+          </Link>
+        </div>
+      ) : (
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => {
           const isPopular = product.stockLevel > 30;
 
           return (
-            <div
+            <Link
               key={product.id}
+              href={`/products/${product.sku}`}
               className="group relative flex flex-col rounded-xl border bg-[var(--card)] overflow-hidden transition hover:border-[var(--primary)]/50 hover:shadow-lg hover:shadow-[var(--primary)]/5"
             >
               {/* Product Image */}
@@ -83,6 +154,9 @@ export default async function ProductsPage() {
                   )}
                   <span className="rounded-full bg-[var(--primary)]/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--primary)]">
                     ⚡ Sofort per E-Mail
+                  </span>
+                  <span className="rounded-full bg-[var(--gold)]/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--gold)]">
+                    🎲 10% Chance
                   </span>
                   {product.category && (
                     <span className="rounded-full bg-[var(--secondary)] px-2 py-0.5 text-[10px] font-medium text-[var(--muted-foreground)]">
@@ -127,21 +201,22 @@ export default async function ProductsPage() {
                 </div>
 
                 {/* CTA */}
-                <Link
-                  href={`/checkout?productId=${product.id}`}
+                <span
+                  aria-label={product.stockLevel > 0 ? `${product.name} — Details ansehen` : `${product.name} — ausverkauft`}
                   className={`block rounded-lg px-4 py-3 text-center text-sm font-semibold transition ${
                     product.stockLevel > 0
-                      ? "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90"
-                      : "bg-[var(--muted)] text-[var(--muted-foreground)] pointer-events-none"
+                      ? "bg-[var(--primary)] text-[var(--primary-foreground)] group-hover:opacity-90"
+                      : "bg-[var(--muted)] text-[var(--muted-foreground)]"
                   }`}
                 >
-                  {product.stockLevel > 0 ? "Jetzt kaufen" : "Ausverkauft"}
-                </Link>
+                  {product.stockLevel > 0 ? "Details ansehen" : "Ausverkauft"}
+                </span>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
+      )}
     </div>
   );
 }

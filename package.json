@@ -8,7 +8,8 @@
     "db:generate": "turbo run db:generate",
     "db:push": "turbo run db:push",
     "db:migrate": "turbo run db:migrate",
-    "vercel-build": "pnpm --filter @repo/db db:generate && pnpm --filter @repo/web build"
+    "vercel-build": "pnpm --filter @repo/db db:generate && pnpm --filter @repo/web build",
+    "test": "turbo test"
   },
   "devDependencies": {
     "next": "^15",

@@ -1,0 +1,83 @@
+# Production deployment — Hetzner VPS
+# Usage: docker compose -f docker-compose.prod.yml up -d
+
+services:
+  agents:
+    build:
+      context: ./apps/agents
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - AGENTS_API_URL=http://localhost:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - backend
+
+  # Reverse proxy — exposes agents API over HTTPS
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - agents
+    networks:
+      - backend
+
+  # ─────────────────────────────────────────────────────────
+  # MiroFish Customer Simulation Engine (optional)
+  # Aktivieren: Uncomment + MIROFISH_LLM_API_KEY in .env setzen
+  # Setup:  ./scripts/setup-mirofish.sh
+  # ─────────────────────────────────────────────────────────
+
+  # mirofish:
+  #   build:
+  #     context: ./services/mirofish
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   env_file: .env
+  #   environment:
+  #     - LLM_API_KEY=${MIROFISH_LLM_API_KEY}
+  #     - LLM_MODEL=${MIROFISH_LLM_MODEL:-qwen-plus}
+  #   volumes:
+  #     - mirofish_data:/app/data
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+  #     interval: 15s
+  #     timeout: 5s
+  #     retries: 3
+  #     start_period: 30s
+  #   networks:
+  #     - backend
+
+volumes:
+  redis-data:
+  caddy-data:
+  caddy-config:
+  # mirofish_data:
+
+networks:
+  backend:

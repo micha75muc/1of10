@@ -3,6 +3,8 @@ Michael — Orchestrator Agent.
 LangGraph StateGraph that routes user prompts to specialized sub-agents.
 """
 
+import logging
+
 from langchain_core.messages import HumanMessage, AIMessage
 from langgraph.graph import StateGraph, START, END
 
@@ -12,6 +14,9 @@ from domains.finance import node_finance
 from domains.marketing import node_marketing_sales
 from domains.it_ops import node_it_ops
 from domains.compliance import node_compliance
+from domains.simulation import node_simulation
+
+logger = logging.getLogger(__name__)
 
 # Keywords for routing (MVP — replace with LLM classification when API key available)
 ROUTING_KEYWORDS: dict[str, list[str]] = {
@@ -37,12 +42,20 @@ ROUTING_KEYWORDS: dict[str, list[str]] = {
         "compliance", "dsgvo", "gdpr", "bgb", "widerruf", "recht",
         "legal", "denny", "amoe", "prüf", "audit", "datenschutz",
     ],
+    "simulation": [
+        "simulation", "vorhersage", "prognose", "kundenreaktion",
+        "predict", "forecast", "mirofish", "mira", "simulier",
+    ],
 }
 
 
 def classify_prompt(prompt: str) -> str:
     """Classify user prompt to determine target agent (keyword-based MVP)."""
-    prompt_lower = prompt.lower()
+    prompt_lower = prompt.lower().strip()
+
+    if not prompt_lower:
+        logger.warning("Empty prompt received — routing to default")
+        return "orchestrator"
 
     scores: dict[str, int] = {}
     for agent, keywords in ROUTING_KEYWORDS.items():
@@ -51,9 +64,12 @@ def classify_prompt(prompt: str) -> str:
             scores[agent] = score
 
     if not scores:
+        logger.info("No keyword match for prompt — routing to default")
         return "orchestrator"  # Default: Michael handles it
 
-    return max(scores, key=scores.get)  # type: ignore[arg-type]
+    target = max(scores, key=scores.get)  # type: ignore[arg-type]
+    logger.info("Routed to '%s' (score: %d)", target, scores[target])
+    return target
 
 
 async def node_orchestrator(state: AgentState) -> AgentState:
@@ -78,7 +94,8 @@ async def node_default_response(state: AgentState) -> AgentState:
         f"- **Elena** (Finanzen): Reports, Umsatz, Stripe-Gebühren\n"
         f"- **Inge** (Marketing & Vertrieb): Content, Kampagnen, Outreach, Partner\n"
         f"- **Martin** (IT-Ops): Support, Tickets, Knowledge Base\n"
-        f"- **Denny** (Compliance): DSGVO, BGB, Dokumentenprüfung\n\n"
+        f"- **Denny** (Compliance): DSGVO, BGB, Dokumentenprüfung\n"
+        f"- **Mira** (Simulation): Kundenverhalten, Vorhersagen, Prognosen\n\n"
         f"Bitte formuliere deine Anfrage spezifischer."
     )
 
@@ -95,7 +112,7 @@ def route_to_agent(state: AgentState) -> str:
     target = state.get("target_agent", "orchestrator")
     if target in (
         "procurement", "finance", "marketing_sales",
-        "it_ops", "compliance",
+        "it_ops", "compliance", "simulation",
     ):
         return target
     return "default"
@@ -111,6 +128,7 @@ graph_builder.add_node("finance", node_finance)
 graph_builder.add_node("marketing_sales", node_marketing_sales)
 graph_builder.add_node("it_ops", node_it_ops)
 graph_builder.add_node("compliance", node_compliance)
+graph_builder.add_node("simulation", node_simulation)
 graph_builder.add_node("default", node_default_response)
 
 # Define edges
@@ -124,12 +142,13 @@ graph_builder.add_conditional_edges(
         "marketing_sales": "marketing_sales",
         "it_ops": "it_ops",
         "compliance": "compliance",
+        "simulation": "simulation",
         "default": "default",
     },
 )
 
 # All agents end after processing
-for node in ["procurement", "finance", "marketing_sales", "it_ops", "compliance", "default"]:
+for node in ["procurement", "finance", "marketing_sales", "it_ops", "compliance", "simulation", "default"]:
     graph_builder.add_edge(node, END)
 
 # Compile
@@ -138,6 +157,16 @@ orchestrator_graph = graph_builder.compile()
 
 async def run_orchestrator(prompt: str, context: dict | None = None) -> dict:
     """Run the orchestrator graph with a user prompt."""
+    if not prompt or not prompt.strip():
+        logger.warning("Empty prompt submitted to orchestrator")
+        return {
+            "response": "Bitte gib eine Anfrage ein.",
+            "agent_used": "Michael",
+            "metadata": {"error": "empty_prompt"},
+        }
+
+    logger.info("Orchestrator invoked with prompt: %s", prompt[:120])
+
     initial_state: AgentState = {
         "messages": [HumanMessage(content=prompt)],
         "target_agent": None,
@@ -145,7 +174,15 @@ async def run_orchestrator(prompt: str, context: dict | None = None) -> dict:
         "agent_used": "",
     }
 
-    result = await orchestrator_graph.ainvoke(initial_state)
+    try:
+        result = await orchestrator_graph.ainvoke(initial_state)
+    except Exception:
+        logger.exception("Orchestrator graph execution failed")
+        return {
+            "response": "Ein interner Fehler ist aufgetreten. Bitte versuche es erneut.",
+            "agent_used": "Michael",
+            "metadata": {"error": "orchestrator_failure"},
+        }
 
     return {
         "response": result.get("agent_response", "Keine Antwort erhalten."),

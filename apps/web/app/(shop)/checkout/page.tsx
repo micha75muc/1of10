@@ -25,6 +25,26 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
 
   return (
     <div className="mx-auto max-w-lg py-4">
+      {/* Fortschrittsanzeige */}
+      <nav aria-label="Checkout-Fortschritt" className="mb-8">
+        <ol className="flex items-center justify-between text-sm">
+          <li className="flex items-center gap-1.5 text-[var(--primary)]">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--primary)] text-xs font-bold text-[var(--primary-foreground)]">✓</span>
+            <span className="font-medium">Produkt gewählt</span>
+          </li>
+          <li className="mx-2 h-px flex-1 bg-[var(--primary)]" aria-hidden="true" />
+          <li className="flex items-center gap-1.5 text-[var(--primary)]">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-[var(--primary)] text-xs font-bold text-[var(--primary)]">2</span>
+            <span className="font-semibold">Deine Daten</span>
+          </li>
+          <li className="mx-2 h-px flex-1 bg-[var(--muted)]" aria-hidden="true" />
+          <li className="flex items-center gap-1.5 text-[var(--muted-foreground)]">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-[var(--muted)] text-xs font-bold">3</span>
+            <span>Bezahlung</span>
+          </li>
+        </ol>
+      </nav>
+
       <h1 className="mb-2 text-3xl font-bold">Checkout</h1>
       <p className="mb-6 text-sm text-[var(--muted-foreground)]">
         Sichere Zahlung über Stripe — Lizenz sofort per E-Mail.

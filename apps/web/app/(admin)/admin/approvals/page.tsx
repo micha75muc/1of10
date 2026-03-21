@@ -24,6 +24,7 @@ export default async function ApprovalsPage() {
         items={items.map((i) => ({
           ...i,
           payload: i.payload as unknown,
+          executionResult: i.executionResult as { success: boolean; result?: unknown; error?: string } | null,
           createdAt: i.createdAt.toISOString(),
         }))}
       />

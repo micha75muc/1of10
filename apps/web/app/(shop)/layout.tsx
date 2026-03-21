@@ -21,7 +21,7 @@ export default function ShopLayout({
 
       {/* Header */}
       <header className="relative border-b px-6 py-4">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between">
+        <nav aria-label="Hauptnavigation" className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="hover:opacity-90 transition">
             <Logo size="md" />
           </Link>
@@ -55,7 +55,7 @@ export default function ShopLayout({
         </nav>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 p-6">{children}</main>
+      <main id="main-content" className="mx-auto w-full max-w-6xl flex-1 p-6">{children}</main>
 
       {/* Footer */}
       <footer className="border-t px-6 py-8">
@@ -71,7 +71,7 @@ export default function ShopLayout({
               <span className="text-[var(--primary)]">🔒</span> SSL &amp; DSGVO
             </div>
           </div>
-          <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
+          <nav aria-label="Rechtliche Informationen" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
             <Link href="/impressum" className="hover:underline">Impressum</Link>
             <Link href="/datenschutz" className="hover:underline">Datenschutz</Link>
             <Link href="/agb" className="hover:underline">AGB</Link>

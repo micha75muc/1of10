@@ -6,10 +6,24 @@ Tool-calling agent with policy constraints.
 
 from langchain_core.messages import AIMessage
 from core.state import AgentState
-from tools.distributor import get_distributor_price, check_distributor_stock
+from tools.distributor import (
+    get_distributor_price,
+    check_distributor_stock,
+    browse_distributor_catalog,
+    view_distributor_products,
+    check_distributor_connection,
+)
 from tools.database import get_product_info, update_sell_price
 
-NESTOR_TOOLS = [get_distributor_price, check_distributor_stock, get_product_info, update_sell_price]
+NESTOR_TOOLS = [
+    get_distributor_price,
+    check_distributor_stock,
+    browse_distributor_catalog,
+    view_distributor_products,
+    check_distributor_connection,
+    get_product_info,
+    update_sell_price,
+]
 
 NESTOR_SYSTEM = """Du bist Nestor, der Beschaffungsagent von 1of10.
 

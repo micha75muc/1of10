@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+interface ExecutionResult {
+  success: boolean;
+  result?: unknown;
+  error?: string;
+}
+
 interface ApprovalItemData {
   id: string;
   agentId: string;
@@ -10,6 +16,7 @@ interface ApprovalItemData {
   payload: unknown;
   status: string;
   approvedBy: string | null;
+  executionResult: ExecutionResult | null;
   createdAt: string;
 }
 
@@ -19,23 +26,38 @@ export default function ApprovalTable({
   items: ApprovalItemData[];
 }) {
   const [items, setItems] = useState(initialItems);
+  const [loadingId, setLoadingId] = useState<string | null>(null);
 
   async function handleAction(id: string, action: "APPROVED" | "REJECTED") {
-    const res = await fetch(`/api/admin/approvals/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "x-admin-api-key": "dev-admin-key-change-in-production",
-      },
-      body: JSON.stringify({ action, approvedBy: "admin-ui" }),
-    });
+    setLoadingId(id);
+    try {
+      const res = await fetch(`/api/admin/approvals/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-api-key": "dev-admin-key-change-in-production",
+        },
+        body: JSON.stringify({ action, approvedBy: "admin-ui" }),
+      });
 
-    if (res.ok) {
-      setItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, status: action, approvedBy: "admin-ui" } : item
-        )
-      );
+      if (res.ok) {
+        const data = await res.json();
+        const returnedItem = data.item;
+        setItems((prev) =>
+          prev.map((item) =>
+            item.id === id
+              ? {
+                  ...item,
+                  status: returnedItem.status,
+                  approvedBy: returnedItem.approvedBy,
+                  executionResult: returnedItem.executionResult ?? data.execution ?? null,
+                }
+              : item
+          )
+        );
+      }
+    } finally {
+      setLoadingId(null);
     }
   }
 
@@ -96,7 +118,9 @@ export default function ApprovalTable({
                       ? "bg-yellow-100 text-yellow-800"
                       : item.status === "APPROVED"
                         ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
+                        : item.status === "FAILED"
+                          ? "bg-orange-100 text-orange-800"
+                          : "bg-red-100 text-red-800"
                   }`}
                 >
                   {item.status}
@@ -107,24 +131,41 @@ export default function ApprovalTable({
               </td>
               <td className="py-3">
                 {item.status === "PENDING" ? (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleAction(item.id, "APPROVED")}
-                      className="rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700 transition"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleAction(item.id, "REJECTED")}
-                      className="rounded bg-red-600 px-3 py-1 text-xs text-white hover:bg-red-700 transition"
-                    >
-                      Reject
-                    </button>
-                  </div>
+                  loadingId === item.id ? (
+                    <span className="text-xs text-blue-600 animate-pulse">
+                      Aktion wird ausgeführt…
+                    </span>
+                  ) : (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleAction(item.id, "APPROVED")}
+                        className="rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700 transition"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleAction(item.id, "REJECTED")}
+                        className="rounded bg-red-600 px-3 py-1 text-xs text-white hover:bg-red-700 transition"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )
                 ) : (
-                  <span className="text-xs text-[var(--muted-foreground)]">
-                    {item.approvedBy}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-[var(--muted-foreground)]">
+                      {item.approvedBy}
+                    </span>
+                    {item.executionResult && (
+                      <span
+                        className={`text-xs ${item.executionResult.success ? "text-green-600" : "text-red-600"}`}
+                      >
+                        {item.executionResult.success
+                          ? "✓ Erfolgreich ausgeführt"
+                          : `✗ Fehler: ${item.executionResult.error}`}
+                      </span>
+                    )}
+                  </div>
                 )}
               </td>
             </tr>

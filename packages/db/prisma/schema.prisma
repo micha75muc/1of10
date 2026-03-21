@@ -44,15 +44,16 @@ model Order {
 }
 
 model ApprovalItem {
-  id         String   @id @default(uuid())
-  agentId    String   // e.g. "Nestor", "Denny"
-  riskClass  Int      // Must be 2 or 4
-  actionType String   // e.g. "PURCHASE_KEYS", "PUBLISH_WINNER"
-  payload    Json     // The action to execute
-  status     String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  approvedBy String?  // Human Admin ID
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id              String   @id @default(uuid())
+  agentId         String   // e.g. "Nestor", "Denny"
+  riskClass       Int      // Must be 2 or 4
+  actionType      String   // e.g. "PURCHASE_KEYS", "PUBLISH_WINNER"
+  payload         Json     // The action to execute
+  status          String   @default("PENDING") // PENDING, APPROVED, REJECTED, FAILED
+  approvedBy      String?  // Human Admin ID
+  executionResult Json?    // Result of the executed action (success/error details)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 /// The "Murmel-Beutel": variable size (7-13), 1 is the winner.

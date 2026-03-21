@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Widerrufsbelehrung",
+  description:
+    "Widerrufsbelehrung von 1of10. Informationen zum Widerrufsrecht und zum Erlöschen bei digitalen Inhalten gemäß §356 BGB.",
+  alternates: { canonical: "/widerruf" },
+  robots: { index: true, follow: true },
+};
+
 export default function WiderrufPage() {
   return (
     <div className="mx-auto max-w-3xl py-8 space-y-8">

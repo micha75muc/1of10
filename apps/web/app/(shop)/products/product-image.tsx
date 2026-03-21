@@ -4,6 +4,8 @@
  * without requiring copyrighted product images.
  */
 
+import Image from "next/image";
+
 type BrandStyle = {
   gradient: string;
   icon: string;
@@ -99,11 +101,12 @@ export function ProductImage({
   if (imageUrl) {
     return (
       <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-xl">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={imageUrl}
           alt={name}
-          className="h-full w-full object-cover"
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover"
         />
       </div>
     );

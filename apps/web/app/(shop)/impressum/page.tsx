@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Impressum",
+  description:
+    "Impressum von 1of10 — Michael Hahnel, München. Angaben gemäß DDG §5.",
+  alternates: { canonical: "/impressum" },
+  robots: { index: true, follow: true },
+};
+
 export default function ImpressumPage() {
   return (
     <div className="mx-auto max-w-3xl py-8">

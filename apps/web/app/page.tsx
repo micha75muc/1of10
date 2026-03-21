@@ -4,7 +4,7 @@ import { LogoFull } from "./components/logo";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <main id="main-content" className="flex min-h-screen flex-col">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-6 py-24 text-center">
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--gold)] bg-[var(--gold)]/10 px-4 py-1.5 text-sm text-[var(--gold)]">
@@ -173,13 +173,13 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="px-6 py-8 text-center">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
+        <nav aria-label="Rechtliche Informationen" className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
           <Link href="/impressum" className="hover:underline">Impressum</Link>
           <Link href="/datenschutz" className="hover:underline">Datenschutz</Link>
           <Link href="/agb" className="hover:underline">AGB</Link>
           <Link href="/widerruf" className="hover:underline">Widerrufsbelehrung</Link>
           <Link href="/admin" className="hover:underline">Admin</Link>
-        </div>
+        </nav>
         <p className="mt-4 text-xs text-[var(--muted-foreground)]">
           © 2026 1of10 — Alle Rechte vorbehalten.
         </p>

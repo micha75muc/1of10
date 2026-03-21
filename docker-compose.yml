@@ -27,6 +27,71 @@ services:
     ports:
       - "6379:6379"
 
+  # ─────────────────────────────────────────────────────────
+  # Optionale Dev-Services
+  # Uncomment um Web-App und Agents ebenfalls in Docker zu starten.
+  # Ohne diese Services: `make dev` startet Web + Agents lokal.
+  # ─────────────────────────────────────────────────────────
+
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/web/Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/oneoften?schema=public
+  #     REDIS_URL: redis://redis:6379
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
+  # agents:
+  #   build:
+  #     context: ./apps/agents
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/oneoften?schema=public
+  #     REDIS_URL: redis://redis:6379
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
+  # ─────────────────────────────────────────────────────────
+  # MiroFish Customer Simulation Engine (optional)
+  # Simuliert Kundenverhalten durch Swarm Intelligence.
+  # Aktivieren: Uncomment + MIROFISH_LLM_API_KEY in .env setzen
+  # Setup:  ./scripts/setup-mirofish.sh
+  # Lizenz: AGPL-3.0 (kompatibel mit 1of10 Open Source)
+  # ─────────────────────────────────────────────────────────
+
+  mirofish:
+    build:
+      context: ./services/mirofish
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+      - "3001:3001"
+    environment:
+      - LLM_API_KEY=${MIROFISH_LLM_API_KEY}
+      - LLM_MODEL=${MIROFISH_LLM_MODEL:-qwen-plus}
+    volumes:
+      - mirofish_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
 volumes:
+  mirofish_data:
   postgres-data:
   redis-data:

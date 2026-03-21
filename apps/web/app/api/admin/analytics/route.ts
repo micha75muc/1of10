@@ -1,0 +1,81 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@repo/db";
+
+/**
+ * GET /api/admin/analytics
+ * Dashboard-Metriken aus der DB.
+ * Auth: ADMIN_API_KEY Header.
+ */
+export async function GET(req: Request) {
+  const key = req.headers.get("x-api-key");
+  if (key !== process.env.ADMIN_API_KEY) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const weekStart = new Date(todayStart);
+  weekStart.setDate(weekStart.getDate() - 7);
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const [
+    totalOrders,
+    totalRevenue,
+    winnerCount,
+    todayOrders,
+    weekOrders,
+    monthOrders,
+    pendingApprovals,
+    topProducts,
+    recentWinners,
+  ] = await Promise.all([
+    prisma.order.count(),
+    prisma.order.aggregate({ _sum: { amountTotal: true } }),
+    prisma.order.count({ where: { isWinner: true } }),
+    prisma.order.count({ where: { createdAt: { gte: todayStart } } }),
+    prisma.order.count({ where: { createdAt: { gte: weekStart } } }),
+    prisma.order.count({ where: { createdAt: { gte: monthStart } } }),
+    prisma.approvalItem.count({ where: { status: "PENDING" } }),
+    prisma.order.groupBy({
+      by: ["productId"],
+      _count: true,
+      _sum: { amountTotal: true },
+      orderBy: { _count: { productId: "desc" } },
+      take: 5,
+    }),
+    prisma.order.findMany({
+      where: { isWinner: true, refundStatus: "COMPLETED" },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        createdAt: true,
+        amountTotal: true,
+        product: { select: { name: true } },
+      },
+    }),
+  ]);
+
+  const revenue = Number(totalRevenue._sum.amountTotal ?? 0);
+  const refundEstimate = winnerCount > 0 ? revenue * (winnerCount / Math.max(totalOrders, 1)) : 0;
+
+  return NextResponse.json({
+    overview: {
+      totalOrders,
+      totalRevenue: revenue,
+      totalRefunds: refundEstimate,
+      netRevenue: revenue - refundEstimate,
+      winnerCount,
+      winnerRate: totalOrders > 0 ? winnerCount / totalOrders : 0,
+    },
+    today: { orders: todayOrders },
+    thisWeek: { orders: weekOrders },
+    thisMonth: { orders: monthOrders },
+    topProducts,
+    recentWinners: recentWinners.map((w) => ({
+      date: w.createdAt,
+      product: w.product.name,
+      amount: Number(w.amountTotal),
+    })),
+    pendingApprovals,
+  });
+}

@@ -20,6 +20,13 @@
     },
     "db:migrate": {
       "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
     }
   }
 }

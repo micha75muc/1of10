@@ -1,0 +1,12 @@
+# Reverse proxy config for agents API
+# Replace agents.1of10.de with your actual subdomain
+
+agents.1of10.de {
+    reverse_proxy agents:8000
+}
+
+# MiroFish Customer Simulation (optional)
+# Nur aktivieren wenn mirofish-Service in docker-compose.prod.yml aktiv ist
+# sim.1of10.de {
+#     reverse_proxy mirofish:5001
+# }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
+import { executeApprovedAction } from "../../../../../lib/action-dispatcher";
 
 function checkAdminAuth(req: NextRequest): boolean {
   const apiKey = req.headers.get("x-admin-api-key");
@@ -50,8 +51,24 @@ export async function PATCH(
     },
   });
 
-  // TODO: If APPROVED and actionType is executable, trigger the actual action here
-  // e.g. if actionType === "PURCHASE_KEYS", call the distributor API
+  // Execute the action after approval
+  if (action === "APPROVED") {
+    const result = await executeApprovedAction(
+      item.actionType,
+      item.payload as any
+    );
+
+    const finalStatus = result.success ? "APPROVED" : "FAILED";
+    const finalItem = await prisma.approvalItem.update({
+      where: { id },
+      data: {
+        status: finalStatus,
+        executionResult: result as any,
+      },
+    });
+
+    return NextResponse.json({ item: finalItem, execution: result });
+  }
 
   return NextResponse.json({ item: updated });
 }

@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "AGB — Allgemeine Geschäftsbedingungen",
+  description:
+    "Allgemeine Geschäftsbedingungen von 1of10. Regelungen zu Vertragsschluss, Preisen, Lieferung digitaler Inhalte und Erstattungen.",
+  alternates: { canonical: "/agb" },
+  robots: { index: true, follow: true },
+};
+
 export default function AGBPage() {
   return (
     <div className="mx-auto max-w-3xl py-8 space-y-8">
@@ -64,8 +74,9 @@ export default function AGBPage() {
           §5 Freiwillige Kaufpreiserstattung (Kulanz)
         </h2>
         <p className="mb-3">
-          Der Anbieter gewährt als einseitige, freiwillige Kulanzleistung ohne Rechtsanspruch die vollständige Erstattung jedes 10. Kaufs. Exakt jeder 10. Kauf wird
-          erstattet wird. Die Ermittlung erfolgt über ein faires, nicht
+          Der Anbieter gewährt als einseitige, freiwillige Kulanzleistung die
+          Erstattung statistisch jedes 10. Kaufs. Es besteht kein
+          Rechtsanspruch auf Erstattung. Die Ermittlung erfolgt über ein faires, nicht
           manipulierbares Verfahren: Jeweils 10 aufeinanderfolgende Käufe bilden
           eine Gruppe, in der genau ein Kauf für die Erstattung vorgesehen ist.
           Die Position innerhalb der Gruppe wird zufällig und nicht

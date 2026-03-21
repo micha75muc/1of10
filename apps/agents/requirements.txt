@@ -6,3 +6,4 @@ langchain-core>=0.3
 httpx>=0.28
 python-dotenv>=1.0
 pydantic>=2.10
+asyncpg>=0.30

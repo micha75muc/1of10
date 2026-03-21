@@ -75,13 +75,15 @@ export default function CheckoutForm({
       </div>
 
       <div>
-        <label className="block mb-2 text-sm font-medium">E-Mail-Adresse</label>
+        <label htmlFor="checkout-email" className="block mb-2 text-sm font-medium">E-Mail-Adresse</label>
         <input
+          id="checkout-email"
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="deine@email.de"
+          autoComplete="email"
           className="w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
         />
       </div>
@@ -95,6 +97,7 @@ export default function CheckoutForm({
             checked={agbAccepted}
             onChange={(e) => setAgbAccepted(e.target.checked)}
             className="mt-1 h-4 w-4"
+            aria-required="true"
           />
           <span className="text-sm">
             Ich stimme den{" "}
@@ -110,6 +113,7 @@ export default function CheckoutForm({
             checked={bgbAccepted}
             onChange={(e) => setBgbAccepted(e.target.checked)}
             className="mt-1 h-4 w-4"
+            aria-required="true"
           />
           <span className="text-sm">
             Ich stimme ausdrücklich zu, dass mit der Ausführung des Vertrags vor
@@ -123,22 +127,10 @@ export default function CheckoutForm({
       </div>
 
       {error && (
-        <div className="rounded-lg border border-[var(--destructive)] bg-red-50 p-4 text-sm text-[var(--destructive)]">
+        <div role="alert" className="rounded-lg border border-[var(--destructive)] bg-red-50 p-4 text-sm text-[var(--destructive)]">
           {error}
         </div>
       )}
-
-      <button
-        type="submit"
-        disabled={!canSubmit}
-        className={`w-full rounded-xl px-6 py-4 text-center font-bold text-lg transition ${
-          canSubmit
-            ? "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 cursor-pointer"
-            : "bg-[var(--muted)] text-[var(--muted-foreground)] cursor-not-allowed"
-        }`}
-      >
-        {loading ? "Wird verarbeitet..." : "Zahlungspflichtig bestellen"}
-      </button>
 
       <div className="rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-4 text-center">
         <p className="text-sm font-semibold text-[var(--gold)]">
@@ -148,6 +140,33 @@ export default function CheckoutForm({
           Du behältst die Lizenz in jedem Fall.
         </p>
       </div>
+
+      <button
+        type="submit"
+        disabled={!canSubmit}
+        aria-busy={loading}
+        className={`w-full rounded-xl px-6 py-4 text-center font-bold text-lg transition ${
+          canSubmit
+            ? "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 cursor-pointer"
+            : "bg-[var(--muted)] text-[var(--muted-foreground)] cursor-not-allowed"
+        }`}
+      >
+        {loading ? (
+          <span className="inline-flex items-center gap-2">
+            <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            Wird verarbeitet…
+          </span>
+        ) : (
+          "Zahlungspflichtig bestellen"
+        )}
+      </button>
+
+      <p className="text-center text-xs text-[var(--muted-foreground)]">
+        🔒 Sichere Zahlung über Stripe — deine Daten sind verschlüsselt.
+      </p>
     </form>
   );
 }

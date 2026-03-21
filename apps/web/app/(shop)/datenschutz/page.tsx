@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Datenschutzerklärung",
+  description:
+    "Datenschutzerklärung von 1of10. Informationen zur Erhebung, Verarbeitung und Nutzung personenbezogener Daten gemäß DSGVO.",
+  alternates: { canonical: "/datenschutz" },
+  robots: { index: true, follow: true },
+};
+
 export default function DatenschutzPage() {
   return (
     <div className="mx-auto max-w-3xl py-8 space-y-8">
@@ -42,7 +52,52 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold">3. Zahlungsabwicklung</h2>
+        <h2 className="mb-3 text-xl font-semibold">
+          3. Hosting und technische Infrastruktur
+        </h2>
+        <h3 className="mb-2 font-semibold">3.1 Webhosting (Vercel)</h3>
+        <p className="mb-3">
+          Unsere Website wird bei Vercel Inc. (340 S Lemon Ave #4133, Walnut, CA
+          91789, USA) gehostet. Beim Aufruf unserer Website werden automatisch
+          Informationen technischer Natur erfasst (Server-Logfiles), insbesondere
+          IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene URL,
+          Referrer-URL, verwendeter Browser und Betriebssystem. Rechtsgrundlage
+          ist Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO (berechtigtes Interesse
+          an einem sicheren und effizienten Betrieb der Website). Vercel ist
+          unter dem EU-US Data Privacy Framework zertifiziert. Weitere
+          Informationen:{" "}
+          <a
+            href="https://vercel.com/legal/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-[var(--primary)]"
+          >
+            vercel.com/legal/privacy-policy
+          </a>
+          .
+        </p>
+        <h3 className="mb-2 font-semibold">3.2 Datenbank (Neon)</h3>
+        <p>
+          Zur Speicherung von Bestelldaten nutzen wir Neon Inc. (350 Treat Ave,
+          Suite 200, San Francisco, CA 94110, USA) als Datenbank-Anbieter
+          (PostgreSQL). Gespeichert werden Bestelldaten (E-Mail, Bestellstatus,
+          Zustimmungen). Rechtsgrundlage ist Art.&nbsp;6 Abs.&nbsp;1
+          lit.&nbsp;b DSGVO (Vertragserfüllung). Neon ist unter dem EU-US Data
+          Privacy Framework zertifiziert. Weitere Informationen:{" "}
+          <a
+            href="https://neon.tech/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-[var(--primary)]"
+          >
+            neon.tech/privacy
+          </a>
+          .
+        </p>
+      </section>
+
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">4. Zahlungsabwicklung</h2>
         <p>
           Die Zahlungsabwicklung erfolgt über den Dienstleister Stripe, Inc. (354
           Oyster Point Blvd, South San Francisco, CA 94080, USA). Zur
@@ -63,7 +118,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold">4. E-Mail-Versand</h2>
+        <h2 className="mb-3 text-xl font-semibold">5. E-Mail-Versand</h2>
         <p>
           Für den Versand von Bestellbestätigungen nutzen wir den Dienst Resend.
           Ihre E-Mail-Adresse wird hierfür an Resend übermittelt. Rechtsgrundlage
@@ -73,7 +128,7 @@ export default function DatenschutzPage() {
 
       <section>
         <h2 className="mb-3 text-xl font-semibold">
-          5. Kaufpreiserstattung (Gamified Refund)
+          6. Kaufpreiserstattung (Gamified Refund)
         </h2>
         <p>
           Der Anbieter gewährt als freiwillige Kulanzleistung die Erstattung jedes 10. Kaufs. Die Ermittlung
@@ -86,7 +141,7 @@ export default function DatenschutzPage() {
 
       <section>
         <h2 className="mb-3 text-xl font-semibold">
-          6. Einsatz von KI-Systemen (EU AI Act)
+          7. Einsatz von KI-Systemen (EU AI Act)
         </h2>
         <p>
           Im Sinne der Transparenzpflichten des EU AI Act informieren wir Sie
@@ -100,7 +155,20 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold">7. Ihre Rechte</h2>
+        <h2 className="mb-3 text-xl font-semibold">
+          8. Datenübermittlung in Drittländer
+        </h2>
+        <p>
+          Einige unserer Dienstleister haben ihren Sitz in den USA (Stripe,
+          Vercel, Neon, Resend). Die Datenübermittlung erfolgt auf Grundlage des
+          EU-US Data Privacy Framework (Angemessenheitsbeschluss der
+          EU-Kommission gem. Art.&nbsp;45 DSGVO) bzw. auf Grundlage von
+          Standardvertragsklauseln (Art.&nbsp;46 Abs.&nbsp;2 lit.&nbsp;c DSGVO).
+        </p>
+      </section>
+
+      <section>
+        <h2 className="mb-3 text-xl font-semibold">9. Ihre Rechte</h2>
         <p className="mb-3">
           Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:
         </p>
@@ -120,7 +188,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold">8. Beschwerderecht</h2>
+        <h2 className="mb-3 text-xl font-semibold">10. Beschwerderecht</h2>
         <p>
           Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über
           die Verarbeitung Ihrer personenbezogenen Daten zu beschweren.
@@ -128,7 +196,7 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold">9. Speicherdauer</h2>
+        <h2 className="mb-3 text-xl font-semibold">11. Speicherdauer</h2>
         <p>
           Personenbezogene Daten werden gelöscht, sobald der Zweck der
           Speicherung entfällt. Für Vertragsdaten gelten die gesetzlichen
@@ -137,14 +205,25 @@ export default function DatenschutzPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold">10. Cookies</h2>
+        <h2 className="mb-3 text-xl font-semibold">12. Cookies und Webanalyse</h2>
         <p className="mb-3">
           Wir verwenden ausschließlich technisch notwendige Cookies, die für den
           Betrieb des Online-Shops erforderlich sind. Es findet kein Tracking
-          statt. Ein Cookie-Banner ist daher nicht erforderlich (TTDSG §25
-          Abs.&nbsp;2).
+          und kein Profiling statt. Eine Einwilligung ist daher nicht
+          erforderlich (TTDSG §25 Abs.&nbsp;2). Rechtsgrundlage ist
+          Art.&nbsp;6 Abs.&nbsp;1 lit.&nbsp;f DSGVO (berechtigtes Interesse an
+          einem sicheren und funktionsfähigen Betrieb der Website).
         </p>
-        <p>
+        <h3 className="mb-2 font-semibold">12.1 Admin-Session-Cookie</h3>
+        <p className="mb-3">
+          Für die Authentifizierung im Admin-Bereich wird ein Session-Cookie
+          gesetzt. Dieses Cookie ist technisch notwendig für die
+          Administratoranmeldung und wird nach Ende der Sitzung gelöscht. Es
+          werden keine personenbezogenen Daten von Shop-Besuchern in diesem
+          Cookie gespeichert.
+        </p>
+        <h3 className="mb-2 font-semibold">12.2 Stripe (Zahlungsabwicklung)</h3>
+        <p className="mb-3">
           Bei der Zahlungsabwicklung über Stripe können technisch notwendige
           Cookies von Stripe gesetzt werden. Diese dienen ausschließlich der
           Betrugsprävention und Zahlungsabwicklung und erfordern keine
@@ -157,6 +236,23 @@ export default function DatenschutzPage() {
             className="underline text-[var(--primary)]"
           >
             Datenschutzerklärung von Stripe
+          </a>
+          .
+        </p>
+        <h3 className="mb-2 font-semibold">12.3 Webanalyse (Plausible)</h3>
+        <p>
+          Zur Analyse der Websitenutzung setzen wir Plausible Analytics ein.
+          Plausible arbeitet vollständig ohne Cookies und ohne die Erfassung
+          personenbezogener Daten. Es werden keine IP-Adressen gespeichert und
+          kein Tracking über Websites hinweg durchgeführt. Eine Einwilligung ist
+          daher nicht erforderlich. Weitere Informationen:{" "}
+          <a
+            href="https://plausible.io/data-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-[var(--primary)]"
+          >
+            plausible.io/data-policy
           </a>
           .
         </p>
