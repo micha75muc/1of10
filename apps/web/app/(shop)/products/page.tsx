@@ -49,7 +49,11 @@ export default async function ProductsPage({
     : sort === "price-desc" ? { sellPrice: "desc" }
     : { name: "asc" };
 
-  const products = await prisma.product.findMany({ where, orderBy });
+  const products = await prisma.product.findMany({
+    where,
+    orderBy,
+    select: { id: true, sku: true, name: true, description: true, sellPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true },
+  });
 
   if (products.length === 0) {
     return (
@@ -111,6 +115,11 @@ export default async function ProductsPage({
       </div>
 
       {/* Product Grid */}
+      <div className="mb-4 flex items-center justify-between">
+        <p className="text-sm text-[var(--muted-foreground)]">
+          {products.length} Produkte verfügbar
+        </p>
+      </div>
       {products.length === 0 && (q || category) ? (
         <div className="py-12 text-center">
           <div className="mb-4 text-5xl">🔍</div>

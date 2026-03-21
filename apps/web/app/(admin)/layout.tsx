@@ -1,10 +1,18 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { verifySession } from "../../lib/auth";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Sven (Security): Admin-Bereich nur mit gültiger Session zugänglich
+  const isLoggedIn = await verifySession();
+  if (!isLoggedIn) {
+    redirect("/admin/login");
+  }
+
   return (
     <div className="min-h-screen">
       <header className="border-b bg-[var(--muted)] px-6 py-4">
