@@ -2,8 +2,17 @@ import Link from "next/link";
 import { WinnerTicker } from "./(shop)/products/winner-ticker";
 import { LogoFull } from "./components/logo";
 import { NewsletterSignup } from "./components/newsletter-signup";
+import { prisma } from "@repo/db";
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Featured products direkt auf Landing — Besucher sehen sofort Preise
+  const featuredProducts = await prisma.product.findMany({
+    where: { stockLevel: { gt: 0 } },
+    select: { id: true, sku: true, name: true, sellPrice: true, brand: true },
+    orderBy: { sellPrice: "asc" },
+    take: 3,
+  });
+
   return (
     <main id="main-content" className="flex min-h-screen flex-col">
       {/* Hero Section */}
@@ -64,6 +73,40 @@ export default function HomePage() {
 
       {/* Winner Ticker — Social Proof */}
       <WinnerTicker />
+
+      {/* FEATURED PRODUCTS — Besucher sehen sofort was es kostet */}
+      <section className="border-t px-6 py-16">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="mb-2 text-center text-2xl font-bold">Beliebteste Produkte</h2>
+          <p className="mb-8 text-center text-sm text-[var(--muted-foreground)]">Sofort per E-Mail — jeder 10. Kauf wird erstattet</p>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {featuredProducts.map((p) => (
+              <Link
+                key={p.id}
+                href={`/products/${p.sku}`}
+                className="group rounded-xl border bg-[var(--card)] p-6 hover:border-[var(--primary)] transition"
+              >
+                <p className="text-xs font-medium text-[var(--muted-foreground)]">{p.brand}</p>
+                <h3 className="mt-1 font-bold group-hover:text-[var(--primary)] transition">{p.name}</h3>
+                <div className="mt-3 flex items-end justify-between">
+                  <span className="text-2xl font-extrabold text-[var(--primary)]">
+                    {Number(p.sellPrice).toFixed(2).replace('.', ',')} €
+                  </span>
+                  <span className="text-xs text-[var(--muted-foreground)]">Endpreis</span>
+                </div>
+                <div className="mt-3 rounded-lg bg-[var(--primary)] py-2 text-center text-sm font-semibold text-[var(--primary-foreground)] group-hover:opacity-90 transition">
+                  Details ansehen →
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <Link href="/products" className="text-sm font-medium text-[var(--primary)] hover:underline">
+              Alle {featuredProducts.length < 12 ? "12" : ""} Produkte ansehen →
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Inge + Clara: Warum 1of10? — Emotional USP Section */}
       <section className="border-t px-6 py-16">
@@ -272,17 +315,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-6 py-8 text-center">
+      {/* Footer — mit Trust-Signalen die einen echten Shop ausmachen */}
+      <footer className="border-t px-6 py-8 text-center">
+        {/* Zahlungsmethoden + Kontakt */}
+        <div className="mx-auto mb-6 flex max-w-3xl flex-wrap items-center justify-center gap-4 text-xs text-[var(--muted-foreground)]">
+          <span className="rounded border px-2 py-1">💳 Visa / Mastercard</span>
+          <span className="rounded border px-2 py-1">🔒 Stripe Secure</span>
+          <span className="rounded border px-2 py-1">📧 info@medialess.de</span>
+          <span className="rounded border px-2 py-1">🇩🇪 München, Deutschland</span>
+        </div>
         <nav aria-label="Rechtliche Informationen" className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
           <Link href="/impressum" className="hover:underline">Impressum</Link>
           <Link href="/datenschutz" className="hover:underline">Datenschutz</Link>
           <Link href="/agb" className="hover:underline">AGB</Link>
           <Link href="/widerruf" className="hover:underline">Widerrufsbelehrung</Link>
-          <Link href="/admin" className="hover:underline">Admin</Link>
         </nav>
         <p className="mt-4 text-xs text-[var(--muted-foreground)]">
-          © 2026 1of10 — Alle Rechte vorbehalten.
+          © 2026 1of10 — Michael Hahnel, Einzelunternehmer — Alle Preise sind Endpreise.
         </p>
       </footer>
     </main>
