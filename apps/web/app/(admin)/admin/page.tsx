@@ -4,12 +4,13 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  const [orderCount, winnerCount, pendingApprovals, totalRevenue] =
+  const [orderCount, winnerCount, pendingApprovals, totalRevenue, products] =
     await Promise.all([
       prisma.order.count(),
       prisma.order.count({ where: { isWinner: true } }),
       prisma.approvalItem.count({ where: { status: "PENDING" } }),
       prisma.order.aggregate({ _sum: { amountTotal: true } }),
+      prisma.product.findMany({ select: { sku: true, name: true, costPrice: true, sellPrice: true, stockLevel: true }, orderBy: { sellPrice: "asc" } }),
     ]);
 
   const stats = [
@@ -51,6 +52,41 @@ export default async function AdminDashboard() {
             <div key={stat.label}>{content}</div>
           );
         })}
+      </div>
+
+      {/* Elena (Finance): Margin Overview */}
+      <h2 className="mt-8 mb-4 text-xl font-bold">Margen-Übersicht</h2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b text-left">
+              <th className="py-2 pr-3 font-semibold">Produkt</th>
+              <th className="py-2 pr-3 font-semibold text-right">EK</th>
+              <th className="py-2 pr-3 font-semibold text-right">VK</th>
+              <th className="py-2 pr-3 font-semibold text-right">Marge</th>
+              <th className="py-2 pr-3 font-semibold text-right">Nach 1/10</th>
+              <th className="py-2 font-semibold text-right">Lager</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {products.map((p) => {
+              const cost = Number(p.costPrice);
+              const sell = Number(p.sellPrice);
+              const margin = sell > 0 ? ((sell - cost) / sell) * 100 : 0;
+              const afterRefund = margin - 10;
+              return (
+                <tr key={p.sku} className={afterRefund < 15 ? "text-red-400" : ""}>
+                  <td className="py-2 pr-3 font-medium">{p.name}</td>
+                  <td className="py-2 pr-3 text-right">{cost.toFixed(2)} €</td>
+                  <td className="py-2 pr-3 text-right">{sell.toFixed(2)} €</td>
+                  <td className="py-2 pr-3 text-right">{margin.toFixed(1)}%</td>
+                  <td className="py-2 pr-3 text-right font-semibold">{afterRefund.toFixed(1)}%</td>
+                  <td className="py-2 text-right">{p.stockLevel}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

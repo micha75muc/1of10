@@ -12,7 +12,7 @@
     "test": "turbo test"
   },
   "devDependencies": {
-    "next": "^15",
+    "next": "^16.2.1",
     "turbo": "^2"
   },
   "packageManager": "pnpm@9.15.4"
