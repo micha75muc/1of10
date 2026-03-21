@@ -167,6 +167,14 @@ export default function CheckoutForm({
       <p className="text-center text-xs text-[var(--muted-foreground)]">
         🔒 Sichere Zahlung über Stripe — deine Daten sind verschlüsselt.
       </p>
+
+      {/* Gregor (Growth): Trust signals */}
+      <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[var(--muted-foreground)]">
+        <span className="flex items-center gap-1">🔒 SSL-verschlüsselt</span>
+        <span className="flex items-center gap-1">⚡ Sofort per E-Mail</span>
+        <span className="flex items-center gap-1">🇩🇪 Deutscher Anbieter</span>
+        <span className="flex items-center gap-1">✓ DSGVO-konform</span>
+      </div>
     </form>
   );
 }

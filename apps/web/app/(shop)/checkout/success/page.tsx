@@ -66,6 +66,28 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                   : order.refundStatus}
             </span>
           </p>
+          {/* Bea: Share buttons for viral loop */}
+          <div className="mt-6 space-y-2">
+            <p className="text-sm text-[var(--muted-foreground)]">Erzähl es weiter:</p>
+            <div className="flex justify-center gap-3">
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Gerade ${order.product.name} bei 1of10.de gekauft und den vollen Kaufpreis zurückbekommen! Die erstatten wirklich jeden 10. Kauf. 🎉`)}&url=${encodeURIComponent("https://1of10.de")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg bg-[#1DA1F2] px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition"
+              >
+                𝕏 Teilen
+              </a>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`Gerade ${order.product.name} bei 1of10.de gekauft und Geld zurückbekommen! 🎉 https://1of10.de`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg bg-[#25D366] px-4 py-2 text-sm font-medium text-white hover:opacity-90 transition"
+              >
+                WhatsApp
+              </a>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="mb-8 rounded-xl border bg-[var(--card)] p-8 text-center">

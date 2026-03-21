@@ -58,6 +58,18 @@ export async function GET(req: Request) {
   const revenue = Number(totalRevenue._sum.amountTotal ?? 0);
   const refundEstimate = winnerCount > 0 ? revenue * (winnerCount / Math.max(totalOrders, 1)) : 0;
 
+  // Elena: Product margin analysis
+  const allProducts = await prisma.product.findMany({
+    select: { sku: true, name: true, costPrice: true, sellPrice: true, stockLevel: true },
+  });
+  const productMargins = allProducts.map((p) => {
+    const cost = Number(p.costPrice);
+    const sell = Number(p.sellPrice);
+    const marginPct = sell > 0 ? (sell - cost) / sell * 100 : 0;
+    const afterRefund = marginPct - 10;
+    return { sku: p.sku, name: p.name, costPrice: cost, sellPrice: sell, margin: `${marginPct.toFixed(1)}%`, marginAfterRefund: `${afterRefund.toFixed(1)}%`, healthy: afterRefund > 15, stockLevel: p.stockLevel };
+  });
+
   return NextResponse.json({
     overview: {
       totalOrders,
@@ -77,5 +89,7 @@ export async function GET(req: Request) {
       amount: Number(w.amountTotal),
     })),
     pendingApprovals,
+    productMargins,
+    marginWarnings: productMargins.filter((p) => !p.healthy).map((p) => `${p.sku}: Marge nach Erstattung nur ${p.marginAfterRefund}`),
   });
 }
