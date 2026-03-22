@@ -1,89 +1,102 @@
 /**
- * Brand-specific visual styling for product cards.
- * Uses brand colors and icons to create recognizable product visuals
- * without requiring copyrighted product images.
+ * Uwe (UI): Professional virtual boxshot product visuals.
+ * Renders brand-colored product cards with name, device count,
+ * duration, and brand logo — no copyrighted images needed.
  */
 
 import Image from "next/image";
 
 type BrandStyle = {
-  gradient: string;
-  icon: string;
-  textColor: string;
+  bg: string;
+  accent: string;
+  text: string;
   label: string;
+  logo: string;
 };
 
 const BRAND_STYLES: Record<string, BrandStyle> = {
-  McAfee: {
-    gradient: "from-red-600 to-red-900",
-    icon: "M",
-    textColor: "text-red-400",
-    label: "McAfee",
-  },
   Norton: {
-    gradient: "from-yellow-500 to-yellow-700",
-    icon: "🛡",
-    textColor: "text-yellow-400",
-    label: "Norton",
+    bg: "from-yellow-500 via-amber-600 to-yellow-700",
+    accent: "bg-yellow-400",
+    text: "text-yellow-950",
+    label: "NORTON",
+    logo: "🛡️",
+  },
+  McAfee: {
+    bg: "from-red-600 via-red-700 to-red-900",
+    accent: "bg-red-400",
+    text: "text-white",
+    label: "McAfee",
+    logo: "M",
   },
   Bitdefender: {
-    gradient: "from-red-500 to-rose-800",
-    icon: "B",
-    textColor: "text-red-400",
-    label: "Bitdefender",
+    bg: "from-red-500 via-rose-600 to-rose-800",
+    accent: "bg-rose-300",
+    text: "text-white",
+    label: "BITDEFENDER",
+    logo: "B",
   },
-  Kaspersky: {
-    gradient: "from-emerald-500 to-emerald-800",
-    icon: "K",
-    textColor: "text-emerald-400",
-    label: "Kaspersky",
-  },
-  AVG: {
-    gradient: "from-green-500 to-green-800",
-    icon: "AVG",
-    textColor: "text-green-400",
-    label: "AVG",
-  },
-  Avast: {
-    gradient: "from-orange-500 to-orange-800",
-    icon: "A",
-    textColor: "text-orange-400",
-    label: "Avast",
-  },
-  Acronis: {
-    gradient: "from-blue-500 to-blue-800",
-    icon: "A",
-    textColor: "text-blue-400",
-    label: "Acronis",
+  "Trend Micro": {
+    bg: "from-red-500 via-red-600 to-red-800",
+    accent: "bg-red-300",
+    text: "text-white",
+    label: "TREND MICRO",
+    logo: "TM",
   },
   Panda: {
-    gradient: "from-cyan-500 to-cyan-800",
-    icon: "🐼",
-    textColor: "text-cyan-400",
-    label: "Panda",
+    bg: "from-cyan-500 via-cyan-600 to-teal-700",
+    accent: "bg-cyan-300",
+    text: "text-white",
+    label: "PANDA",
+    logo: "🐼",
+  },
+  "F-Secure": {
+    bg: "from-indigo-500 via-blue-600 to-indigo-800",
+    accent: "bg-blue-300",
+    text: "text-white",
+    label: "F-SECURE",
+    logo: "F",
+  },
+  Microsoft: {
+    bg: "from-blue-600 via-blue-700 to-blue-900",
+    accent: "bg-blue-400",
+    text: "text-white",
+    label: "MICROSOFT",
+    logo: "⊞",
+  },
+  Parallels: {
+    bg: "from-red-500 via-red-600 to-rose-800",
+    accent: "bg-red-300",
+    text: "text-white",
+    label: "PARALLELS",
+    logo: "∥",
   },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  VPN: "🔒 VPN",
-  Sicherheit: "🛡️ Sicherheit",
-  "Backup & Utility": "💾 Backup",
-  "Kreativ-Software": "🎨 Kreativ",
-  Produktivität: "📊 Produktivität",
+  Antivirus: "🛡️ Antivirus",
+  Office: "💼 Office",
+  Betriebssystem: "🖥️ Windows",
+  Mac: "🍎 Mac",
 };
 
-function getProductIcon(name: string, brand: string | null): string {
-  if (name.includes("NordVPN")) return "N";
-  if (name.includes("Norton")) return "🛡";
-  if (name.includes("Bitdefender")) return "B";
-  if (name.includes("Kaspersky")) return "K";
-  if (name.includes("McAfee")) return "M";
-  if (name.includes("Acronis")) return "A";
-  if (name.includes("AOMEI")) return "AO";
-  if (name.includes("Affinity Photo")) return "Ap";
-  if (name.includes("Affinity Designer")) return "Ad";
-  if (name.includes("Nitro")) return "N";
-  return brand?.charAt(0) ?? "?";
+/** Parse product name to extract devices/duration for the boxshot */
+function parseProductMeta(name: string): { devices?: string; duration?: string; edition?: string } {
+  const devices = name.match(/(\d+)\s*(?:Geräte?|PC|Dev|Mac)/i)?.[1];
+  const unlimited = /Unbegrenzt/i.test(name);
+  const duration = name.match(/(\d+)\s*Jahr/i)?.[1];
+  
+  let edition = "";
+  if (/Premium|Family Pack/i.test(name)) edition = "PREMIUM";
+  else if (/Deluxe|Total Security|Total Protection|LiveSafe|Maximum|Complete|Pro\b/i.test(name)) edition = "PRO";
+  else if (/Standard|Plus|Advanced|Essential|Home/i.test(name)) edition = "STANDARD";
+  else if (/Internet Security/i.test(name)) edition = "INTERNET SECURITY";
+  
+  return {
+    devices: unlimited ? "∞" : devices,
+    duration: duration ? `${duration} ${Number(duration) === 1 ? "Jahr" : "Jahre"}` : undefined,
+    edition: edition || undefined,
+  };
 }
 
 export function ProductImage({
@@ -97,8 +110,22 @@ export function ProductImage({
   category: string | null;
   imageUrl: string | null;
 }) {
-  // If a real image URL is provided, use it
   if (imageUrl) {
+    const isLocal = imageUrl.startsWith("/products/");
+    if (isLocal) {
+      return (
+        <div className="relative mb-4 overflow-hidden rounded-xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt={name}
+            width={600}
+            height={450}
+            className="w-full h-auto"
+          />
+        </div>
+      );
+    }
     return (
       <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-xl">
         <Image
@@ -112,34 +139,60 @@ export function ProductImage({
     );
   }
 
-  // Brand-styled visual
   const style = BRAND_STYLES[brand ?? ""] ?? {
-    gradient: "from-slate-600 to-slate-800",
-    icon: "📦",
-    textColor: "text-slate-400",
-    label: brand ?? "Software",
+    bg: "from-slate-600 via-slate-700 to-slate-800",
+    accent: "bg-slate-400",
+    text: "text-white",
+    label: brand?.toUpperCase() ?? "SOFTWARE",
+    logo: "📦",
   };
 
-  const productIcon = getProductIcon(name, brand);
+  const meta = parseProductMeta(name);
 
   return (
     <div
-      className={`relative mb-4 flex aspect-[4/3] flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br ${style.gradient} p-4`}
+      className={`relative mb-4 flex aspect-[4/3] flex-col overflow-hidden rounded-xl bg-gradient-to-br ${style.bg} p-5 select-none`}
     >
-      {/* Brand Icon */}
-      <span className="mb-2 text-5xl font-black text-white/90 select-none leading-none">
-        {productIcon}
-      </span>
-      {/* Brand Label */}
-      <span className="text-xs font-semibold uppercase tracking-widest text-white/50">
-        {style.label}
-      </span>
-      {/* Category Badge */}
-      {category && (
-        <span className="absolute bottom-3 right-3 rounded-full bg-black/30 px-2 py-0.5 text-[10px] font-medium text-white/70 backdrop-blur-sm">
-          {CATEGORY_LABELS[category] ?? category}
-        </span>
+      {/* Decorative shapes */}
+      <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-white/5" />
+      <div className="absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-white/5" />
+      <div className="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-l from-black/10 to-transparent" />
+
+      {/* Top: Brand logo + name */}
+      <div className="relative z-10 flex items-center gap-2 mb-auto">
+        <span className="text-2xl font-black text-white/80 leading-none">{style.logo}</span>
+        <span className="text-xs font-bold tracking-[0.15em] text-white/60">{style.label}</span>
+      </div>
+
+      {/* Center: Edition name */}
+      {meta.edition && (
+        <div className="relative z-10 mb-2">
+          <p className={`text-xl font-extrabold leading-tight ${style.text} drop-shadow-sm`}>
+            {meta.edition}
+          </p>
+        </div>
       )}
+
+      {/* Bottom: Specs pills */}
+      <div className="relative z-10 flex flex-wrap items-center gap-1.5 mt-auto">
+        {meta.devices && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-white/20 backdrop-blur-sm px-2.5 py-1 text-[11px] font-semibold text-white">
+            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg>
+            {meta.devices === "∞" ? "Unbegrenzt" : `${meta.devices} ${Number(meta.devices) === 1 ? "Gerät" : "Geräte"}`}
+          </span>
+        )}
+        {meta.duration && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-white/20 backdrop-blur-sm px-2.5 py-1 text-[11px] font-semibold text-white">
+            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+            {meta.duration}
+          </span>
+        )}
+        {category && (
+          <span className="inline-flex items-center rounded-full bg-black/20 backdrop-blur-sm px-2 py-0.5 text-[10px] font-medium text-white/70">
+            {CATEGORY_LABELS[category] ?? category}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

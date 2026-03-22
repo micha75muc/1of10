@@ -26,6 +26,9 @@
     --radius: 0.625rem;
     --gold: oklch(0.82 0.19 85);
     --success: oklch(0.55 0.15 145);
+    --brand-blue: oklch(0.55 0.15 250);
+    --brand-teal: oklch(0.65 0.12 190);
+    --brand-amber: oklch(0.78 0.15 75);
   }
 }
 
@@ -51,4 +54,29 @@
 
 .animate-slide-in {
   animation: slide-in 0.5s ease-out;
+}
+
+/* Brand gradient backgrounds for product cards */
+.brand-norton { background: linear-gradient(135deg, oklch(0.95 0.02 85), oklch(0.92 0.04 75)); }
+.brand-mcafee { background: linear-gradient(135deg, oklch(0.93 0.03 25), oklch(0.90 0.05 15)); }
+.brand-bitdefender { background: linear-gradient(135deg, oklch(0.93 0.03 15), oklch(0.89 0.06 5)); }
+.brand-trendmicro { background: linear-gradient(135deg, oklch(0.93 0.04 20), oklch(0.88 0.06 10)); }
+.brand-panda { background: linear-gradient(135deg, oklch(0.93 0.04 195), oklch(0.88 0.06 185)); }
+.brand-fsecure { background: linear-gradient(135deg, oklch(0.93 0.04 255), oklch(0.88 0.06 245)); }
+.brand-microsoft { background: linear-gradient(135deg, oklch(0.93 0.03 240), oklch(0.89 0.05 230)); }
+.brand-parallels { background: linear-gradient(135deg, oklch(0.93 0.03 25), oklch(0.89 0.05 15)); }
+.brand-default { background: linear-gradient(135deg, oklch(0.95 0.02 250), oklch(0.91 0.04 240)); }
+
+/* Subtle grid pattern */
+.hero-pattern {
+  background-image: radial-gradient(oklch(0.85 0 0) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Step counter accent */
+.step-number {
+  background: linear-gradient(135deg, var(--foreground) 0%, oklch(0.3 0 0) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

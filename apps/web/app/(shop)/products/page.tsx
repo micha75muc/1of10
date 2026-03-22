@@ -8,14 +8,14 @@ import { CategoryFilter } from "./category-filter";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Digitale Produkte kaufen — Antivirus, VPN, Plugins & mehr",
+  title: "Software kaufen — Antivirus, Office, Windows & mehr",
   description:
-    "Günstige Software bei 1of10 kaufen. Antivirus, VPN, Audio-Plugins, Foto-Software & Game Keys. Sofort per E-Mail — und jeder 10. Kauf wird erstattet.",
+    "Günstige Software bei 1of10 kaufen. Norton, McAfee, Bitdefender, Trend Micro, Windows und Office. Sofort per E-Mail — jeder 10. Kauf wird erstattet.",
   alternates: { canonical: "/products" },
   openGraph: {
-    title: "Digitale Produkte kaufen | 1of10",
+    title: "Software kaufen | 1of10",
     description:
-      "Günstige Software. Sofort per E-Mail — jeder 10. Kauf wird vollständig erstattet.",
+      "Antivirus, Office, Windows und mehr. Sofort per E-Mail — jeder 10. Kauf wird erstattet.",
   },
 };
 
@@ -49,6 +49,9 @@ export default async function ProductsPage({
     : sort === "price-desc" ? { sellPrice: "desc" }
     : { name: "asc" };
 
+  // Only show products with stock > 0
+  where.stockLevel = { gt: 0 };
+
   const products = await prisma.product.findMany({
     where,
     orderBy,
@@ -79,7 +82,7 @@ export default async function ProductsPage({
       <div className="mb-8">
         <h1 className="mb-3 text-3xl font-bold">Alle Produkte</h1>
         <p className="text-[var(--muted-foreground)]">
-          Software, Games, Guthaben &amp; mehr — alles wird{" "}
+          Antivirus, Office, Windows &amp; mehr — alles wird{" "}
           <span className="font-semibold text-[var(--primary)]">
             sofort per E-Mail
           </span>{" "}
@@ -137,8 +140,6 @@ export default async function ProductsPage({
       ) : (
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => {
-          const isPopular = product.stockLevel > 30;
-
           return (
             <Link
               key={product.id}
@@ -154,22 +155,21 @@ export default async function ProductsPage({
               />
 
               <div className="flex flex-1 flex-col px-5 pb-5">
-                {/* Badges */}
+                {/* Badges — max 2, category + optional stock warning */}
                 <div className="mb-3 flex flex-wrap items-center gap-1.5">
-                  {isPopular && (
-                    <span className="rounded-full bg-[var(--gold)]/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--gold)]">
-                      ⭐ Bestseller
-                    </span>
-                  )}
-                  <span className="rounded-full bg-[var(--primary)]/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--primary)]">
-                    ⚡ Sofort per E-Mail
-                  </span>
-                  <span className="rounded-full bg-[var(--gold)]/15 px-2 py-0.5 text-[10px] font-semibold text-[var(--gold)]">
-                    🎲 Jeder 10. Kauf wird erstattet
-                  </span>
                   {product.category && (
                     <span className="rounded-full bg-[var(--secondary)] px-2 py-0.5 text-[10px] font-medium text-[var(--muted-foreground)]">
                       {getCategoryLabel(product.category)}
+                    </span>
+                  )}
+                  {product.brand && (
+                    <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-[10px] font-medium text-[var(--primary)]">
+                      {product.brand}
+                    </span>
+                  )}
+                  {product.stockLevel > 0 && product.stockLevel <= 5 && (
+                    <span className="rounded-full bg-[var(--destructive)]/10 px-2 py-0.5 text-[10px] font-semibold text-[var(--destructive)]">
+                      Nur noch {product.stockLevel}×
                     </span>
                   )}
                 </div>

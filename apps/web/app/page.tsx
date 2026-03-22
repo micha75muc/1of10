@@ -1,169 +1,310 @@
 import Link from "next/link";
-import { LogoFull } from "./components/logo";
+import { Logo } from "./components/logo";
+import { MobileNav } from "./components/mobile-nav";
 import { NewsletterSignup } from "./components/newsletter-signup";
 import { prisma } from "@repo/db";
+import { Gift, Shield, Zap, ShoppingCart, Mail, Phone } from "lucide-react";
 
 export default async function HomePage() {
+  // Bestseller-Auswahl für die Startseite (je 1-2 pro Marke, verschiedene Preisstufen)
+  const featuredSkus = [
+    "NORTON-360-STD-1Y", "NORTON-360-DLX-3D-1Y", "NORTON-360-PREM-10D-1Y",
+    "MCAFEE-TP-1PC-1Y", "MCAFEE-LIVESAFE-UNL-1Y",
+    "BITDEF-TS-5D-1Y", "BITDEF-FAMILY-15D-1Y",
+    "TREND-MAXSEC-5PC-1Y",
+  ];
   const products = await prisma.product.findMany({
-    where: { stockLevel: { gt: 0 } },
-    select: { id: true, sku: true, name: true, sellPrice: true, brand: true, description: true, stockLevel: true },
+    where: { sku: { in: featuredSkus }, stockLevel: { gt: 0 } },
+    select: { id: true, sku: true, name: true, sellPrice: true, brand: true, description: true, stockLevel: true, category: true },
     orderBy: { sellPrice: "asc" },
   });
 
+  // Anzahl aller aktiven Produkte für den "Alle X Produkte" Link
+  const totalProducts = await prisma.product.count({ where: { stockLevel: { gt: 0 } } });
+
   return (
-    <main>
-      {/* Header */}
-      <header className="border-b border-[var(--border)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="text-xl font-bold">
-              <LogoFull size="sm" />
+    <div className="min-h-screen flex flex-col">
+      {/* USP Banner */}
+      <div className="bg-[var(--gold)]/10 border-b border-[var(--gold)]/20 text-center py-2.5 px-4">
+        <Gift className="inline-block h-4 w-4 mr-1.5 -mt-0.5 text-[var(--gold)]" />
+        <span className="text-sm font-medium">Wir erstatten jeden 10. Kauf</span>
+        <span className="text-sm text-[var(--muted-foreground)]"> — freiwillige Kulanzleistung</span>
+      </div>
+
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 border-b bg-[var(--background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--background)]/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/" className="mr-8">
+              <Logo size="md" />
             </Link>
-            <nav className="hidden sm:flex items-center gap-6">
-              <Link href="/products" className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Produkte</Link>
-              <Link href="/blog" className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Ratgeber</Link>
-              <Link href="/faq" className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">FAQ</Link>
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+              <Link href="/products" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Produkte</Link>
+              <Link href="/blog" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Ratgeber</Link>
+              <Link href="/transparenz" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Transparenz</Link>
             </nav>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/products"
+              className="hidden md:inline-flex items-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] hover:opacity-90 transition"
+            >
+              Jetzt einkaufen
+            </Link>
+            <MobileNav />
           </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[var(--secondary)]/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-16 sm:py-20 lg:py-28">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-[var(--foreground)]">
-                Security-Software zum fairen Preis
+      <main className="flex-1">
+        {/* Hero */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-blue)]/8 via-[var(--secondary)]/40 to-[var(--gold)]/8" />
+          <div className="absolute inset-0 hero-pattern opacity-40" />
+          <div className="relative max-w-5xl mx-auto px-6 py-20 sm:py-28 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[var(--gold)]/15 px-4 py-1.5 text-sm font-medium text-[var(--gold)] mb-6 border border-[var(--gold)]/20">
+                <Gift className="h-4 w-4" />
+                Jeder 10. Kauf wird erstattet
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
+                Software
+                <span className="block mt-2 pb-3 bg-gradient-to-r from-[var(--foreground)] via-[var(--brand-blue)] to-[var(--foreground)] bg-clip-text text-transparent leading-[1.3] [box-decoration-break:clone]">günstig &amp; sicher</span>
               </h1>
-              <p className="mt-6 text-lg sm:text-xl text-[var(--muted-foreground)] leading-relaxed">
-                Autorisierte Keys von Norton, McAfee und Avast. Sofortige Lieferung per E-Mail.
-                Als freiwillige Kulanz erstatten wir jeden zehnten Kauf vollst&#228;ndig.
+              <p className="mt-6 text-lg leading-8 text-[var(--muted-foreground)] max-w-2xl mx-auto">
+                Antivirus, Office und Windows — autorisierte Lizenzen zu fairen Preisen.
+                Sofortige Lieferung per E-Mail. Als Kulanz erstatten wir jeden zehnten Kauf.
               </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
+              <div className="mt-10 flex items-center justify-center gap-4">
                 <Link
                   href="/products"
-                  className="inline-flex items-center justify-center gap-2 h-12 px-8 bg-[var(--foreground)] text-[var(--primary-foreground)] rounded-full text-base font-medium hover:bg-[var(--foreground)]/90 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-[var(--foreground)] text-[var(--primary-foreground)] font-medium hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] transition-all"
                 >
-                  Alle Produkte
+                  <ShoppingCart className="h-4 w-4" />
+                  Alle {totalProducts} Produkte
                 </Link>
-                <a
+                <Link
                   href="#so-funktionierts"
-                  className="inline-flex items-center justify-center gap-2 h-12 px-8 border border-[var(--border)] rounded-full text-base font-medium hover:bg-[var(--secondary)] transition-colors"
+                  className="inline-flex items-center justify-center h-12 px-8 rounded-full border border-[var(--border)] font-medium hover:bg-[var(--secondary)] hover:border-[var(--muted-foreground)]/30 transition-all"
                 >
                   So funktioniert es
-                </a>
+                </Link>
               </div>
             </div>
-          </div>
-        </div>
-        <div aria-hidden="true" className="absolute top-1/2 right-0 -translate-y-1/2 w-1/3 h-full bg-gradient-to-l from-[var(--secondary)]/50 to-transparent pointer-events-none hidden lg:block" />
-      </section>
 
-      {/* Products */}
-      <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <h2 className="text-3xl font-medium tracking-tight">Unsere Produkte</h2>
-            <p className="mt-2 text-[var(--muted-foreground)]">Autorisierte Software ab 14,99 &#8364;</p>
-          </div>
-          <Link href="/products" className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors hidden sm:block">
-            Alle anzeigen &rarr;
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((p) => (
-            <Link key={p.id} href={`/products/${p.sku}`} className="group">
-              <div className="aspect-square bg-[var(--secondary)] rounded-2xl overflow-hidden mb-4 flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-[var(--muted-foreground)]">{p.brand}</p>
-                  <p className="mt-2 text-sm font-medium text-[var(--foreground)]/60 px-6 leading-snug">{p.name}</p>
+            {/* Trust Indicators */}
+            <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-[var(--background)]/80 backdrop-blur border border-[var(--border)]/50 hover:border-[var(--brand-teal)]/30 hover:shadow-md transition-all">
+                <div className="rounded-2xl bg-gradient-to-br from-[var(--brand-teal)]/20 to-[var(--brand-teal)]/5 p-3.5 mb-3">
+                  <Zap className="h-6 w-6 text-[var(--brand-teal)]" />
                 </div>
+                <h3 className="font-semibold">Sofortige Lieferung</h3>
+                <p className="text-sm text-[var(--muted-foreground)] mt-1">Lizenzschlüssel direkt per E-Mail</p>
               </div>
-              <div className="space-y-1">
-                <h3 className="text-sm font-medium text-[var(--foreground)] group-hover:underline">{p.name}</h3>
-                <p className="text-sm font-medium text-[var(--foreground)]">{Number(p.sellPrice).toFixed(2).replace(".", ",")} &#8364;</p>
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-[var(--background)]/80 backdrop-blur border border-[var(--border)]/50 hover:border-[var(--brand-blue)]/30 hover:shadow-md transition-all">
+                <div className="rounded-2xl bg-gradient-to-br from-[var(--brand-blue)]/20 to-[var(--brand-blue)]/5 p-3.5 mb-3">
+                  <Shield className="h-6 w-6 text-[var(--brand-blue)]" />
+                </div>
+                <h3 className="font-semibold">Sichere Zahlung</h3>
+                <p className="text-sm text-[var(--muted-foreground)] mt-1">SSL-verschlüsselt über Stripe</p>
               </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* How it works */}
-      <section id="so-funktionierts" className="bg-[var(--secondary)]/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <h2 className="text-3xl font-medium tracking-tight mb-4">So funktioniert 1of10</h2>
-          <p className="text-[var(--muted-foreground)] mb-12 max-w-2xl">Drei einfache Schritte zu Ihrer Software &#8212; und der M&#246;glichkeit einer vollst&#228;ndigen Erstattung.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12">
-            <div>
-              <div className="text-sm font-semibold text-[var(--muted-foreground)] mb-3">01</div>
-              <h3 className="text-lg font-medium mb-2">Produkt w&#228;hlen</h3>
-              <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">W&#228;hlen Sie aus unserem Sortiment autorisierter Security-Software.</p>
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-[var(--muted-foreground)] mb-3">02</div>
-              <h3 className="text-lg font-medium mb-2">Sicher bezahlen</h3>
-              <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">Bezahlen Sie sicher &#252;ber Stripe. Ihr Lizenzschl&#252;ssel kommt sofort per E-Mail.</p>
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-[var(--muted-foreground)] mb-3">03</div>
-              <h3 className="text-lg font-medium mb-2">Erstattung pr&#252;fen</h3>
-              <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">Nach dem Kauf erfahren Sie sofort, ob Ihr Kauf als Kulanz erstattet wird. Ihre Software behalten Sie in jedem Fall.</p>
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-[var(--background)]/80 backdrop-blur border border-[var(--border)]/50 hover:border-[var(--gold)]/30 hover:shadow-md transition-all">
+                <div className="rounded-2xl bg-gradient-to-br from-[var(--gold)]/20 to-[var(--gold)]/5 p-3.5 mb-3">
+                  <Gift className="h-6 w-6 text-[var(--gold)]" />
+                </div>
+                <h3 className="font-semibold">Jeder 10. Kauf erstattet</h3>
+                <p className="text-sm text-[var(--muted-foreground)] mt-1">Freiwillige Kulanzleistung</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Newsletter */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="max-w-md">
-          <h2 className="text-2xl font-medium tracking-tight">Auf dem Laufenden bleiben</h2>
-          <p className="mt-3 text-sm text-[var(--muted-foreground)] leading-relaxed">Erhalten Sie Informationen zu neuen Produkten und Erstattungs-Updates.</p>
-          <div className="mt-6">
-            <NewsletterSignup variant="banner" />
+        {/* Products */}
+        <section id="produkte" className="py-16 px-6 bg-[var(--secondary)]/20">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-end justify-between mb-12">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tight">Beliebte Produkte</h2>
+                <p className="mt-2 text-[var(--muted-foreground)]">Unsere Empfehlungen — aus {totalProducts} Produkten</p>
+              </div>
+              <Link href="/products" className="text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors hidden sm:block">
+                Alle anzeigen →
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((p) => {
+                const bl = p.brand?.toLowerCase() ?? '';
+                const brandClass = bl.includes('norton') ? 'brand-norton'
+                  : bl.includes('mcafee') ? 'brand-mcafee'
+                  : bl.includes('bitdefender') ? 'brand-bitdefender'
+                  : bl.includes('trend') ? 'brand-trendmicro'
+                  : bl.includes('panda') ? 'brand-panda'
+                  : bl.includes('f-secure') ? 'brand-fsecure'
+                  : bl.includes('microsoft') ? 'brand-microsoft'
+                  : bl.includes('parallels') ? 'brand-parallels'
+                  : 'brand-default';
+                return (
+                  <div key={p.id} className="group rounded-xl border bg-[var(--card)] overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                    {/* Brand color header area */}
+                    <div className={`${brandClass} px-5 pt-5 pb-4`}>
+                      <div className="flex justify-between items-start mb-3">
+                        <span className="inline-flex items-center rounded-full bg-[var(--background)]/80 backdrop-blur px-2.5 py-0.5 text-xs font-medium">
+                          {p.category || p.brand}
+                        </span>
+                        {p.stockLevel <= 5 && (
+                          <span className="inline-flex items-center rounded-full bg-[var(--destructive)]/10 px-2 py-0.5 text-xs text-[var(--destructive)] font-medium">
+                            Nur noch {p.stockLevel}×
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--muted-foreground)]/70 mb-1">{p.brand}</p>
+                      <h3 className="font-semibold text-lg leading-tight">{p.name}</h3>
+                    </div>
+                    <div className="px-5 py-4">
+                      <p className="text-sm text-[var(--muted-foreground)] line-clamp-2">{p.description}</p>
+                    </div>
+                    <div className="px-5 pb-5 pt-3 border-t flex flex-col gap-3">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-bold">{Number(p.sellPrice).toFixed(2).replace(".", ",")} €</span>
+                        <span className="text-xs text-[var(--muted-foreground)]">Endpreis</span>
+                      </div>
+                      <Link
+                        href={`/products/${p.sku}`}
+                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2.5 text-sm font-medium text-[var(--primary-foreground)] hover:scale-[1.02] active:scale-[0.98] transition-all w-full"
+                      >
+                        <ShoppingCart className="h-4 w-4" />
+                        Details ansehen
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-8 text-center">
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--border)] px-6 py-3 text-sm font-medium hover:bg-[var(--secondary)] transition-all"
+              >
+                Alle {totalProducts} Produkte anzeigen →
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* How it works */}
+        <section id="so-funktionierts" className="bg-[var(--background)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div className="text-center mb-14">
+              <h2 className="text-3xl font-bold tracking-tight mb-4">So funktioniert 1of10</h2>
+              <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto">
+                Drei einfache Schritte zu Ihrer Software — und der Möglichkeit einer vollständigen Erstattung.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              <div className="relative rounded-2xl border bg-[var(--card)] p-6 hover:shadow-md transition-all">
+                <div className="step-number text-4xl font-black mb-4">01</div>
+                <div className="h-1 w-12 rounded-full bg-[var(--brand-teal)] mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Produkt wählen</h3>
+                <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
+                  Wählen Sie aus über {totalProducts} Produkten: Antivirus, Office, Windows und mehr.
+                </p>
+              </div>
+              <div className="relative rounded-2xl border bg-[var(--card)] p-6 hover:shadow-md transition-all">
+                <div className="step-number text-4xl font-black mb-4">02</div>
+                <div className="h-1 w-12 rounded-full bg-[var(--brand-blue)] mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Sicher bezahlen</h3>
+                <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
+                  Bezahlen Sie sicher über Stripe. Ihr Lizenzschlüssel kommt sofort per E-Mail.
+                </p>
+              </div>
+              <div className="relative rounded-2xl border bg-[var(--card)] p-6 hover:shadow-md transition-all">
+                <div className="step-number text-4xl font-black mb-4">03</div>
+                <div className="h-1 w-12 rounded-full bg-[var(--gold)] mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Erstattung prüfen</h3>
+                <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
+                  Nach dem Kauf erfahren Sie sofort, ob Ihr Kauf als Kulanz erstattet wird. Ihre Software behalten Sie in jedem Fall.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Newsletter */}
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-blue)]/8 to-[var(--gold)]/8" />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+            <div className="max-w-xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-blue)]/10 px-4 py-1.5 text-sm font-medium text-[var(--brand-blue)] mb-4">
+                <Mail className="h-4 w-4" />
+                Newsletter
+              </div>
+              <h2 className="text-2xl font-bold tracking-tight">Auf dem Laufenden bleiben</h2>
+              <p className="mt-3 text-sm text-[var(--muted-foreground)] leading-relaxed">
+                Erhalten Sie Informationen zu neuen Produkten, Angeboten und Erstattungs-Updates.
+              </p>
+              <div className="mt-6 max-w-sm mx-auto">
+                <NewsletterSignup variant="banner" />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="border-t border-[var(--border)] bg-[var(--background)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-12 sm:py-16 flex flex-col sm:flex-row gap-8 sm:gap-16">
-            <div className="sm:max-w-xs">
-              <Link href="/" className="text-xl font-bold text-[var(--foreground)]">1of10</Link>
-              <p className="mt-4 text-sm text-[var(--muted-foreground)] leading-relaxed">
-                Autorisierte Software-Keys mit sofortiger Lieferung. Als freiwillige Kulanz erstatten wir jeden zehnten Kauf.
+      <footer className="border-t bg-[var(--foreground)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <Link href="/" className="inline-flex items-center gap-2 mb-4">
+                <span className="text-xl font-extrabold text-[var(--primary-foreground)]">
+                  <span className="opacity-60">1</span>of<span>10</span>
+                </span>
+              </Link>
+              <p className="text-sm text-[var(--primary-foreground)]/50 leading-relaxed">
+                Ihr zuverlässiger Partner für günstige Software. Autorisierte Lizenzschlüssel zu fairen Preisen.
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-[var(--foreground)]">Shop</h3>
-              <ul className="mt-4 space-y-3">
-                <li><Link href="/products" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Alle Produkte</Link></li>
-                <li><Link href="/blog" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Ratgeber</Link></li>
-                <li><Link href="/faq" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">FAQ</Link></li>
-                <li><Link href="/transparenz" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Transparenz</Link></li>
+              <h3 className="text-sm font-semibold mb-4 text-[var(--primary-foreground)]/70">Shop</h3>
+              <ul className="space-y-3">
+                <li><Link href="/products" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Alle Produkte</Link></li>
+                <li><Link href="/blog" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Ratgeber</Link></li>
+                <li><Link href="/transparenz" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Transparenz</Link></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-[var(--foreground)]">Rechtliches</h3>
-              <ul className="mt-4 space-y-3">
-                <li><Link href="/impressum" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Impressum</Link></li>
-                <li><Link href="/datenschutz" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Datenschutz</Link></li>
-                <li><Link href="/agb" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">AGB</Link></li>
-                <li><Link href="/widerruf" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Widerruf</Link></li>
+              <h3 className="text-sm font-semibold mb-4 text-[var(--primary-foreground)]/70">Rechtliches</h3>
+              <ul className="space-y-3">
+                <li><Link href="/impressum" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Impressum</Link></li>
+                <li><Link href="/datenschutz" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Datenschutz</Link></li>
+                <li><Link href="/agb" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">AGB</Link></li>
+                <li><Link href="/widerruf" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Widerruf</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold mb-4 text-[var(--primary-foreground)]/70">Kontakt</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center text-sm text-[var(--primary-foreground)]/50">
+                  <Mail className="h-4 w-4 mr-2 shrink-0" />
+                  info@medialess.de
+                </li>
+                <li className="flex items-center text-sm text-[var(--primary-foreground)]/50">
+                  <Phone className="h-4 w-4 mr-2 shrink-0" />
+                  0152 25389619
+                </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-[var(--border)] py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-[var(--muted-foreground)]">&#169; 2026 1of10 &#183; Michael Hahnel &#183; Alle Preise Endpreise &#183; &#167;19 UStG</p>
-            <div className="flex items-center gap-4 text-xs text-[var(--muted-foreground)]">
-              <span>Visa / Mastercard</span>
-              <span>SSL</span>
-              <span>M&#252;nchen, DE</span>
-            </div>
+          <div className="mt-10 border-t border-[var(--primary-foreground)]/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-[var(--primary-foreground)]/40">
+              © {new Date().getFullYear()} 1of10 · Michael Hahnel · München
+            </p>
+            <p className="text-xs text-[var(--primary-foreground)]/40">
+              Alle Preise Endpreise · gem. §19 UStG keine USt.
+            </p>
           </div>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }

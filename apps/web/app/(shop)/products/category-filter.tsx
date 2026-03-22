@@ -4,11 +4,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const CATEGORIES = [
   { value: "", label: "Alle" },
-  { value: "os", label: "Betriebssysteme" },
-  { value: "office", label: "Office" },
-  { value: "security", label: "Security" },
-  { value: "creative", label: "Kreativ" },
-  { value: "server", label: "Server" },
+  { value: "Antivirus", label: "Antivirus & Security" },
+  { value: "Office", label: "Office & 365" },
+  { value: "Betriebssystem", label: "Windows" },
+  { value: "Mac", label: "Mac" },
 ] as const;
 
 export function CategoryFilter() {

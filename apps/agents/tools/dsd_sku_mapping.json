@@ -1,114 +1,90 @@
 {
   "description": "Mapping 1of10 Product SKUs to DSD Europe Article Numbers",
-  "last_updated": "2026-03-21",
+  "last_updated": "2026-03-22",
   "products": [
-    {
-      "sku": "MCAFEE-TP-3PC-1Y",
-      "dsd_article": "DSD260010",
-      "dsd_supplier_sku": "DSD260010",
-      "dsd_name": "McAfee Total Protection 3-PC 1 Jahr",
-      "our_sell_price": 19.99,
-      "dsd_buy_price_incl_vat": 4.17,
-      "notes": "Extrem günstig — Top-Seller Kandidat"
-    },
-    {
-      "sku": "MCAFEE-TP-UNL-1Y",
-      "dsd_article": "DSD260020",
-      "dsd_supplier_sku": "DSD260020",
-      "dsd_name": "McAfee Total Protection Unlimited Devices 1 Jahr",
-      "our_sell_price": 29.99,
-      "dsd_buy_price_incl_vat": 10.59,
-      "notes": "Familie-Produkt, gute Marge"
-    },
     {
       "sku": "NORTON-360-STD-1Y",
       "dsd_article": "DSD190048",
-      "dsd_supplier_sku": "21397343",
-      "dsd_name": "Norton 360 Standard 1-Device + 10 GB 1 year (Non-Subscription)",
-      "our_sell_price": 34.99,
-      "dsd_buy_price_incl_vat": 19.04,
-      "notes": "Non-Subscription Version"
+      "dsd_name": "Norton 360 Standard 1-Device + 10 GB Cloudstorage 1 year (Non-Subscription)",
+      "our_sell_price": 14.99,
+      "dsd_buy_price": 6.00
+    },
+    {
+      "sku": "NORTON-360-DLX-3D-1Y",
+      "dsd_article": "DSD190045",
+      "dsd_name": "Norton 360 Deluxe 3-Devices + 25 GB Cloudstorage 1 year (Non-Subscription)",
+      "our_sell_price": 19.99,
+      "dsd_buy_price": 8.00
     },
     {
       "sku": "NORTON-360-DLX-5D-1Y",
       "dsd_article": "DSD190046",
-      "dsd_supplier_sku": "21395465",
-      "dsd_name": "Norton 360 Deluxe 5-Devices + 50 GB 1 year (Non-Subscription)",
-      "our_sell_price": 44.99,
-      "dsd_buy_price_incl_vat": 22.61,
-      "notes": "Non-Subscription, 5 Geräte"
+      "dsd_name": "Norton 360 Deluxe 5-Devices + 50 GB Cloudstorage 1 year (Non-Subscription)",
+      "our_sell_price": 24.99,
+      "dsd_buy_price": 11.75
     },
     {
       "sku": "NORTON-360-PREM-10D-1Y",
       "dsd_article": "DSD190047",
-      "dsd_supplier_sku": "21397287",
-      "dsd_name": "Norton 360 Premium 10-Devices + 75 GB 1 year (Non-Subscription)",
-      "our_sell_price": 49.99,
-      "dsd_buy_price_incl_vat": 26.18,
-      "notes": "Non-Subscription, Familie"
+      "dsd_name": "Norton 360 Premium 10-Devices + 75 GB Cloudstorage 1 year (Non-Subscription)",
+      "our_sell_price": 34.99,
+      "dsd_buy_price": 14.40
+    },
+    {
+      "sku": "MCAFEE-TP-3PC-1Y",
+      "dsd_article": "DSD260021",
+      "dsd_name": "McAfee Total Protection 1-PC 1 year",
+      "our_sell_price": 14.99,
+      "dsd_buy_price": 7.80
+    },
+    {
+      "sku": "MCAFEE-TP-UNL-1Y",
+      "dsd_article": "DSD260020",
+      "dsd_name": "McAfee Total Protection 10-PC 1 year",
+      "our_sell_price": 24.99,
+      "dsd_buy_price": 11.80
+    },
+    {
+      "sku": "MCAFEE-LIVESAFE-UNL-1Y",
+      "dsd_article": "DSD260009",
+      "dsd_name": "McAfee LiveSafe Unlimited Devices 1 year",
+      "our_sell_price": 29.99,
+      "dsd_buy_price": 14.80
     },
     {
       "sku": "BITDEF-TS-5D-1Y",
       "dsd_article": "160103",
-      "dsd_supplier_sku": "CP_TS_20_5_12",
       "dsd_name": "Bitdefender Total Security Multi-Device 5-Devices 1 year",
-      "our_sell_price": 69.99,
-      "dsd_buy_price_incl_vat": 46.41,
-      "notes": "Nr. 1 in Tests"
+      "our_sell_price": 44.99,
+      "dsd_buy_price": 29.00
     },
     {
       "sku": "BITDEF-TS-10D-1Y",
       "dsd_article": "160106",
-      "dsd_supplier_sku": "CP_TS_20_10_12",
       "dsd_name": "Bitdefender Total Security Multi-Device 10-Devices 1 year",
-      "our_sell_price": 89.99,
-      "dsd_buy_price_incl_vat": 65.40,
-      "notes": "10 Geräte Version"
-    },
-    {
-      "sku": "AVG-TUNEUP-10D-1Y",
-      "dsd_article": "DSD300029",
-      "dsd_supplier_sku": "DSD300029",
-      "dsd_name": "AVG TuneUp 10-Devices 1 year",
-      "our_sell_price": 19.99,
-      "dsd_buy_price_incl_vat": 6.55,
-      "notes": "Optimierung, keine Security"
-    },
-    {
-      "sku": "AVAST-PREM-10D-1Y",
-      "dsd_article": "230077",
-      "dsd_supplier_sku": "PRD.10.12M",
-      "dsd_name": "Avast Premium Security Multi-Device 10-Devices 1 year",
-      "our_sell_price": 49.99,
-      "dsd_buy_price_incl_vat": 28.56,
-      "notes": "Guter Kompromiss Preis/Leistung"
-    },
-    {
-      "sku": "KASPERSKY-PLUS-3D-1Y",
-      "dsd_article": "DSD110110",
-      "dsd_supplier_sku": "KL1042BDCFS",
-      "dsd_name": "Kaspersky Plus 3-Devices 1 Jahr",
-      "our_sell_price": 69.99,
-      "dsd_buy_price_incl_vat": 51.62,
-      "notes": "Dünnere Marge, aber bekannte Marke"
-    },
-    {
-      "sku": "ACRONIS-ESSENTIAL-1PC-1Y",
-      "dsd_article": "DSD180089",
-      "dsd_supplier_sku": "HOEASHLOS",
-      "dsd_name": "Acronis True Image Essential 1-PC/MAC 1 year",
-      "our_sell_price": 49.99,
-      "dsd_buy_price_incl_vat": 36.87,
-      "notes": "Backup-Kategorie"
-    },
-    {
-      "sku": "PANDA-ADV-3PC-1Y",
-      "dsd_article": "170004",
-      "dsd_supplier_sku": "Q12GPESD",
-      "dsd_name": "Panda Dome Complete 3-PC 1 year",
       "our_sell_price": 44.99,
-      "dsd_buy_price_incl_vat": 24.56,
-      "notes": "Achtung: DSD hat Dome Complete, nicht Advanced. Preis prüfen!"
+      "dsd_buy_price": 29.00
+    },
+    {
+      "sku": "BITDEF-FAMILY-15D-1Y",
+      "dsd_article": "160114",
+      "dsd_name": "Bitdefender Family Pack 15-Devices 1 year",
+      "our_sell_price": 49.99,
+      "dsd_buy_price": 30.00
+    },
+    {
+      "sku": "TREND-MAXSEC-5PC-1Y",
+      "dsd_article": "DSD151022",
+      "dsd_name": "Trend Micro Maximum Security 5-PC 1 year",
+      "our_sell_price": 16.99,
+      "dsd_buy_price": 8.20
+    },
+    {
+      "sku": "TREND-MAXSEC-3PC-2Y",
+      "dsd_article": "DSD151021",
+      "dsd_name": "Trend Micro Maximum Security 3-PC 2 year",
+      "our_sell_price": 14.99,
+      "dsd_buy_price": 7.50
     }
   ]
 }

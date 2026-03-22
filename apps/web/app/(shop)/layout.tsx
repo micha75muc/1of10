@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "../components/logo";
 import { MobileNav } from "../components/mobile-nav";
-import { NewsletterSignup } from "../components/newsletter-signup";
+import { Gift, Mail, Phone } from "lucide-react";
 
 export default function ShopLayout({
   children,
@@ -10,94 +10,91 @@ export default function ShopLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Gamification Banner */}
-      <div className="bg-[var(--gold)]/10 border-b border-[var(--gold)]/20 px-4 py-2 text-center text-sm">
-        <span className="text-[var(--gold)] font-semibold">
-          🏆 Wir erstatten jeden 10. Kauf
-        </span>
-        <span className="text-[var(--muted-foreground)]">
-          {" "}— freiwillige Kulanzleistung für unsere Kunden
-        </span>
+      {/* USP Banner */}
+      <div className="bg-[var(--gold)]/10 border-b border-[var(--gold)]/20 text-center py-2.5 px-4">
+        <Gift className="inline-block h-4 w-4 mr-1.5 -mt-0.5 text-[var(--gold)]" />
+        <span className="text-sm font-medium">Wir erstatten jeden 10. Kauf</span>
+        <span className="text-sm text-[var(--muted-foreground)]"> — freiwillige Kulanzleistung</span>
       </div>
 
       {/* Header */}
-      <header className="relative border-b px-6 py-4">
-        <nav aria-label="Hauptnavigation" className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href="/" className="hover:opacity-90 transition">
-            <Logo size="md" />
-          </Link>
-          <div className="hidden md:flex items-center gap-6">
-            <Link
-              href="/products"
-              className="text-sm font-medium hover:text-[var(--primary)] transition"
-            >
-              Produkte
+      <header className="sticky top-0 z-50 border-b bg-[var(--background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--background)]/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/" className="mr-8 hover:opacity-90 transition">
+              <Logo size="md" />
             </Link>
-            <Link
-              href="/blog"
-              className="text-sm font-medium hover:text-[var(--primary)] transition"
-            >
-              Ratgeber
-            </Link>
-            <Link
-              href="/transparenz"
-              className="text-sm font-medium hover:text-[var(--primary)] transition"
-            >
-              Transparenz
-            </Link>
-            <Link
-              href="/products"
-              className="rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
-            >
-              Jetzt kaufen
-            </Link>
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+              <Link href="/products" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Produkte</Link>
+              <Link href="/blog" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Ratgeber</Link>
+              <Link href="/transparenz" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Transparenz</Link>
+            </nav>
           </div>
-          <MobileNav />
-        </nav>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/products"
+              className="hidden md:inline-flex items-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] hover:opacity-90 transition"
+            >
+              Jetzt einkaufen
+            </Link>
+            <MobileNav />
+          </div>
+        </div>
       </header>
 
-      <main id="main-content" className="mx-auto w-full max-w-6xl flex-1 p-6">{children}</main>
+      <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8 py-6">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t px-6 py-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-6 flex flex-wrap items-center justify-center gap-6 text-sm text-[var(--muted-foreground)]">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[var(--primary)]">✓</span> Original-Keys
+      <footer className="border-t bg-[var(--card)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <Link href="/" className="inline-block mb-4">
+                <Logo size="sm" />
+              </Link>
+              <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
+                Autorisierte Software-Keys mit sofortiger Lieferung. Als freiwillige Kulanz erstatten wir jeden zehnten Kauf.
+              </p>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[var(--primary)]">⚡</span> Sofort per E-Mail
+            <div>
+              <h3 className="text-sm font-semibold mb-4">Shop</h3>
+              <ul className="space-y-3">
+                <li><Link href="/products" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Alle Produkte</Link></li>
+                <li><Link href="/blog" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Ratgeber</Link></li>
+                <li><Link href="/transparenz" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Transparenz</Link></li>
+              </ul>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[var(--primary)]">🔒</span> SSL &amp; DSGVO
+            <div>
+              <h3 className="text-sm font-semibold mb-4">Rechtliches</h3>
+              <ul className="space-y-3">
+                <li><Link href="/impressum" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Impressum</Link></li>
+                <li><Link href="/datenschutz" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Datenschutz</Link></li>
+                <li><Link href="/agb" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">AGB</Link></li>
+                <li><Link href="/widerruf" className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Widerruf</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold mb-4">Kontakt</h3>
+              <ul className="space-y-3">
+                <li className="flex items-center text-sm text-[var(--muted-foreground)]">
+                  <Mail className="h-4 w-4 mr-2 shrink-0" />
+                  info@medialess.de
+                </li>
+                <li className="flex items-center text-sm text-[var(--muted-foreground)]">
+                  <Phone className="h-4 w-4 mr-2 shrink-0" />
+                  0152 25389619
+                </li>
+              </ul>
             </div>
           </div>
-          {/* Newsletter in Footer */}
-          <div className="mx-auto mt-6 max-w-sm">
-            <NewsletterSignup variant="footer" />
+          <div className="mt-10 border-t pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-[var(--muted-foreground)]">
+              © {new Date().getFullYear()} 1of10 · Michael Hahnel · München
+            </p>
+            <p className="text-xs text-[var(--muted-foreground)]">
+              Alle Preise Endpreise · gem. §19 UStG keine USt.
+            </p>
           </div>
-          <nav aria-label="Rechtliche Informationen" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-[var(--muted-foreground)]">
-            <Link href="/impressum" className="hover:underline">Impressum</Link>
-            <Link href="/datenschutz" className="hover:underline">Datenschutz</Link>
-            <Link href="/agb" className="hover:underline">AGB</Link>
-            <Link href="/widerruf" className="hover:underline">Widerrufsbelehrung</Link>
-          </nav>
-          <p className="mt-3 text-center text-[10px] text-[var(--muted-foreground)]">
-            Alle Preise sind Endpreise. Gem. §19 UStG wird keine Umsatzsteuer erhoben.
-          </p>
-          {/* Uwe (UI): Payment + Trust Badges */}
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs text-[var(--muted-foreground)]">
-            <span className="rounded border px-2 py-1">💳 Stripe Payments</span>
-            <span className="rounded border px-2 py-1">🔒 256-bit SSL</span>
-            <span className="rounded border px-2 py-1">🇩🇪 Deutscher Anbieter</span>
-            <span className="rounded border px-2 py-1">📧 Sofort-Lieferung</span>
-          </div>
-          <div className="mt-4 flex justify-center">
-            <Logo size="sm" />
-          </div>
-          <p className="mt-2 text-center text-xs text-[var(--muted-foreground)]">
-            © 2026 1of10 — Alle Rechte vorbehalten.
-          </p>
         </div>
       </footer>
     </div>
