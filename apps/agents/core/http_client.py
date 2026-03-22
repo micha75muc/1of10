@@ -7,7 +7,10 @@ import os
 import httpx
 
 NEXTJS_API_URL = os.getenv("NEXTJS_API_URL", "http://localhost:3000")
-ADMIN_API_KEY = os.getenv("ADMIN_API_KEY", "dev-admin-key-change-in-production")
+ADMIN_API_KEY = os.environ.get("ADMIN_API_KEY")
+if not ADMIN_API_KEY:
+    import warnings
+    warnings.warn("ADMIN_API_KEY not set — agent API calls will fail")
 
 
 async def request_approval(agent_id: str, action_type: str, payload: dict) -> dict:

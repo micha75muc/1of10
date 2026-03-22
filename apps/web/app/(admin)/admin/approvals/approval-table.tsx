@@ -35,8 +35,8 @@ export default function ApprovalTable({
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-api-key": "dev-admin-key-change-in-production",
         },
+        credentials: "include",
         body: JSON.stringify({ action, approvedBy: "admin-ui" }),
       });
 

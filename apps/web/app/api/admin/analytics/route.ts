@@ -7,7 +7,7 @@ import { prisma } from "@repo/db";
  * Auth: ADMIN_API_KEY Header.
  */
 export async function GET(req: Request) {
-  const key = req.headers.get("x-api-key");
+  const key = req.headers.get("x-admin-api-key");
   if (key !== process.env.ADMIN_API_KEY) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

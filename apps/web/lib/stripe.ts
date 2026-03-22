@@ -13,6 +13,9 @@ function getStripeClient() {
   const useMock = process.env.STRIPE_MOCK === "true";
 
   if (useMock) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("FATAL: STRIPE_MOCK=true in production is not allowed");
+    }
     console.log("[Stripe] Using MOCK mode");
     return mockStripe;
   }
