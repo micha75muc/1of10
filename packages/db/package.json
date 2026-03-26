@@ -17,10 +17,10 @@
     "lint": "echo 'No linter configured'"
   },
   "dependencies": {
-    "@prisma/client": "^7.5.0"
+    "@prisma/client": "^6.19.2"
   },
   "devDependencies": {
-    "prisma": "^7.5.0",
+    "prisma": "^6.19.2",
     "tsx": "^4",
     "typescript": "^5"
   }

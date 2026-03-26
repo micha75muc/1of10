@@ -94,15 +94,23 @@ export async function verifySession(): Promise<boolean> {
 
 /**
  * Verifiziert Admin-Credentials.
+ * Sven (Security): bcrypt statt Klartext-Vergleich.
+ * ADMIN_PASSWORD_HASH muss ein bcrypt-Hash sein (z.B. via: npx bcryptjs hash "password")
  */
-export function verifyCredentials(email: string, password: string): boolean {
+export async function verifyCredentials(email: string, password: string): Promise<boolean> {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
 
   if (!adminEmail || !adminPasswordHash) return false;
+  if (email !== adminEmail) return false;
 
-  // Einfacher Vergleich für Single-User (kein bcrypt nötig)
-  return email === adminEmail && password === adminPasswordHash;
+  // Support both bcrypt hash ($2a$/$2b$) and legacy plaintext
+  if (adminPasswordHash.startsWith("$2")) {
+    const { compare } = await import("bcryptjs");
+    return compare(password, adminPasswordHash);
+  }
+  // Fallback: Klartext (für Migration — sollte ASAP auf Hash umgestellt werden)
+  return password === adminPasswordHash;
 }
 
 /**

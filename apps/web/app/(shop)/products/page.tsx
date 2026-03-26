@@ -5,6 +5,7 @@ import { ProductImage, getCategoryLabel } from "./product-image";
 import { WinnerTicker } from "./winner-ticker";
 import { SearchBar } from "./search-bar";
 import { CategoryFilter } from "./category-filter";
+import { SortDropdown } from "./sort-dropdown";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -55,7 +56,7 @@ export default async function ProductsPage({
   const products = await prisma.product.findMany({
     where,
     orderBy,
-    select: { id: true, sku: true, name: true, description: true, sellPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true },
+    select: { id: true, sku: true, name: true, description: true, sellPrice: true, uvpPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true },
   });
 
   if (products.length === 0) {
@@ -64,9 +65,8 @@ export default async function ProductsPage({
         <div className="mb-6 text-6xl">📦</div>
         <h1 className="mb-4 text-3xl font-bold">Produkte</h1>
         <p className="mb-8 text-[var(--muted-foreground)]">
-          Noch keine Produkte vorhanden.
+          Noch keine Produkte vorhanden. Bitte kontaktieren Sie den Administrator.
         </p>
-        <SeedButton />
       </div>
     );
   }
@@ -90,11 +90,14 @@ export default async function ProductsPage({
         </p>
       </div>
 
-      {/* Suche + Filter */}
+      {/* Suche + Filter + Sort */}
       <div className="mb-6 space-y-4">
         <Suspense>
           <SearchBar />
-          <CategoryFilter />
+          <div className="flex flex-wrap items-center gap-4">
+            <CategoryFilter />
+            <SortDropdown />
+          </div>
         </Suspense>
       </div>
 
@@ -187,8 +190,18 @@ export default async function ProductsPage({
                 {/* Price + Stock */}
                 <div className="mt-auto mb-4 flex items-end justify-between">
                   <div>
+                    {product.uvpPrice && Number(product.uvpPrice) > Number(product.sellPrice) && (
+                      <div className="mb-1 flex items-center gap-2">
+                        <span className="text-xs text-[var(--muted-foreground)] line-through">
+                          UVP {Number(product.uvpPrice).toFixed(2).replace(".", ",")}&nbsp;€
+                        </span>
+                        <span className="rounded-full bg-[var(--destructive)] px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          -{Math.round((1 - Number(product.sellPrice) / Number(product.uvpPrice)) * 100)}%
+                        </span>
+                      </div>
+                    )}
                     <span className="text-2xl font-extrabold">
-                      {Number(product.sellPrice).toFixed(2)}&nbsp;€
+                      {Number(product.sellPrice).toFixed(2).replace(".", ",")}&nbsp;€
                     </span>
                     <span className="ml-1 text-[10px] text-[var(--muted-foreground)]">
                       Endpreis
@@ -227,102 +240,5 @@ export default async function ProductsPage({
       </div>
       )}
     </div>
-  );
-}
-
-function SeedButton() {
-  async function seedProducts() {
-    "use server";
-
-    const existing = await prisma.product.count();
-    if (existing > 0) return;
-
-    await prisma.product.createMany({
-      data: [
-        {
-          sku: "WIN-11-PRO",
-          name: "Microsoft Windows 11 Professional",
-          costPrice: 8.50,
-          sellPrice: 14.99,
-          minimumMargin: 2.00,
-          stockLevel: 100,
-        },
-        {
-          sku: "WIN-11-HOME",
-          name: "Microsoft Windows 11 Home",
-          costPrice: 6.50,
-          sellPrice: 11.99,
-          minimumMargin: 1.50,
-          stockLevel: 80,
-        },
-        {
-          sku: "MS-365-BUS-STD",
-          name: "Microsoft 365 Business Standard",
-          costPrice: 10.20,
-          sellPrice: 12.90,
-          minimumMargin: 1.50,
-          stockLevel: 50,
-        },
-        {
-          sku: "MS-365-BUS-PREM",
-          name: "Microsoft 365 Business Premium",
-          costPrice: 18.00,
-          sellPrice: 22.00,
-          minimumMargin: 2.00,
-          stockLevel: 30,
-        },
-        {
-          sku: "MS-OFFICE-2024-PRO",
-          name: "Microsoft Office 2024 Professional Plus",
-          costPrice: 22.00,
-          sellPrice: 29.99,
-          minimumMargin: 3.00,
-          stockLevel: 45,
-        },
-        {
-          sku: "ADOBE-CC-ALL",
-          name: "Adobe Creative Cloud All Apps (1 Jahr)",
-          costPrice: 45.00,
-          sellPrice: 54.99,
-          minimumMargin: 5.00,
-          stockLevel: 25,
-        },
-        {
-          sku: "NORTON-360-DLX",
-          name: "Norton 360 Deluxe Antivirus (1 Jahr)",
-          costPrice: 8.00,
-          sellPrice: 14.99,
-          minimumMargin: 2.00,
-          stockLevel: 60,
-        },
-        {
-          sku: "KASPERSKY-PLUS",
-          name: "Kaspersky Plus Antivirus (1 Jahr)",
-          costPrice: 7.50,
-          sellPrice: 12.99,
-          minimumMargin: 2.00,
-          stockLevel: 55,
-        },
-        {
-          sku: "WIN-SRV-2022-STD",
-          name: "Microsoft Windows Server 2022 Standard",
-          costPrice: 120.00,
-          sellPrice: 179.99,
-          minimumMargin: 20.00,
-          stockLevel: 15,
-        },
-      ],
-    });
-  }
-
-  return (
-    <form action={seedProducts}>
-      <button
-        type="submit"
-        className="rounded-xl bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
-      >
-        Demo-Produkte anlegen
-      </button>
-    </form>
   );
 }

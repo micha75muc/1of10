@@ -20,7 +20,8 @@ export default function CheckoutForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = agbAccepted && bgbAccepted && email.includes("@") && !loading;
+  const isValidEmail = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(email);
+  const canSubmit = agbAccepted && bgbAccepted && isValidEmail && !loading;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

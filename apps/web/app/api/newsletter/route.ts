@@ -13,14 +13,14 @@ export async function POST(req: NextRequest) {
     const windowMs = 60_000;
     const maxReq = 5;
     const key = `newsletter:${ip}`;
-    if (!globalThis.__nlRL) globalThis.__nlRL = new Map();
-    const rl = globalThis.__nlRL as Map<string, number[]>;
-    const hits = (rl.get(key) ?? []).filter(t => t > now - windowMs);
+    const g = globalThis as unknown as { __nlRL?: Map<string, number[]> };
+    if (!g.__nlRL) g.__nlRL = new Map();
+    const hits = (g.__nlRL.get(key) ?? []).filter(t => t > now - windowMs);
     if (hits.length >= maxReq) {
       return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 });
     }
     hits.push(now);
-    rl.set(key, hits);
+    g.__nlRL.set(key, hits);
 
     const { email } = await req.json();
 
@@ -28,9 +28,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ungültige E-Mail" }, { status: 400 });
     }
 
-    // Upsert — don't create duplicate if already subscribed
-    // Using Order table's customerEmail as a lightweight solution
-    // TODO: Eigene NewsletterSubscriber-Tabelle in nächster Schema-Migration
+    // Persist to DB (upsert to avoid duplicates)
+    await prisma.newsletterSignup.upsert({
+      where: { email },
+      update: {},
+      create: { email },
+    });
+
     console.log(JSON.stringify({
       level: "info",
       event: "newsletter.signup",

@@ -1,0 +1,36 @@
+{
+  "hooks": [
+    {
+      "event": "preToolUse",
+      "description": "Block destructive terminal commands (rm -rf, git push --force, DROP TABLE, etc.)",
+      "match": {
+        "toolName": "run_in_terminal"
+      },
+      "action": {
+        "type": "reject",
+        "conditions": [
+          {
+            "pattern": "rm\\s+-rf",
+            "message": "🛑 BLOCKED: rm -rf is not allowed. Use targeted file deletion instead."
+          },
+          {
+            "pattern": "git\\s+push\\s+--force",
+            "message": "🛑 BLOCKED: git push --force can destroy remote history. Use --force-with-lease if absolutely necessary."
+          },
+          {
+            "pattern": "git\\s+reset\\s+--hard",
+            "message": "🛑 BLOCKED: git reset --hard discards uncommitted work. Use git stash or git checkout instead."
+          },
+          {
+            "pattern": "DROP\\s+TABLE|DROP\\s+DATABASE|TRUNCATE",
+            "message": "🛑 BLOCKED: Destructive SQL detected. Use Prisma migrations for schema changes."
+          },
+          {
+            "pattern": "npx\\s+next\\s+dev\\s+--turbopack",
+            "message": "🛑 BLOCKED: --turbopack has a Prisma client loading bug. Use 'npx next dev' without --turbopack."
+          }
+        ]
+      }
+    }
+  ]
+}

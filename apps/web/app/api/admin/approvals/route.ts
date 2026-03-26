@@ -2,14 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { enforcePolicy } from "@repo/policy";
 
-function checkAdminAuth(req: NextRequest): boolean {
+import { verifySession } from "../../../../lib/auth";
+
+async function checkAdminAuth(req: NextRequest): Promise<boolean> {
   const apiKey = req.headers.get("x-admin-api-key");
-  return apiKey === process.env.ADMIN_API_KEY;
+  if (apiKey && apiKey === process.env.ADMIN_API_KEY) return true;
+  return await verifySession();
 }
 
 // GET /api/admin/approvals — List all approval items (optionally filtered by status)
 export async function GET(req: NextRequest) {
-  if (!checkAdminAuth(req)) {
+  if (!(await checkAdminAuth(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -26,7 +29,7 @@ export async function GET(req: NextRequest) {
 
 // POST /api/admin/approvals — Create a new approval item (called by agents)
 export async function POST(req: NextRequest) {
-  if (!checkAdminAuth(req)) {
+  if (!(await checkAdminAuth(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -1,5 +1,6 @@
 import { prisma } from "@repo/db";
 import Link from "next/link";
+import { Trophy, CheckCircle, Clock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -31,11 +32,17 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
   if (!order) {
     return (
-      <div className="mx-auto max-w-md text-center">
+      <div className="mx-auto max-w-md text-center py-12">
+        <div className="mb-6 text-5xl animate-pulse"><Clock className="h-12 w-12 mx-auto text-[var(--muted-foreground)]" /></div>
         <h1 className="mb-4 text-3xl font-bold">Bestellung wird verarbeitet</h1>
         <p className="text-[var(--muted-foreground)]">
-          Deine Bestellung wird gerade verarbeitet. Bitte warte einen Moment und
-          lade die Seite dann neu.
+          Deine Zahlung war erfolgreich! Deine Bestellung wird gerade verarbeitet.
+          Diese Seite aktualisiert sich automatisch.
+        </p>
+        {/* Auto-refresh after 3 seconds */}
+        <meta httpEquiv="refresh" content="3" />
+        <p className="mt-4 text-xs text-[var(--muted-foreground)]">
+          Seite aktualisiert sich in wenigen Sekunden...
         </p>
       </div>
     );
@@ -44,15 +51,18 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   return (
     <div className="mx-auto max-w-lg py-4">
       {order.isWinner ? (
+        <>
+        {/* Bea: Confetti animation for winners */}
+        <div className="winner-confetti" aria-hidden="true" />
         <div className="mb-8 rounded-xl border-2 border-[var(--gold)] bg-[var(--gold)]/10 p-8 text-center animate-slide-in">
-          <div className="mb-4 text-6xl">🎉</div>
+          <div className="mb-4"><Trophy className="h-16 w-16 mx-auto text-[var(--gold)]" /></div>
           <h1 className="mb-2 text-3xl font-extrabold text-[var(--gold)]">
             Kaufpreis wird erstattet!
           </h1>
           <p className="text-lg">
             Du bist einer von 10 — der volle Kaufpreis von{" "}
             <span className="font-bold text-[var(--gold)]">
-              {Number(order.amountTotal).toFixed(2)} €
+              {Number(order.amountTotal).toFixed(2).replace(".", ",")} €
             </span>{" "}
             wird dir automatisch zurückerstattet.
           </p>
@@ -89,9 +99,10 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             </div>
           </div>
         </div>
+        </>
       ) : (
         <div className="mb-8 rounded-xl border bg-[var(--card)] p-8 text-center">
-          <div className="mb-4 text-6xl">✅</div>
+          <div className="mb-4"><CheckCircle className="h-16 w-16 mx-auto text-[var(--success)]" /></div>
           <h1 className="mb-2 text-3xl font-bold">Bestellung bestätigt!</h1>
           <p className="text-[var(--muted-foreground)]">
             Deine Lizenz wurde erfolgreich erworben. Diesmal keine
@@ -128,7 +139,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           <span>{order.product.name}</span>
           <span className="text-[var(--muted-foreground)]">Betrag</span>
           <span className="font-semibold">
-            {Number(order.amountTotal).toFixed(2)} €
+            {Number(order.amountTotal).toFixed(2).replace(".", ",")} €
           </span>
           <span className="text-[var(--muted-foreground)]">Status</span>
           <span>

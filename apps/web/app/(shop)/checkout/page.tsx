@@ -54,11 +54,6 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         productName={product.name}
         price={Number(product.sellPrice).toFixed(2)}
       />
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-[var(--muted-foreground)]">
-        <span>🔒 SSL-verschlüsselt</span>
-        <span>⚡ Sofort-Download</span>
-        <span>✅ 100 % Original</span>
-      </div>
     </div>
   );
 }

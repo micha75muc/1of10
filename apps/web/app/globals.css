@@ -56,6 +56,44 @@
   animation: slide-in 0.5s ease-out;
 }
 
+/* Bea (Gamification): Winner confetti animation — CSS-only, no JS bundle */
+@keyframes confetti-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+.winner-confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.winner-confetti::before,
+.winner-confetti::after {
+  content: "🎉 🎊 ⭐ 🏆 ✨ 💛 🎉 🎊 ⭐ 🏆";
+  position: absolute;
+  top: -20px;
+  font-size: 24px;
+  letter-spacing: 30px;
+  animation: confetti-fall 4s ease-in forwards;
+}
+
+.winner-confetti::before {
+  left: 5%;
+  animation-delay: 0s;
+}
+
+.winner-confetti::after {
+  left: 40%;
+  animation-delay: 0.5s;
+  font-size: 20px;
+}
+
 /* Brand gradient backgrounds for product cards */
 .brand-norton { background: linear-gradient(135deg, oklch(0.95 0.02 85), oklch(0.92 0.04 75)); }
 .brand-mcafee { background: linear-gradient(135deg, oklch(0.93 0.03 25), oklch(0.90 0.05 15)); }

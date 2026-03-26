@@ -62,7 +62,7 @@ const products = [
 ];
 
 function escapeXml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
 function generateBoxshot(product) {
@@ -70,6 +70,20 @@ function generateBoxshot(product) {
   const edition = escapeXml(product.edition);
   const brandName = escapeXml(product.brand);
   const sub = escapeXml(product.sub);
+  
+  // Dynamic font size for long edition names (e.g. "Office Home & Business")
+  const edFS = edition.length > 20 ? 11 : edition.length > 16 ? 13 : 16;
+  // Split long editions into 2 lines
+  let edLine1 = edition, edLine2 = "";
+  if (edition.length > 16) {
+    const words = edition.split(" ");
+    const mid = Math.ceil(words.length / 2);
+    edLine1 = words.slice(0, mid).join(" ");
+    edLine2 = words.slice(mid).join(" ");
+  }
+  // Dynamic sub pill width
+  const subW = Math.min(150, Math.max(90, sub.length * 6.5 + 16));
+  const subFS = sub.length > 18 ? 9 : 11;
   
   // 3D box perspective with front face + side face + top face
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
@@ -115,12 +129,13 @@ function generateBoxshot(product) {
     <!-- Brand name -->
     <text x="95" y="148" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="${b.textColor}" opacity="0.7">${brandName.toUpperCase()}</text>
     
-    <!-- Edition name -->
-    <text x="95" y="175" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="16" font-weight="700" fill="${b.textColor}">${edition}</text>
+    <!-- Edition name (auto-wrapped for long names) -->
+    <text x="95" y="${edLine2 ? 168 : 175}" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="${edFS}" font-weight="700" fill="${b.textColor}">${edLine1}</text>
+    ${edLine2 ? `<text x="95" y="${168 + edFS + 4}" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="${edFS}" font-weight="700" fill="${b.textColor}">${edLine2}</text>` : ""}
     
     <!-- Sub info (devices/duration) -->
-    <rect x="35" y="195" width="120" height="24" rx="12" fill="white" opacity="0.2"/>
-    <text x="95" y="212" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="11" font-weight="600" fill="${b.textColor}">${sub}</text>
+    <rect x="${95 - subW/2}" y="195" width="${subW}" height="24" rx="12" fill="white" opacity="0.2"/>
+    <text x="95" y="212" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="${subFS}" font-weight="600" fill="${b.textColor}">${sub}</text>
   </g>
 </svg>`;
 }

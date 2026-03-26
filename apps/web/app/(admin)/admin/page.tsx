@@ -18,7 +18,7 @@ export default async function AdminDashboard() {
     { label: "Erstattungskunde (10%)", value: winnerCount, href: null },
     {
       label: "Umsatz",
-      value: `${Number(totalRevenue._sum.amountTotal ?? 0).toFixed(2)} €`,
+      value: `${Number(totalRevenue._sum.amountTotal ?? 0).toFixed(2).replace(".", ",")} €`,
       href: null,
     },
     {
@@ -77,8 +77,8 @@ export default async function AdminDashboard() {
               return (
                 <tr key={p.sku} className={afterRefund < 15 ? "text-red-400" : ""}>
                   <td className="py-2 pr-3 font-medium">{p.name}</td>
-                  <td className="py-2 pr-3 text-right">{cost.toFixed(2)} €</td>
-                  <td className="py-2 pr-3 text-right">{sell.toFixed(2)} €</td>
+                  <td className="py-2 pr-3 text-right">{cost.toFixed(2).replace(".", ",")} €</td>
+                  <td className="py-2 pr-3 text-right">{sell.toFixed(2).replace(".", ",")} €</td>
                   <td className="py-2 pr-3 text-right">{margin.toFixed(1)}%</td>
                   <td className="py-2 pr-3 text-right font-semibold">{afterRefund.toFixed(1)}%</td>
                   <td className="py-2 text-right">{p.stockLevel}</td>

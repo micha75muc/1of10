@@ -8,14 +8,22 @@ import { Gift, Shield, Zap, ShoppingCart, Mail, Phone } from "lucide-react";
 export default async function HomePage() {
   // Bestseller-Auswahl für die Startseite (je 1-2 pro Marke, verschiedene Preisstufen)
   const featuredSkus = [
-    "NORTON-360-STD-1Y", "NORTON-360-DLX-3D-1Y", "NORTON-360-PREM-10D-1Y",
-    "MCAFEE-TP-1PC-1Y", "MCAFEE-LIVESAFE-UNL-1Y",
-    "BITDEF-TS-5D-1Y", "BITDEF-FAMILY-15D-1Y",
-    "TREND-MAXSEC-5PC-1Y",
+    "MCAFEE-IS-1PC-1Y", "MCAFEE-TP-1PC-1Y",
+    "NORTON-360-DLX-VPN-3D-1Y", "NORTON-360-PREM-10D-1Y",
+    "AVG-TUNEUP-3D-1Y", "AVG-IS-1PC-1Y",
+    "AVAST-PREM-1PC-1Y",
+    "PANDA-ESS-1PC-1Y", "PANDA-COMP-1PC-1Y",
+    "BITDEF-AV-1PC-1Y", "BITDEF-TS-5D-1Y",
+    "ESET-NOD32-3D-1Y",
+    "GDATA-AV-1PC-1Y",
+    "TREND-IS-1PC-1Y",
+    "MS-OFFICE-HS-2021", "WIN11-PRO-OEM",
+    "PARALLELS-18-STD-1Y",
+    "ACRONIS-ESS-1PC-1Y",
   ];
   const products = await prisma.product.findMany({
     where: { sku: { in: featuredSkus }, stockLevel: { gt: 0 } },
-    select: { id: true, sku: true, name: true, sellPrice: true, brand: true, description: true, stockLevel: true, category: true },
+    select: { id: true, sku: true, name: true, sellPrice: true, uvpPrice: true, brand: true, description: true, stockLevel: true, category: true },
     orderBy: { sellPrice: "asc" },
   });
 
@@ -28,7 +36,7 @@ export default async function HomePage() {
       <div className="bg-[var(--gold)]/10 border-b border-[var(--gold)]/20 text-center py-2.5 px-4">
         <Gift className="inline-block h-4 w-4 mr-1.5 -mt-0.5 text-[var(--gold)]" />
         <span className="text-sm font-medium">Wir erstatten jeden 10. Kauf</span>
-        <span className="text-sm text-[var(--muted-foreground)]"> — freiwillige Kulanzleistung</span>
+        <span className="text-sm text-[var(--foreground)]/60"> — freiwillige Kulanzleistung</span>
       </div>
 
       {/* Navigation */}
@@ -56,7 +64,7 @@ export default async function HomePage() {
         </div>
       </header>
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-blue)]/8 via-[var(--secondary)]/40 to-[var(--gold)]/8" />
@@ -98,21 +106,21 @@ export default async function HomePage() {
                 <div className="rounded-2xl bg-gradient-to-br from-[var(--brand-teal)]/20 to-[var(--brand-teal)]/5 p-3.5 mb-3">
                   <Zap className="h-6 w-6 text-[var(--brand-teal)]" />
                 </div>
-                <h3 className="font-semibold">Sofortige Lieferung</h3>
+                <h2 className="font-semibold">Sofortige Lieferung</h2>
                 <p className="text-sm text-[var(--muted-foreground)] mt-1">Lizenzschlüssel direkt per E-Mail</p>
               </div>
               <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-[var(--background)]/80 backdrop-blur border border-[var(--border)]/50 hover:border-[var(--brand-blue)]/30 hover:shadow-md transition-all">
                 <div className="rounded-2xl bg-gradient-to-br from-[var(--brand-blue)]/20 to-[var(--brand-blue)]/5 p-3.5 mb-3">
                   <Shield className="h-6 w-6 text-[var(--brand-blue)]" />
                 </div>
-                <h3 className="font-semibold">Sichere Zahlung</h3>
+                <h2 className="font-semibold">Sichere Zahlung</h2>
                 <p className="text-sm text-[var(--muted-foreground)] mt-1">SSL-verschlüsselt über Stripe</p>
               </div>
               <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-[var(--background)]/80 backdrop-blur border border-[var(--border)]/50 hover:border-[var(--gold)]/30 hover:shadow-md transition-all">
                 <div className="rounded-2xl bg-gradient-to-br from-[var(--gold)]/20 to-[var(--gold)]/5 p-3.5 mb-3">
                   <Gift className="h-6 w-6 text-[var(--gold)]" />
                 </div>
-                <h3 className="font-semibold">Jeder 10. Kauf erstattet</h3>
+                <h2 className="font-semibold">Jeder 10. Kauf erstattet</h2>
                 <p className="text-sm text-[var(--muted-foreground)] mt-1">Freiwillige Kulanzleistung</p>
               </div>
             </div>
@@ -142,7 +150,16 @@ export default async function HomePage() {
                   : bl.includes('f-secure') ? 'brand-fsecure'
                   : bl.includes('microsoft') ? 'brand-microsoft'
                   : bl.includes('parallels') ? 'brand-parallels'
+                  : bl.includes('avg') ? 'brand-avg'
+                  : bl.includes('avast') ? 'brand-avast'
+                  : bl.includes('eset') ? 'brand-eset'
+                  : bl.includes('kaspersky') ? 'brand-kaspersky'
+                  : bl.includes('g data') ? 'brand-gdata'
+                  : bl.includes('acronis') ? 'brand-acronis'
+                  : bl.includes('abbyy') ? 'brand-abbyy'
                   : 'brand-default';
+                const hasUvp = p.uvpPrice && Number(p.uvpPrice) > Number(p.sellPrice);
+                const savingsPercent = hasUvp ? Math.round((1 - Number(p.sellPrice) / Number(p.uvpPrice)) * 100) : 0;
                 return (
                   <div key={p.id} className="group rounded-xl border bg-[var(--card)] overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                     {/* Brand color header area */}
@@ -151,9 +168,9 @@ export default async function HomePage() {
                         <span className="inline-flex items-center rounded-full bg-[var(--background)]/80 backdrop-blur px-2.5 py-0.5 text-xs font-medium">
                           {p.category || p.brand}
                         </span>
-                        {p.stockLevel <= 5 && (
-                          <span className="inline-flex items-center rounded-full bg-[var(--destructive)]/10 px-2 py-0.5 text-xs text-[var(--destructive)] font-medium">
-                            Nur noch {p.stockLevel}×
+                        {hasUvp && (
+                          <span className="inline-flex items-center rounded-full bg-[var(--destructive)] px-2 py-0.5 text-xs font-bold text-white">
+                            -{savingsPercent}%
                           </span>
                         )}
                       </div>
@@ -164,16 +181,23 @@ export default async function HomePage() {
                       <p className="text-sm text-[var(--muted-foreground)] line-clamp-2">{p.description}</p>
                     </div>
                     <div className="px-5 pb-5 pt-3 border-t flex flex-col gap-3">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-bold">{Number(p.sellPrice).toFixed(2).replace(".", ",")} €</span>
-                        <span className="text-xs text-[var(--muted-foreground)]">Endpreis</span>
+                      <div>
+                        {hasUvp && (
+                          <span className="text-xs text-[var(--muted-foreground)] line-through mr-2">
+                            UVP {Number(p.uvpPrice).toFixed(2).replace(".", ",")} €
+                          </span>
+                        )}
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl font-bold">{Number(p.sellPrice).toFixed(2).replace(".", ",")} €</span>
+                          <span className="text-xs text-[var(--muted-foreground)]">Endpreis</span>
+                        </div>
                       </div>
                       <Link
                         href={`/products/${p.sku}`}
                         className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2.5 text-sm font-medium text-[var(--primary-foreground)] hover:scale-[1.02] active:scale-[0.98] transition-all w-full"
                       >
                         <ShoppingCart className="h-4 w-4" />
-                        Details ansehen
+                        Jetzt kaufen
                       </Link>
                     </div>
                   </div>
@@ -187,6 +211,34 @@ export default async function HomePage() {
               >
                 Alle {totalProducts} Produkte anzeigen →
               </Link>
+            </div>
+
+            {/* Kategorien-Schnellnavigation */}
+            <div className="mt-12">
+              <h2 className="text-xl font-bold mb-6 text-center">Nach Kategorie stöbern</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {[
+                  { cat: "Antivirus", icon: "🛡️", desc: "Virenschutz" },
+                  { cat: "Internet Security", icon: "🔒", desc: "Firewall & mehr" },
+                  { cat: "Total Security", icon: "🏆", desc: "Komplett-Schutz" },
+                  { cat: "Office", icon: "💼", desc: "Word, Excel & Co." },
+                  { cat: "Windows", icon: "🖥️", desc: "Betriebssystem" },
+                  { cat: "VPN", icon: "🌐", desc: "Privatsphäre" },
+                  { cat: "Utilities", icon: "⚙️", desc: "Tools & Optimierung" },
+                  { cat: "Backup", icon: "💾", desc: "Datensicherung" },
+                  { cat: "Mac", icon: "🍎", desc: "Mac-Software" },
+                ].map((c) => (
+                  <Link
+                    key={c.cat}
+                    href={`/products?category=${encodeURIComponent(c.cat)}`}
+                    className="flex flex-col items-center gap-2 rounded-xl border bg-[var(--card)] p-4 hover:shadow-md hover:-translate-y-0.5 transition-all text-center"
+                  >
+                    <span className="text-2xl">{c.icon}</span>
+                    <span className="text-sm font-semibold">{c.cat}</span>
+                    <span className="text-xs text-[var(--muted-foreground)]">{c.desc}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -260,35 +312,35 @@ export default async function HomePage() {
                   <span className="opacity-60">1</span>of<span>10</span>
                 </span>
               </Link>
-              <p className="text-sm text-[var(--primary-foreground)]/50 leading-relaxed">
+              <p className="text-sm text-[var(--primary-foreground)]/60 leading-relaxed">
                 Ihr zuverlässiger Partner für günstige Software. Autorisierte Lizenzschlüssel zu fairen Preisen.
               </p>
             </div>
             <div>
               <h3 className="text-sm font-semibold mb-4 text-[var(--primary-foreground)]/70">Shop</h3>
               <ul className="space-y-3">
-                <li><Link href="/products" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Alle Produkte</Link></li>
-                <li><Link href="/blog" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Ratgeber</Link></li>
-                <li><Link href="/transparenz" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Transparenz</Link></li>
+                <li><Link href="/products" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">Alle Produkte</Link></li>
+                <li><Link href="/blog" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">Ratgeber</Link></li>
+                <li><Link href="/transparenz" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">Transparenz</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="text-sm font-semibold mb-4 text-[var(--primary-foreground)]/70">Rechtliches</h3>
               <ul className="space-y-3">
-                <li><Link href="/impressum" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Impressum</Link></li>
-                <li><Link href="/datenschutz" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Datenschutz</Link></li>
-                <li><Link href="/agb" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">AGB</Link></li>
-                <li><Link href="/widerruf" className="text-sm text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] transition-colors">Widerruf</Link></li>
+                <li><Link href="/impressum" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">Impressum</Link></li>
+                <li><Link href="/datenschutz" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">Datenschutz</Link></li>
+                <li><Link href="/agb" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">AGB</Link></li>
+                <li><Link href="/widerruf" className="text-sm text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors">Widerruf</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="text-sm font-semibold mb-4 text-[var(--primary-foreground)]/70">Kontakt</h3>
               <ul className="space-y-3">
-                <li className="flex items-center text-sm text-[var(--primary-foreground)]/50">
+                <li className="flex items-center text-sm text-[var(--primary-foreground)]/60">
                   <Mail className="h-4 w-4 mr-2 shrink-0" />
                   info@medialess.de
                 </li>
-                <li className="flex items-center text-sm text-[var(--primary-foreground)]/50">
+                <li className="flex items-center text-sm text-[var(--primary-foreground)]/60">
                   <Phone className="h-4 w-4 mr-2 shrink-0" />
                   0152 25389619
                 </li>
@@ -296,12 +348,17 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="mt-10 border-t border-[var(--primary-foreground)]/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-[var(--primary-foreground)]/40">
+            <p className="text-xs text-[var(--primary-foreground)]/60">
               © {new Date().getFullYear()} 1of10 · Michael Hahnel · München
             </p>
-            <p className="text-xs text-[var(--primary-foreground)]/40">
-              Alle Preise Endpreise · gem. §19 UStG keine USt.
-            </p>
+            <div className="flex items-center gap-4">
+              <a href="https://de.trustpilot.com/review/1of10.de" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--primary-foreground)]/60 hover:text-[var(--primary-foreground)] transition-colors flex items-center gap-1">
+                ★ Trustpilot
+              </a>
+              <p className="text-xs text-[var(--primary-foreground)]/60">
+                Alle Preise Endpreise · gem. §19 UStG keine USt.
+              </p>
+            </div>
           </div>
         </div>
       </footer>

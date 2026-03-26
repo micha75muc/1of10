@@ -56,9 +56,9 @@ export function MobileNav() {
             <Link
               href="/products"
               onClick={close}
-              className="rounded-lg bg-[var(--primary)] px-4 py-2 text-center text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
+              className="rounded-lg bg-[var(--foreground)] px-4 py-2 text-center text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
             >
-              Jetzt kaufen
+              Jetzt einkaufen
             </Link>
           </div>
         </nav>

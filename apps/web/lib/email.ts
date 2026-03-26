@@ -57,7 +57,7 @@ export function orderConfirmationEmail(order: {
   const winnerBlock = order.isWinner
     ? `<div style="background:#22c55e;color:white;padding:24px;border-radius:12px;margin:24px 0;text-align:center;">
         <h2 style="margin:0 0 8px;">🎉 Dein Kauf wurde erstattet!</h2>
-        <p style="margin:0 0 16px;font-size:18px;">Wir haben dir <strong>${(order.amountTotal / 100).toFixed(2)} €</strong> zurückerstattet — als freiwillige Kulanzleistung.</p>
+        <p style="margin:0 0 16px;font-size:18px;">Wir haben dir <strong>${(order.amountTotal / 100).toFixed(2).replace(".", ",")} €</strong> zurückerstattet — als freiwillige Kulanzleistung.</p>
         <p style="margin:0 0 4px;">Dein Produkt behältst du natürlich.</p>
       </div>
       <div style="text-align:center;margin:20px 0;">
@@ -76,7 +76,7 @@ export function orderConfirmationEmail(order: {
     html: `
       <h1>Bestellbestätigung</h1>
       <p>Vielen Dank für deinen Kauf von <strong>${order.productName}</strong>.</p>
-      <p>Betrag: ${(order.amountTotal / 100).toFixed(2)} €</p>
+      <p>Betrag: ${(order.amountTotal / 100).toFixed(2).replace(".", ",")} €</p>
       ${winnerBlock}
       <hr/>
       <p style="font-size:12px;color:#888;">

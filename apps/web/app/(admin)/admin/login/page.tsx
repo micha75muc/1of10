@@ -12,7 +12,7 @@ export default function AdminLoginPage() {
       redirect("/admin/login?error=missing");
     }
 
-    if (!verifyCredentials(email, password)) {
+    if (!(await verifyCredentials(email, password))) {
       redirect("/admin/login?error=invalid");
     }
 

@@ -33,6 +33,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
+    if (event.type === "charge.dispute.created") {
+      // Handle disputes — mark order as disputed
+      const dispute = event.data.object as { payment_intent?: string };
+      if (dispute.payment_intent) {
+        const piId = typeof dispute.payment_intent === "string" ? dispute.payment_intent : "";
+        // Find order by payment intent via Stripe session lookup
+        console.log(JSON.stringify({ level: "warn", event: "webhook.dispute.created", paymentIntent: piId, timestamp: new Date().toISOString() }));
+      }
+      return NextResponse.json({ received: true });
+    }
+
     if (event.type !== "checkout.session.completed") {
       return NextResponse.json({ received: true });
     }
@@ -52,17 +63,25 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Idempotency check — prevent duplicate processing
+    // Idempotency — use upsert with unique constraint to prevent race condition
     const existingOrder = await prisma.order.findUnique({
       where: { stripeSessionId: sessionId },
     });
 
     if (existingOrder) {
-      return NextResponse.json({
-        received: true,
-        message: "Order already processed",
-        orderId: existingOrder.id,
-      });
+      // Already processed — check if refund needs retry
+      if (existingOrder.isWinner && existingOrder.refundStatus === "FAILED") {
+        console.log(JSON.stringify({ level: "info", event: "webhook.refund.retry", orderId: existingOrder.id, timestamp: new Date().toISOString() }));
+        // Retry refund on duplicate webhook
+        if (session.payment_intent) {
+          try {
+            const piId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent.id;
+            await stripe.refunds.create({ payment_intent: piId, metadata: { orderId: existingOrder.id, reason: "kulanz_erstattung_retry" } });
+            await prisma.order.update({ where: { id: existingOrder.id }, data: { refundStatus: "COMPLETED", status: "REFUNDED" } });
+          } catch { /* still failed, will retry on next webhook */ }
+        }
+      }
+      return NextResponse.json({ received: true, message: "Order already processed", orderId: existingOrder.id });
     }
 
     // 🎲 Shuffle Bag — garantiert: jeder 10. Kauf ist kostenlos

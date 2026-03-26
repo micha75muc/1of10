@@ -4,9 +4,24 @@ import { prisma } from "@repo/db";
 /**
  * GET /api/order-status?sessionId=cs_xxx
  * Gibt den Erstattungskunde-Status einer Bestellung zurück.
- * Öffentlich zugänglich (nur via stripeSessionId — kein Auth nötig).
+ * Rate-limited: 10 req/min per IP.
  */
 export async function GET(req: Request) {
+  // Rate limiting
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const now = Date.now();
+  const windowMs = 60_000;
+  const maxReq = 10;
+  const key = `orderstatus:${ip}`;
+  const g = globalThis as unknown as { __osRL?: Map<string, number[]> };
+  if (!g.__osRL) g.__osRL = new Map();
+  const hits = (g.__osRL.get(key) ?? []).filter(t => t > now - windowMs);
+  if (hits.length >= maxReq) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+  }
+  hits.push(now);
+  g.__osRL.set(key, hits);
+
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get("sessionId");
 
@@ -31,11 +46,9 @@ export async function GET(req: Request) {
   }
 
   return NextResponse.json({
-    orderId: order.id,
+    status: order.status,
     isWinner: order.isWinner,
     refundStatus: order.refundStatus,
-    status: order.status,
-    amount: Number(order.amountTotal),
     productName: order.product.name,
   });
 }

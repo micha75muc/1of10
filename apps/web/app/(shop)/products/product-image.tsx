@@ -71,12 +71,67 @@ const BRAND_STYLES: Record<string, BrandStyle> = {
     label: "PARALLELS",
     logo: "∥",
   },
+  AVG: {
+    bg: "from-green-500 via-emerald-600 to-green-800",
+    accent: "bg-green-300",
+    text: "text-white",
+    label: "AVG",
+    logo: "A",
+  },
+  Avast: {
+    bg: "from-orange-500 via-orange-600 to-amber-700",
+    accent: "bg-orange-300",
+    text: "text-white",
+    label: "AVAST",
+    logo: "A",
+  },
+  ESET: {
+    bg: "from-teal-500 via-teal-600 to-cyan-800",
+    accent: "bg-teal-300",
+    text: "text-white",
+    label: "ESET",
+    logo: "E",
+  },
+  Kaspersky: {
+    bg: "from-emerald-600 via-green-700 to-emerald-900",
+    accent: "bg-emerald-400",
+    text: "text-white",
+    label: "KASPERSKY",
+    logo: "K",
+  },
+  "G Data": {
+    bg: "from-blue-500 via-blue-600 to-sky-800",
+    accent: "bg-blue-300",
+    text: "text-white",
+    label: "G DATA",
+    logo: "G",
+  },
+  Acronis: {
+    bg: "from-blue-700 via-indigo-700 to-blue-900",
+    accent: "bg-blue-400",
+    text: "text-white",
+    label: "ACRONIS",
+    logo: "A",
+  },
+  ABBYY: {
+    bg: "from-sky-600 via-blue-700 to-sky-900",
+    accent: "bg-sky-300",
+    text: "text-white",
+    label: "ABBYY",
+    logo: "A",
+  },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
   Antivirus: "🛡️ Antivirus",
+  "Internet Security": "🔒 Internet Security",
+  "Total Security": "🏆 Total Security",
   Office: "💼 Office",
+  Windows: "🖥️ Windows",
   Betriebssystem: "🖥️ Windows",
+  VPN: "🌐 VPN",
+  Utilities: "⚙️ Utilities",
+  Backup: "💾 Backup",
   Mac: "🍎 Mac",
 };
 

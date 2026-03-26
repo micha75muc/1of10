@@ -5,6 +5,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
 
   const products = await prisma.product.findMany({
+    where: { stockLevel: { gt: 0 } },
     select: { sku: true, updatedAt: true },
   });
 

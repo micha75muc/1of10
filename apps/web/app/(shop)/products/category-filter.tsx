@@ -4,9 +4,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 const CATEGORIES = [
   { value: "", label: "Alle" },
-  { value: "Antivirus", label: "Antivirus & Security" },
-  { value: "Office", label: "Office & 365" },
-  { value: "Betriebssystem", label: "Windows" },
+  { value: "Antivirus", label: "Antivirus" },
+  { value: "Internet Security", label: "Internet Security" },
+  { value: "Total Security", label: "Total Security" },
+  { value: "Office", label: "Office" },
+  { value: "Windows", label: "Windows" },
+  { value: "VPN", label: "VPN" },
+  { value: "Utilities", label: "Utilities" },
+  { value: "Backup", label: "Backup" },
   { value: "Mac", label: "Mac" },
 ] as const;
 

@@ -49,7 +49,7 @@ export async function WinnerTicker() {
               </div>
               <div className="flex items-center gap-4">
                 <span className="font-bold text-[var(--gold)]">
-                  {Number(order.amountTotal).toFixed(2)} € erstattet
+                  {Number(order.amountTotal).toFixed(2).replace(".", ",")} € erstattet
                 </span>
                 <span className="text-xs text-[var(--muted-foreground)]">
                   {timeAgo(order.createdAt)}

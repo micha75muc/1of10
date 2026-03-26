@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function TransparenzPage() {
-  const [totalOrders, totalWinners, totalRefundAmount, recentWinners] =
+  const [totalOrders, totalWinners, totalRefundAmount, recentWinners, lastWinOrder] =
     await Promise.all([
       prisma.order.count(),
       prisma.order.count({ where: { isWinner: true } }),
@@ -31,7 +31,17 @@ export default async function TransparenzPage() {
         take: 10,
         include: { product: true },
       }),
+      prisma.order.findFirst({
+        where: { isWinner: true },
+        orderBy: { createdAt: "desc" },
+        select: { createdAt: true },
+      }),
     ]);
+
+  // Count orders since last winner (correct math, not assuming bag size 10)
+  const sinceLastWin = lastWinOrder
+    ? await prisma.order.count({ where: { createdAt: { gt: lastWinOrder.createdAt } } })
+    : totalOrders;
 
   const refundRate =
     totalOrders > 0 ? ((totalWinners / totalOrders) * 100).toFixed(1) : "—";
@@ -98,7 +108,7 @@ export default async function TransparenzPage() {
           <StatCard label="Erstattungsquote" value={`${refundRate} %`} highlight />
           <StatCard
             label="Erstattet (Gesamt)"
-            value={`${totalRefunded.toFixed(2)} €`}
+            value={`${totalRefunded.toFixed(2).replace(".", ",")} €`}
           />
         </div>
       ) : (
@@ -116,7 +126,7 @@ export default async function TransparenzPage() {
       {totalOrders > 0 && (
         <div className="mb-10 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-6 text-center">
           <p className="text-sm text-[var(--muted-foreground)]">Seit der letzten Erstattung:</p>
-          <p className="text-4xl font-extrabold text-[var(--gold)]">{totalOrders > 0 ? totalOrders - (totalWinners * 10) : 0} Käufe</p>
+          <p className="text-4xl font-extrabold text-[var(--gold)]">{sinceLastWin} Käufe</p>
           <p className="mt-1 text-sm text-[var(--muted-foreground)]">Statistisch kommt die nächste Erstattung bald!</p>
         </div>
       )}
@@ -365,7 +375,7 @@ export default async function TransparenzPage() {
                   </div>
                 </div>
                 <span className="font-bold text-[var(--gold)]">
-                  {Number(order.amountTotal).toFixed(2)} € erstattet
+                  {Number(order.amountTotal).toFixed(2).replace(".", ",")} € erstattet
                 </span>
               </div>
             ))}

@@ -17,6 +17,7 @@ model Product {
   imageUrl      String?
   costPrice     Decimal
   sellPrice     Decimal
+  uvpPrice      Decimal?
   minimumMargin Decimal
   stockLevel    Int      @default(0)
   orders        Order[]
@@ -75,4 +76,12 @@ model ShuffleBag {
   isActive      Boolean  @default(true)
   slotsHash     String?  // SHA-256 hash of slots array, computed at creation
   createdAt     DateTime @default(now())
+}
+
+model NewsletterSignup {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

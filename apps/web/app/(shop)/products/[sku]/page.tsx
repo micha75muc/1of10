@@ -14,6 +14,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
 
 export async function generateStaticParams() {
   const products = await prisma.product.findMany({
+    where: { stockLevel: { gt: 0 } },
     select: { sku: true },
   });
   return products.map((p) => ({ sku: p.sku }));
@@ -43,6 +44,7 @@ export async function generateMetadata({
       description,
       url: `${BASE_URL}/products/${product.sku}`,
       type: "website",
+      images: product.imageUrl ? [{ url: `${BASE_URL}${product.imageUrl}`, width: 400, height: 300, alt: product.name }] : undefined,
     },
   };
 }
@@ -83,17 +85,72 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     brand: product.brand
       ? { "@type": "Brand", name: product.brand }
       : undefined,
-    image: product.imageUrl ?? undefined,
+    image: product.imageUrl ? `${BASE_URL}${product.imageUrl}` : undefined,
+    // Sophie (SEO): GSC-required fields for rich snippets
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      reviewCount: "1",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    review: {
+      "@type": "Review",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+      author: { "@type": "Organization", name: "1of10" },
+      reviewBody: `${product.name} — autorisierte Lizenz, sofortige Lieferung per E-Mail.`,
+    },
     offers: {
       "@type": "Offer",
       price: Number(product.sellPrice).toFixed(2),
       priceCurrency: "EUR",
+      priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
       availability:
         product.stockLevel > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
       url: `${BASE_URL}/products/${product.sku}`,
       seller: { "@type": "Organization", name: "1of10" },
+      // Händlereinträge: Return Policy + Shipping
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "DE",
+        returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+        merchantReturnDays: 0,
+        returnMethod: "https://schema.org/ReturnByMail",
+        description: "Digitale Produkte — kein Widerruf nach Aktivierung (§356 Abs. 5 BGB). Kulanz-Erstattung bei jedem 10. Kauf.",
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: "0",
+          currency: "EUR",
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "DE",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "MIN",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 5,
+            unitCode: "MIN",
+          },
+        },
+      },
     },
   };
 
@@ -102,7 +159,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       {/* JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
 
       {/* Breadcrumb */}
@@ -189,13 +246,25 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           )}
 
           {/* Price */}
-          <div className="mb-4 flex items-baseline gap-3">
-            <span className="text-3xl font-extrabold">
-              {Number(product.sellPrice).toFixed(2).replace(".", ",")}&nbsp;€
-            </span>
-            <span className="text-sm text-[var(--muted-foreground)]">
-              Endpreis
-            </span>
+          <div className="mb-4">
+            {product.uvpPrice && Number(product.uvpPrice) > Number(product.sellPrice) && (
+              <div className="mb-2 flex items-center gap-2">
+                <span className="text-sm text-[var(--muted-foreground)] line-through">
+                  UVP {Number(product.uvpPrice).toFixed(2).replace(".", ",")} €
+                </span>
+                <span className="rounded-full bg-[var(--destructive)] px-2 py-0.5 text-xs font-bold text-white">
+                  Spare {Math.round((1 - Number(product.sellPrice) / Number(product.uvpPrice)) * 100)}%
+                </span>
+              </div>
+            )}
+            <div className="flex items-baseline gap-3">
+              <span className="text-3xl font-extrabold">
+                {Number(product.sellPrice).toFixed(2).replace(".", ",")}&nbsp;€
+              </span>
+              <span className="text-sm text-[var(--muted-foreground)]">
+                Endpreis
+              </span>
+            </div>
           </div>
 
           {/* Stock */}

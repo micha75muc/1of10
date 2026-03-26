@@ -2,6 +2,8 @@
  * Clara (Content) + Sophie (SEO): Rich product data for PDPs.
  * Features, highlights, system requirements, FAQ — keyed by SKU.
  * This enriches the minimal DB data without requiring schema changes.
+ *
+ * KATALOG-BEREINIGUNG 2026-03-26: Nur noch 14 profitable Produkte (DSD-EK).
  */
 
 export interface ProductEnrichment {
@@ -13,16 +15,6 @@ export interface ProductEnrichment {
 
 const data: Record<string, ProductEnrichment> = {
   // ===== NORTON =====
-  "NORTON-360-STD-1Y": {
-    features: ["Echtzeitschutz vor Viren und Malware", "Secure VPN für anonymes Surfen", "Passwort-Manager", "10 GB Cloud-Backup", "1 Gerät, 1 Jahr", "Non-Subscription (kein Auto-Renew)"],
-    highlights: ["Nr. 1 Antivirus weltweit", "VPN inklusive", "Kein automatisches Abo"],
-    systemReq: "Windows 10/11, macOS 12+, Android 8+, iOS 15+. 2 GB RAM, 300 MB Speicherplatz.",
-    faq: [
-      { q: "Was bedeutet Non-Subscription?", a: "Ihr Schutz läuft 1 Jahr und verlängert sich NICHT automatisch. Keine versteckten Kosten." },
-      { q: "Kann ich Norton auf dem Mac nutzen?", a: "Ja, Norton 360 Standard unterstützt Windows, macOS, Android und iOS." },
-      { q: "Ist das VPN im Preis enthalten?", a: "Ja, Norton Secure VPN ist ohne Aufpreis enthalten." },
-    ],
-  },
   "NORTON-360-DLX-3D-1Y": {
     features: ["Schutz für 3 Geräte gleichzeitig", "Secure VPN (3 Geräte)", "Passwort-Manager", "25 GB Cloud-Backup", "Kindersicherung", "Non-Subscription"],
     highlights: ["3 Geräte zum Preis von einem", "Kindersicherung inklusive", "25 GB Cloud-Backup"],
@@ -45,6 +37,26 @@ const data: Record<string, ProductEnrichment> = {
       { q: "Was ist Dark Web Monitoring?", a: "Norton überprüft automatisch, ob Ihre persönlichen Daten im Dark Web aufgetaucht sind und warnt Sie." },
       { q: "Lohnt sich Premium gegenüber Deluxe?", a: "Ja, wenn Sie mehr als 5 Geräte haben oder das Dark Web Monitoring nutzen möchten." },
     ],
+  },
+  "NORTON-360-DLX-VPN-3D-1Y": {
+    features: ["Norton 360 Deluxe Funktionsumfang", "Integriertes VPN", "Passwort-Manager", "25 GB Cloud-Backup", "Kindersicherung"],
+    highlights: ["VPN inklusive", "3 Geräte schützen", "Champion-Edition"],
+    systemReq: "Windows 10/11, macOS 12+, Android 8+, iOS 15+. 2 GB RAM, 300 MB Speicherplatz.",
+  },
+  "NORTON-360-PREM-5D-1Y": {
+    features: ["Schutz für 5 Geräte", "Secure VPN", "Passwort-Manager", "50 GB Cloud-Backup", "Kindersicherung"],
+    highlights: ["5 Geräte", "Premium zum Bestpreis", "Champion-Edition"],
+    systemReq: "Windows 10/11, macOS 12+, Android 8+, iOS 15+. 2 GB RAM, 300 MB Speicherplatz.",
+  },
+  "NORTON-ANTITRACK-1D-1Y": {
+    features: ["Anti-Tracking-Schutz", "Fingerprinting-Schutz", "Privatsphäre beim Surfen", "Cookie-Management"],
+    highlights: ["Unsichtbar surfen", "Tracker blockieren"],
+    systemReq: "Windows 10/11, macOS 12+. Browser: Chrome, Firefox, Edge.",
+  },
+  "NORTON-VPN-5D-1Y": {
+    features: ["Verschlüsselte Verbindung", "Anonymes Surfen", "5 Geräte gleichzeitig", "No-Log-Policy"],
+    highlights: ["5 Geräte", "No-Log VPN", "Öffentliche WLANs sicher nutzen"],
+    systemReq: "Windows 10/11, macOS 12+, Android 8+, iOS 15+.",
   },
 
   // ===== McAFEE =====
@@ -71,9 +83,14 @@ const data: Record<string, ProductEnrichment> = {
       { q: "Was ist der Unterschied zwischen Internet Security und Total Protection?", a: "Total Protection enthält zusätzlich VPN, Passwort-Manager und Identitätsschutz." },
     ],
   },
-  "MCAFEE-TP-10PC-1Y": {
-    features: ["Schutz für 10 PCs", "Secure VPN (10 Geräte)", "Passwort-Manager", "Identitätsschutz", "Firewall", "1 Jahr"],
-    highlights: ["10 Geräte", "VPN für alle", "Familien-Schutz"],
+  "MCAFEE-TP-3PC-1Y": {
+    features: ["Schutz für 3 PCs", "Secure VPN", "Passwort-Manager", "Identitätsschutz", "Firewall"],
+    highlights: ["3 PCs mit VPN", "Identitätsschutz"],
+    systemReq: "Windows 10/11. 2 GB RAM, 500 MB Speicherplatz.",
+  },
+  "MCAFEE-TP-UNL-1Y": {
+    features: ["Unbegrenzte Geräteanzahl", "Secure VPN", "Passwort-Manager", "Identitätsschutz", "Firewall", "1 Jahr"],
+    highlights: ["Unbegrenzte Geräte", "VPN für alle"],
     systemReq: "Windows 10/11, macOS 10.15+, Android 7+, iOS 14+. 2 GB RAM.",
   },
   "MCAFEE-LIVESAFE-UNL-1Y": {
@@ -86,145 +103,142 @@ const data: Record<string, ProductEnrichment> = {
     ],
   },
 
-  // ===== TREND MICRO =====
-  "TREND-IS-1PC-1Y": {
-    features: ["Schutz vor Viren und Ransomware", "E-Mail-Schutzfilter", "Web Threat Protection", "1 PC, 1 Jahr"],
-    highlights: ["Günstigster Einstieg", "Ransomware-Schutz"],
-    systemReq: "Windows 10/11. 2 GB RAM, 1.5 GB Speicherplatz.",
+  // ===== AVG =====
+  "AVG-TUNEUP-3D-1Y": {
+    features: ["Automatische Wartung", "Junk-Dateien entfernen", "Programme beschleunigen", "3 Geräte"],
+    highlights: ["PC schneller machen", "Automatische Optimierung"],
+    systemReq: "Windows 10/11, macOS 10.14+, Android 6+.",
   },
-  "TREND-IS-3PC-1Y": {
-    features: ["Schutz für 3 PCs", "Anti-Ransomware", "E-Mail-Schutz", "Social-Media-Schutz", "1 Jahr"],
-    highlights: ["3 PCs", "Social-Media-Schutz"],
-    systemReq: "Windows 10/11. 2 GB RAM, 1.5 GB Speicherplatz pro PC.",
+  "AVG-IS-1PC-1Y": {
+    features: ["Echtzeitschutz", "Firewall", "Anti-Ransomware", "E-Mail-Schutz", "Web-Schutz"],
+    highlights: ["Firewall inklusive", "Ransomware-Schutz"],
+    systemReq: "Windows 10/11. 1 GB RAM, 1.5 GB Speicherplatz.",
   },
-  "TREND-IS-5PC-2Y": {
-    features: ["2 Jahre Schutz", "5 PCs", "Anti-Ransomware", "E-Mail-Schutz", "Pay Guard (sicheres Banking)"],
-    highlights: ["2 Jahre — langfristig sparen", "5 PCs", "Sicheres Online-Banking"],
-    systemReq: "Windows 10/11. 2 GB RAM, 1.5 GB Speicherplatz pro PC.",
+  "AVG-ULTIMATE-1PC-1Y": {
+    features: ["Internet Security", "TuneUp Optimierung", "VPN Privatsphäre", "Alles in einem Paket"],
+    highlights: ["Security + TuneUp + VPN", "Komplett-Paket"],
+    systemReq: "Windows 10/11. 2 GB RAM, 2 GB Speicherplatz.",
   },
-  "TREND-MAXSEC-5PC-1Y": {
-    features: ["Schutz für 5 Geräte", "Anti-Ransomware", "Kindersicherung", "Social-Media-Schutz", "Pay Guard", "Plattformübergreifend", "1 Jahr"],
-    highlights: ["5 Geräte, alle Plattformen", "Kindersicherung", "Maximum Security"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+, ChromeOS. 2 GB RAM.",
+
+  // ===== AVAST =====
+  "AVAST-PREM-1PC-1Y": {
+    features: ["Echtzeitschutz", "Anti-Ransomware", "WLAN-Inspektor", "Sandbox", "Phishing-Schutz"],
+    highlights: ["Premium-Schutz", "Sandbox-Technologie"],
+    systemReq: "Windows 10/11, macOS 10.14+. 1 GB RAM, 2 GB Speicherplatz.",
   },
-  "TREND-MAXSEC-3PC-2Y": {
-    features: ["2 Jahre Schutz", "3 Geräte", "Anti-Ransomware", "Kindersicherung", "Pay Guard"],
-    highlights: ["2 Jahre Ruhe", "Kindersicherung inklusive"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+. 2 GB RAM.",
+  "AVAST-ULTIMATE-1PC-1Y": {
+    features: ["Premium Security", "Cleanup Premium", "SecureLine VPN", "AntiTrack", "Alles in einem"],
+    highlights: ["VPN + Cleanup inklusive", "Komplett-Paket"],
+    systemReq: "Windows 10/11, macOS 10.14+. 2 GB RAM, 2 GB Speicherplatz.",
   },
-  "TREND-MAXSEC-5PC-2Y": {
-    features: ["2 Jahre Schutz", "5 Geräte", "Anti-Ransomware", "Kindersicherung", "Social-Media-Schutz", "Pay Guard"],
-    highlights: ["2 Jahre + 5 Geräte", "Rundum-Schutz"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+, ChromeOS. 2 GB RAM.",
+
+  // ===== PANDA =====
+  "PANDA-ESS-1PC-1Y": {
+    features: ["Cloud-basierter Virenschutz", "Echtzeit-Erkennung", "USB-Schutz", "Rescue Kit"],
+    highlights: ["Cloud-basiert — schnell", "Leichte Systembelastung"],
+    systemReq: "Windows 10/11. 256 MB RAM, 240 MB Speicherplatz.",
   },
-  "TREND-MAXSEC-3PC-3Y": {
-    features: ["3 Jahre Schutz", "3 Geräte", "Anti-Ransomware", "Kindersicherung", "Pay Guard", "Automatische Updates"],
-    highlights: ["3 Jahre — maximales Sparpotenzial", "Set it and forget it"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+. 2 GB RAM.",
-  },
-  "TREND-MAXSEC-5PC-3Y": {
-    features: ["3 Jahre Schutz", "5 Geräte", "Anti-Ransomware", "Kindersicherung", "Social-Media-Schutz", "Pay Guard"],
-    highlights: ["3 Jahre + 5 Geräte = bester Deal", "Langzeit-Empfehlung"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+, ChromeOS. 2 GB RAM.",
-    faq: [
-      { q: "Warum 3 Jahre?", a: "Sie sparen über 50% gegenüber drei Einzeljahr-Käufen und haben 3 Jahre lang keinen Aufwand." },
-    ],
+  "PANDA-COMP-1PC-1Y": {
+    features: ["VPN (150 MB/Tag)", "Passwort-Manager", "Dateiverschlüsselung", "Anti-Ransomware", "Kindersicherung"],
+    highlights: ["VPN inklusive", "Passwort-Manager", "Dateiverschlüsselung"],
+    systemReq: "Windows 10/11, macOS 10.14+, Android 5+, iOS 14+. 256 MB RAM.",
   },
 
   // ===== BITDEFENDER =====
   "BITDEF-AV-1PC-1Y": {
-    features: ["Preisgekrönter Virenschutz", "Anti-Phishing", "Sicheres Online-Banking", "VPN (200 MB/Tag)", "1 PC, 1 Jahr"],
-    highlights: ["Nr. 1 in AV-Tests", "VPN inklusive", "Leichtgewichtig"],
+    features: ["Preisgekrönter Antivirus", "Anti-Phishing", "VPN (200 MB/Tag)", "Passwort-Manager"],
+    highlights: ["Nr. 1 bei AV-TEST", "Leicht und schnell"],
     systemReq: "Windows 10/11. 2 GB RAM, 2.5 GB Speicherplatz.",
   },
-  "BITDEF-AV-3PC-1Y": {
-    features: ["Virenschutz für 3 PCs", "Anti-Phishing", "Sicheres Banking", "VPN (200 MB/Tag)", "Passwort-Manager", "1 Jahr"],
-    highlights: ["3 PCs", "Passwort-Manager", "Top-bewerteter Schutz"],
-    systemReq: "Windows 10/11. 2 GB RAM, 2.5 GB Speicherplatz pro PC.",
-  },
-  "BITDEF-IS-5PC-1Y": {
-    features: ["5 PCs schützen", "Firewall", "Webcam-Schutz", "Kindersicherung", "Anti-Spam", "VPN (200 MB/Tag)", "1 Jahr"],
-    highlights: ["Webcam-Schutz", "Firewall", "Kindersicherung"],
-    systemReq: "Windows 10/11. 2 GB RAM, 2.5 GB Speicherplatz pro PC.",
+  "BITDEF-IS-1PC-1Y": {
+    features: ["Firewall", "Kindersicherung", "Anti-Spam", "Webcam-Schutz", "Ransomware-Schutz"],
+    highlights: ["Webcam-Schutz", "Firewall inklusive"],
+    systemReq: "Windows 10/11. 2 GB RAM, 2.5 GB Speicherplatz.",
   },
   "BITDEF-TS-5D-1Y": {
-    features: ["5 Geräte, alle Plattformen", "Anti-Ransomware", "Webcam- & Mikrofon-Schutz", "Kindersicherung", "VPN (200 MB/Tag)", "Anti-Theft (Android)", "System-Optimierung", "1 Jahr"],
-    highlights: ["Testsieger in unabhängigen Tests", "Plattformübergreifend", "Komplettsuite"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+. 2 GB RAM, 2.5 GB Speicherplatz.",
-    faq: [
-      { q: "Warum Bitdefender Total Security?", a: "Bitdefender wird regelmäßig als Nr. 1 in unabhängigen Tests (AV-Test, AV-Comparatives) ausgezeichnet." },
-      { q: "Funktioniert der Schutz auf iPhone und Android?", a: "Ja, voller Schutz auf Windows, macOS, Android und iOS." },
-    ],
-  },
-  "BITDEF-TS-10D-1Y": {
-    features: ["10 Geräte, alle Plattformen", "Anti-Ransomware", "Webcam-Schutz", "Kindersicherung", "VPN (200 MB/Tag)", "Anti-Theft", "1 Jahr"],
-    highlights: ["10 Geräte", "Ideal für Großfamilien", "Testsieger"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+. 2 GB RAM, 2.5 GB Speicherplatz.",
-  },
-  "BITDEF-TS-10D-2Y": {
-    features: ["2 Jahre Schutz", "10 Geräte", "Alle Plattformen", "Anti-Ransomware", "Webcam-Schutz", "Kindersicherung", "VPN"],
-    highlights: ["2 Jahre sparen", "10 Geräte", "Premium-Schutz"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+. 2 GB RAM, 2.5 GB Speicherplatz.",
+    features: ["Plattformübergreifend", "Anti-Theft", "VPN", "Mikrofon-Schutz", "Kindersicherung", "5 Geräte"],
+    highlights: ["Alle Plattformen", "Anti-Theft", "Mikrofon-Schutz"],
+    systemReq: "Windows 10/11, macOS 12+, Android 6+, iOS 14+. 2 GB RAM, 2.5 GB Speicherplatz.",
   },
   "BITDEF-FAMILY-15D-1Y": {
-    features: ["15 Geräte schützen", "Alle Plattformen", "Anti-Ransomware", "Webcam-Schutz", "Kindersicherung", "VPN (200 MB/Tag)", "1 Jahr"],
-    highlights: ["15 Geräte — ultimatives Family Pack", "Testsieger-Schutz", "Alle Plattformen"],
-    systemReq: "Windows 10/11, macOS 11+, Android 6+, iOS 14+. 2 GB RAM, 2.5 GB Speicherplatz.",
-    faq: [
-      { q: "Wofür brauche ich 15 Geräte?", a: "Smartphone + Tablet + Laptop + PC — für eine 4-köpfige Familie kommen schnell 12+ Geräte zusammen." },
-    ],
+    features: ["15 Geräte", "Plattformübergreifend", "Kindersicherung", "VPN", "Anti-Theft"],
+    highlights: ["15 Geräte für die ganze Familie", "Kindersicherung inklusive"],
+    systemReq: "Windows 10/11, macOS 12+, Android 6+, iOS 14+. 2 GB RAM.",
   },
 
-  // ===== PANDA =====
-  "PANDA-ADV-1PC-1Y": {
-    features: ["Echtzeit-Antivirus", "Anti-Ransomware", "Phishing-Schutz", "Cloud-basierte Erkennung", "1 PC, 1 Jahr"],
-    highlights: ["Cloud-basiert = leichtgewichtig", "Budget-freundlich"],
-    systemReq: "Windows 10/11. 1 GB RAM, 240 MB Speicherplatz.",
+  // ===== ESET =====
+  "ESET-NOD32-3D-1Y": {
+    features: ["Leichtgewichtiger Scanner", "Geringe Systembelastung", "Anti-Phishing", "3 Geräte"],
+    highlights: ["Schnellster Scanner", "Geringe Systemlast"],
+    systemReq: "Windows 10/11, macOS 12+, Linux. 1 GB RAM, 320 MB Speicherplatz.",
   },
-  "PANDA-ADV-3PC-1Y": {
-    features: ["3 PCs schützen", "Anti-Ransomware", "Phishing-Schutz", "Kindersicherung", "Wi-Fi-Schutz", "1 Jahr"],
-    highlights: ["3 PCs", "Kindersicherung", "Wi-Fi-Schutz"],
-    systemReq: "Windows 10/11. 1 GB RAM, 240 MB Speicherplatz pro PC.",
+  "ESET-SMARTSEC-3D-1Y": {
+    features: ["Passwort-Manager", "Dateiverschlüsselung", "Anti-Theft", "Banking-Schutz", "3 Geräte"],
+    highlights: ["Passwort-Manager", "Dateiverschlüsselung"],
+    systemReq: "Windows 10/11, macOS 12+, Android 6+. 1 GB RAM, 320 MB Speicherplatz.",
   },
-  "PANDA-COMP-5PC-1Y": {
-    features: ["5 PCs Komplettschutz", "VPN", "Passwort-Manager", "Datei-Verschlüsselung", "PC-Bereinigung", "Anti-Theft", "1 Jahr"],
-    highlights: ["VPN + Passwort-Manager inkl.", "Datei-Verschlüsselung", "Komplett-Paket"],
-    systemReq: "Windows 10/11. 1 GB RAM, 240 MB Speicherplatz pro PC.",
+
+  // ===== G DATA =====
+  "GDATA-AV-1PC-1Y": {
+    features: ["Doppelte Scan-Engine", "Anti-Ransomware", "Banking-Schutz", "Made in Germany"],
+    highlights: ["Deutsche Qualität", "Doppelte Engine", "Banking-Schutz"],
+    systemReq: "Windows 10/11. 2 GB RAM, 1 GB Speicherplatz.",
+  },
+  "GDATA-IS-1PC-1Y": {
+    features: ["Firewall", "Kindersicherung", "Banking-Schutz", "Anti-Spam", "Doppelte Engine"],
+    highlights: ["Firewall inklusive", "Made in Germany"],
+    systemReq: "Windows 10/11. 2 GB RAM, 2 GB Speicherplatz.",
+  },
+
+  // ===== TREND MICRO =====
+  "TREND-IS-1PC-1Y": {
+    features: ["KI-gestützte Erkennung", "Anti-Ransomware", "Web-Schutz", "E-Mail-Schutz"],
+    highlights: ["KI-Schutz", "Einfache Bedienung"],
+    systemReq: "Windows 10/11. 1 GB RAM, 1.5 GB Speicherplatz.",
+  },
+  "TREND-MAXSEC-5PC-1Y": {
+    features: ["5 Geräte", "Plattformübergreifend", "Passwort-Manager", "Kindersicherung", "VPN"],
+    highlights: ["5 Geräte schützen", "VPN inklusive"],
+    systemReq: "Windows 10/11, macOS 12+, Android 8+, iOS 14+. 1 GB RAM.",
   },
 
   // ===== F-SECURE =====
-  "FSEC-IS-1PC-1Y": {
-    features: ["Banking-Schutz", "Browsing-Schutz", "Ransomware-Schutz", "Automatische Updates", "1 PC, 1 Jahr"],
-    highlights: ["Finnische Qualität", "Banking-Schutz Spezialität"],
-    systemReq: "Windows 10/11. 1 GB RAM, 800 MB Speicherplatz.",
+  "FSEC-VPN-1D-1Y": {
+    features: ["Verschlüsselte Verbindung", "Finnische Datenschutzgesetze", "No-Log-Policy", "Tracker-Schutz"],
+    highlights: ["Finnischer Datenschutz", "No-Log VPN"],
+    systemReq: "Windows 10/11, macOS 12+, Android 8+, iOS 15+.",
   },
-  "FSEC-SAFE-3D-1Y": {
-    features: ["3 Geräte schützen", "Banking-Schutz", "Browsing-Schutz", "Kindersicherung", "Finder (Geräteortung)", "1 Jahr"],
-    highlights: ["Aus Finnland — Privacy First", "Kindersicherung", "Geräteortung"],
-    systemReq: "Windows 10/11, macOS 11+, Android 7+, iOS 14+. 1 GB RAM.",
+  "FSEC-IS-1PC-1Y": {
+    features: ["Banking-Schutz", "Anti-Ransomware", "Browsing-Schutz", "Finnische Qualität"],
+    highlights: ["Banking-Schutz", "Finnische Sicherheit"],
+    systemReq: "Windows 10/11. 1 GB RAM, 1 GB Speicherplatz.",
+  },
+
+  // ===== KASPERSKY =====
+  "KASP-SAFEKIDS-1U-1Y": {
+    features: ["GPS-Standort-Tracking", "App-Kontrolle", "Bildschirmzeit-Limits", "Webfilter", "YouTube-Überwachung"],
+    highlights: ["GPS-Ortung", "Bildschirmzeit-Kontrolle", "YouTube-Filter"],
+    systemReq: "Windows 10/11, macOS 12+, Android 6+, iOS 14+.",
     faq: [
-      { q: "Warum F-Secure?", a: "F-Secure aus Finnland hat einen starken Fokus auf Datenschutz — keine Daten werden verkauft oder für Werbung genutzt." },
+      { q: "Kann ich den Standort meines Kindes sehen?", a: "Ja, Safe Kids zeigt den GPS-Standort in Echtzeit auf einer Karte." },
     ],
   },
 
-  // ===== MICROSOFT OFFICE & 365 =====
-  "MS365-PERSONAL-1Y": {
-    features: ["Word, Excel, PowerPoint, Outlook", "1 TB OneDrive Cloud-Speicher", "Für 1 Person", "Auf bis zu 5 Geräten gleichzeitig", "Microsoft Editor (KI-Schreibhilfe)", "1 Jahr"],
-    highlights: ["1 TB Cloud-Speicher", "Immer aktuelle Version", "Auf 5 Geräten nutzbar"],
-    systemReq: "Windows 10/11, macOS (3 neueste Versionen), iOS, Android. Internetverbindung für Aktivierung.",
-    faq: [
-      { q: "Brauche ich Internet für Office?", a: "Nur für die Aktivierung und Updates. Sie können offline arbeiten." },
-      { q: "Was passiert nach 1 Jahr?", a: "Ihr Abo läuft aus. Ihre Dateien bleiben erhalten, aber Sie können nicht mehr bearbeiten bis zur Verlängerung." },
-    ],
+  // ===== ACRONIS =====
+  "ACRONIS-ESS-1PC-1Y": {
+    features: ["Vollständiges Backup", "Anti-Ransomware", "Klonen von Festplatten", "Schnelle Wiederherstellung"],
+    highlights: ["Backup + Antivirus", "Disk-Klonen"],
+    systemReq: "Windows 10/11, macOS 12+. 2 GB RAM, 1.5 GB Speicherplatz.",
   },
-  "MS365-FAMILY-1Y": {
-    features: ["Word, Excel, PowerPoint, Outlook", "Bis zu 6 Nutzer", "1 TB OneDrive pro Person (6 TB gesamt)", "Microsoft Editor", "Family Safety App", "1 Jahr"],
-    highlights: ["6 Nutzer = 6 TB Speicher", "Family Safety inklusive", "Bestes Preis-Leistungs-Verhältnis"],
-    systemReq: "Windows 10/11, macOS (3 neueste Versionen), iOS, Android. Internetverbindung für Aktivierung.",
-    faq: [
-      { q: "Können die 6 Nutzer in verschiedenen Haushalten sein?", a: "Ja, Sie können die Lizenzen mit Familie oder Freunden teilen — unabhängig vom Wohnort." },
-    ],
+
+  // ===== ABBYY =====
+  "ABBYY-FR-STD-1Y": {
+    features: ["OCR-Texterkennung", "PDF erstellen und bearbeiten", "PDF konvertieren", "Formulare ausfüllen"],
+    highlights: ["Beste OCR am Markt", "PDF-Editor"],
+    systemReq: "Windows 10/11. 4 GB RAM, 3 GB Speicherplatz.",
   },
+
+  // ===== MICROSOFT OFFICE =====
   "MS-OFFICE-HS-2021": {
     features: ["Word, Excel, PowerPoint", "Einmalkauf — kein Abo", "Dauerlizenz für 1 PC oder Mac", "Klassische Desktop-Apps"],
     highlights: ["Einmal kaufen, für immer nutzen", "Kein Abo nötig", "Für Abo-Verweigerer"],
@@ -238,6 +252,11 @@ const data: Record<string, ProductEnrichment> = {
     features: ["Word, Excel, PowerPoint, Outlook", "Einmalkauf — kein Abo", "Dauerlizenz für 1 PC oder Mac", "Geschäftliche E-Mails mit Outlook"],
     highlights: ["Mit Outlook für E-Mails", "Einmalkauf", "Ideal fürs Home-Office"],
     systemReq: "Windows 10/11 oder macOS (3 neueste Versionen). 4 GB RAM, 4 GB Speicherplatz.",
+  },
+  "MS-OFFICE-HB-MAC-2021": {
+    features: ["Word, Excel, PowerPoint, Outlook", "Speziell für macOS", "Einmalkauf — kein Abo", "Dauerlizenz für 1 Mac"],
+    highlights: ["Mac-optimiert", "Outlook inklusive", "Einmalkauf"],
+    systemReq: "macOS (3 neueste Versionen). 4 GB RAM, 10 GB Speicherplatz.",
   },
 
   // ===== WINDOWS =====
