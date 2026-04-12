@@ -13,6 +13,7 @@ AgentName = Literal[
     "marketing_sales",
     "it_ops",
     "compliance",
+    "simulation",
 ]
 
 

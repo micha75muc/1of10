@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 /**
  * Newsletter-Signup — sammelt E-Mails für die Launch-Liste.
  * Gregor (Growth): Besucher die nicht kaufen → E-Mail statt verloren.
- * Speichert vorerst in localStorage + sendet an /api/newsletter.
  */
 export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | "footer" | "banner" }) {
   const [email, setEmail] = useState("");
@@ -13,11 +14,10 @@ export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.includes("@")) return;
+    if (!EMAIL_REGEX.test(email)) return;
     setStatus("loading");
 
     try {
-      // Send to API for server-side persistence
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -26,12 +26,6 @@ export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | 
 
       if (!res.ok) throw new Error("Failed");
 
-      // Also store locally as backup
-      const existing = JSON.parse(localStorage.getItem("1of10_newsletter_signups") ?? "[]");
-      if (!existing.includes(email)) {
-        existing.push(email);
-        localStorage.setItem("1of10_newsletter_signups", JSON.stringify(existing));
-      }
       setStatus("success");
       setEmail("");
     } catch {
@@ -51,23 +45,28 @@ export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | 
 
   if (variant === "banner") {
     return (
-      <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="deine@email.de"
-          required
-          className="flex-1 rounded-lg border bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--ring)]"
-        />
-        <button
-          type="submit"
-          disabled={status === "loading"}
-          className="shrink-0 rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
-        >
-          Anmelden
-        </button>
-      </form>
+      <div>
+        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="deine@email.de"
+            required
+            className="flex-1 rounded-lg border bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--ring)]"
+          />
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="shrink-0 rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
+          >
+            {status === "loading" ? "…" : "Anmelden"}
+          </button>
+        </form>
+        {status === "error" && (
+          <p className="mt-2 text-xs text-center text-red-400">Anmeldung fehlgeschlagen. Bitte versuche es erneut.</p>
+        )}
+      </div>
     );
   }
 
@@ -93,11 +92,11 @@ export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | 
           disabled={status === "loading"}
           className="shrink-0 rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
         >
-          {status === "loading" ? "..." : "Anmelden"}
+          {status === "loading" ? "…" : "Anmelden"}
         </button>
       </form>
       {status === "error" && (
-        <p className="mt-2 text-xs text-red-400">Etwas ist schiefgelaufen. Versuche es erneut.</p>
+        <p className="mt-2 text-xs text-red-400">Anmeldung fehlgeschlagen. Bitte versuche es erneut.</p>
       )}
     </div>
   );

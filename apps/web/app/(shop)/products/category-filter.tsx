@@ -27,8 +27,6 @@ export function CategoryFilter() {
     } else {
       params.delete("category");
     }
-    // Reset zur ersten Seite bei Filterwechsel
-    params.delete("q");
     router.push(`/products?${params.toString()}`);
   }
 

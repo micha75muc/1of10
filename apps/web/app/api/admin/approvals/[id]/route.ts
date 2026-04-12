@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { executeApprovedAction } from "../../../../../lib/action-dispatcher";
-
-import { verifySession } from "../../../../../lib/auth";
-
-async function checkAdminAuth(req: NextRequest): Promise<boolean> {
-  const apiKey = req.headers.get("x-admin-api-key");
-  if (apiKey && apiKey === process.env.ADMIN_API_KEY) return true;
-  return await verifySession();
-}
+import { requireAdmin } from "../../../../../lib/auth";
 
 // PATCH /api/admin/approvals/[id] — Approve or Reject an approval item
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!(await checkAdminAuth(req))) {
+  if (!(await requireAdmin(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

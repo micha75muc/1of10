@@ -140,33 +140,33 @@ export default async function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {products.map((p) => {
-                const bl = p.brand?.toLowerCase() ?? '';
-                const brandClass = bl.includes('norton') ? 'brand-norton'
-                  : bl.includes('mcafee') ? 'brand-mcafee'
-                  : bl.includes('bitdefender') ? 'brand-bitdefender'
-                  : bl.includes('trend') ? 'brand-trendmicro'
-                  : bl.includes('panda') ? 'brand-panda'
-                  : bl.includes('f-secure') ? 'brand-fsecure'
-                  : bl.includes('microsoft') ? 'brand-microsoft'
-                  : bl.includes('parallels') ? 'brand-parallels'
-                  : bl.includes('avg') ? 'brand-avg'
-                  : bl.includes('avast') ? 'brand-avast'
-                  : bl.includes('eset') ? 'brand-eset'
-                  : bl.includes('kaspersky') ? 'brand-kaspersky'
-                  : bl.includes('g data') ? 'brand-gdata'
-                  : bl.includes('acronis') ? 'brand-acronis'
-                  : bl.includes('abbyy') ? 'brand-abbyy'
+              {products.map((product) => {
+                const brandLower = product.brand?.toLowerCase() ?? '';
+                const brandClass = brandLower.includes('norton') ? 'brand-norton'
+                  : brandLower.includes('mcafee') ? 'brand-mcafee'
+                  : brandLower.includes('bitdefender') ? 'brand-bitdefender'
+                  : brandLower.includes('trend') ? 'brand-trendmicro'
+                  : brandLower.includes('panda') ? 'brand-panda'
+                  : brandLower.includes('f-secure') ? 'brand-fsecure'
+                  : brandLower.includes('microsoft') ? 'brand-microsoft'
+                  : brandLower.includes('parallels') ? 'brand-parallels'
+                  : brandLower.includes('avg') ? 'brand-avg'
+                  : brandLower.includes('avast') ? 'brand-avast'
+                  : brandLower.includes('eset') ? 'brand-eset'
+                  : brandLower.includes('kaspersky') ? 'brand-kaspersky'
+                  : brandLower.includes('g data') ? 'brand-gdata'
+                  : brandLower.includes('acronis') ? 'brand-acronis'
+                  : brandLower.includes('abbyy') ? 'brand-abbyy'
                   : 'brand-default';
-                const hasUvp = p.uvpPrice && Number(p.uvpPrice) > Number(p.sellPrice);
-                const savingsPercent = hasUvp ? Math.round((1 - Number(p.sellPrice) / Number(p.uvpPrice)) * 100) : 0;
+                const hasUvp = product.uvpPrice && Number(product.uvpPrice) > Number(product.sellPrice);
+                const savingsPercent = hasUvp ? Math.round((1 - Number(product.sellPrice) / Number(product.uvpPrice)) * 100) : 0;
                 return (
-                  <div key={p.id} className="group rounded-xl border bg-[var(--card)] overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                  <div key={product.id} className="group rounded-xl border bg-[var(--card)] overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
                     {/* Brand color header area */}
                     <div className={`${brandClass} px-5 pt-5 pb-4`}>
                       <div className="flex justify-between items-start mb-3">
                         <span className="inline-flex items-center rounded-full bg-[var(--background)]/80 backdrop-blur px-2.5 py-0.5 text-xs font-medium">
-                          {p.category || p.brand}
+                          {product.category || product.brand}
                         </span>
                         {hasUvp && (
                           <span className="inline-flex items-center rounded-full bg-[var(--destructive)] px-2 py-0.5 text-xs font-bold text-white">
@@ -174,26 +174,26 @@ export default async function HomePage() {
                           </span>
                         )}
                       </div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--muted-foreground)]/70 mb-1">{p.brand}</p>
-                      <h3 className="font-semibold text-lg leading-tight">{p.name}</h3>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--muted-foreground)]/70 mb-1">{product.brand}</p>
+                      <h3 className="font-semibold text-lg leading-tight">{product.name}</h3>
                     </div>
                     <div className="px-5 py-4">
-                      <p className="text-sm text-[var(--muted-foreground)] line-clamp-2">{p.description}</p>
+                      <p className="text-sm text-[var(--muted-foreground)] line-clamp-2">{product.description}</p>
                     </div>
                     <div className="px-5 pb-5 pt-3 border-t flex flex-col gap-3">
                       <div>
                         {hasUvp && (
                           <span className="text-xs text-[var(--muted-foreground)] line-through mr-2">
-                            UVP {Number(p.uvpPrice).toFixed(2).replace(".", ",")} €
+                            UVP {Number(product.uvpPrice).toFixed(2).replace(".", ",")} €
                           </span>
                         )}
                         <div className="flex items-baseline gap-2">
-                          <span className="text-2xl font-bold">{Number(p.sellPrice).toFixed(2).replace(".", ",")} €</span>
+                          <span className="text-2xl font-bold">{Number(product.sellPrice).toFixed(2).replace(".", ",")} €</span>
                           <span className="text-xs text-[var(--muted-foreground)]">Endpreis</span>
                         </div>
                       </div>
                       <Link
-                        href={`/products/${p.sku}`}
+                        href={`/products/${product.sku}`}
                         className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2.5 text-sm font-medium text-[var(--primary-foreground)] hover:scale-[1.02] active:scale-[0.98] transition-all w-full"
                       >
                         <ShoppingCart className="h-4 w-4" />

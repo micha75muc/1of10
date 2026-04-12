@@ -104,13 +104,13 @@ export async function verifyCredentials(email: string, password: string): Promis
   if (!adminEmail || !adminPasswordHash) return false;
   if (email !== adminEmail) return false;
 
-  // Support both bcrypt hash ($2a$/$2b$) and legacy plaintext
-  if (adminPasswordHash.startsWith("$2")) {
-    const { compare } = await import("bcryptjs");
-    return compare(password, adminPasswordHash);
+  // Sven (Security): Nur bcrypt-Hashes erlaubt — kein Plaintext-Fallback
+  if (!adminPasswordHash.startsWith("$2")) {
+    console.error("[Auth] ADMIN_PASSWORD_HASH is not a bcrypt hash. Login disabled. Generate one: npx bcryptjs hash 'yourpassword'");
+    return false;
   }
-  // Fallback: Klartext (für Migration — sollte ASAP auf Hash umgestellt werden)
-  return password === adminPasswordHash;
+  const { compare } = await import("bcryptjs");
+  return compare(password, adminPasswordHash);
 }
 
 /**
@@ -119,4 +119,14 @@ export async function verifyCredentials(email: string, password: string): Promis
 export async function destroySession(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE);
+}
+
+/**
+ * Prüft Admin-Berechtigung via API-Key Header oder Session-Cookie.
+ * Konsolidierte Auth-Check-Funktion für alle Admin-API-Routes.
+ */
+export async function requireAdmin(req: Request): Promise<boolean> {
+  const apiKey = req.headers.get("x-admin-api-key");
+  if (apiKey && apiKey === process.env.ADMIN_API_KEY) return true;
+  return await verifySession();
 }

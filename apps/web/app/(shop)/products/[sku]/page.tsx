@@ -86,24 +86,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       ? { "@type": "Brand", name: product.brand }
       : undefined,
     image: product.imageUrl ? `${BASE_URL}${product.imageUrl}` : undefined,
-    // Sophie (SEO): GSC-required fields for rich snippets
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "1",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    review: {
-      "@type": "Review",
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: "5",
-        bestRating: "5",
-      },
-      author: { "@type": "Organization", name: "1of10" },
-      reviewBody: `${product.name} — autorisierte Lizenz, sofortige Lieferung per E-Mail.`,
-    },
+    // Note: aggregateRating/review removed — no real reviews exist yet.
+    // Adding fabricated ratings violates Google Webmaster Guidelines.
     offers: {
       "@type": "Offer",
       price: Number(product.sellPrice).toFixed(2),
