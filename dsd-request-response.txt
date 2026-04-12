@@ -3,6 +3,10 @@ Date: 2026-04-01 07:07:20 UTC
 Client: httpx/0.28.1 (Python 3.12.1)
 ======================================================================
 
+NOTE: Credentials removed for security. Auth uses HTTP Basic Auth
+with credentials stored in environment variables DSD_API_USERNAME
+and DSD_API_PASSWORD.
+
 >>> REQUEST
 ----------------------------------------------------------------------
 GET https://www.dsdeurope.nl/api2s/login.json HTTP/1.1
@@ -10,7 +14,7 @@ Host: www.dsdeurope.nl
 Accept: application/json
 Cache-Control: private
 Connection: Keep-Alive
-Authorization: Basic ><REDACTED>==
+Authorization: Basic <REDACTED>
 User-Agent: httpx/0.28.1
 
 (no request body)
@@ -23,14 +27,9 @@ content-type: application/json; charset=UTF-8
 transfer-encoding: chunked
 connection: keep-alive
 server: cloudflare
-x-powered-by: PHP/7.2.34-55+0~20250707.109+debian12~1.gbp140deb
-set-cookie: CAKEPHP=dfcd6fd283e5626968ccd6afa23751d6; expires=Thu, 02-Apr-2026 03:07:21 GMT; Max-Age=72000; path=/; SameSite=Lax; secure; HttpOnly
+set-cookie: <REDACTED>
 cf-cache-status: DYNAMIC
-nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
-report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=iHPJRDe3a1vwWfdBXHamQiV%2BJKN0%2FPcC4UesjThKvmQJwhNGsgxMw3pIxZia%2FJch0wCuydmXpLRngfrV0%2B%2FK4dgT4KkU5HVh09PJKS8Y0IymHe75k4ZFRot0rvB4xLOt5Gi6"}]}
 content-encoding: gzip
-cf-ray: 9e55c1a37bd414bd-AMS
-alt-svc: h3=":443"; ma=86400
 
 <<< RESPONSE BODY
 ----------------------------------------------------------------------
