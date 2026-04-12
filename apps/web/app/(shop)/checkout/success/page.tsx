@@ -1,6 +1,7 @@
 import { prisma } from "@repo/db";
 import Link from "next/link";
-import { Trophy, CheckCircle, Clock } from "lucide-react";
+import { Trophy, CheckCircle } from "lucide-react";
+import { OrderPending } from "./order-pending";
 
 export const dynamic = "force-dynamic";
 
@@ -31,21 +32,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   });
 
   if (!order) {
-    return (
-      <div className="mx-auto max-w-md text-center py-12">
-        <div className="mb-6 text-5xl animate-pulse"><Clock className="h-12 w-12 mx-auto text-[var(--muted-foreground)]" /></div>
-        <h1 className="mb-4 text-3xl font-bold">Bestellung wird verarbeitet</h1>
-        <p className="text-[var(--muted-foreground)]">
-          Deine Zahlung war erfolgreich! Deine Bestellung wird gerade verarbeitet.
-          Diese Seite aktualisiert sich automatisch.
-        </p>
-        {/* Auto-refresh after 3 seconds */}
-        <meta httpEquiv="refresh" content="3" />
-        <p className="mt-4 text-xs text-[var(--muted-foreground)]">
-          Seite aktualisiert sich in wenigen Sekunden...
-        </p>
-      </div>
-    );
+    return <OrderPending />;
   }
 
   return (
@@ -115,17 +102,18 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
       {/* License Delivery Info */}
       <div className="mb-6 rounded-xl border border-[var(--primary)]/30 bg-[var(--primary)]/5 p-6">
         <div className="flex items-start gap-4">
-          <span className="text-2xl">⚡</span>
+          <span className="text-2xl">📧</span>
           <div>
             <p className="font-semibold text-[var(--primary)]">
-              Deine Lizenz ist unterwegs!
+              Bestellbestätigung gesendet
             </p>
             <p className="text-sm text-[var(--muted-foreground)]">
-              Dein Lizenzschlüssel wurde an{" "}
+              Eine Bestätigung wurde an{" "}
               <span className="font-medium text-[var(--foreground)]">
                 {order.customerEmail}
               </span>{" "}
-              gesendet. Prüfe ggf. deinen Spam-Ordner.
+              gesendet. Dein Lizenzschlüssel wird in Kürze separat zugestellt.
+              Prüfe ggf. deinen Spam-Ordner.
             </p>
           </div>
         </div>

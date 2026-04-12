@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
+import { requireAdmin } from "../../../../lib/auth";
 
 /**
  * GET /api/admin/export — CSV-Export aller Bestellungen für den Steuerberater.
  * Elena (Finance): EÜR-tauglicher Export mit allen relevanten Feldern.
- * Auth: x-admin-api-key Header
  */
 export async function GET(req: NextRequest) {
-  const key = req.headers.get("x-admin-api-key");
-  if (key !== process.env.ADMIN_API_KEY) {
+  if (!(await requireAdmin(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -1,6 +1,6 @@
 # 1of10
 
-AI-Native E-Commerce Platform für Software-Lizenzen mit "Gamified Refund" — jeder 10. Kauf ist kostenlos.
+AI-Native E-Commerce Platform für Software-Lizenzen mit "Gamified Refund" — jeder 10. Kauf wird erstattet.
 
 ## Tech-Stack
 
@@ -88,7 +88,7 @@ Siehe `.env.example` für alle verfügbaren Variablen. Die wichtigsten:
 │   ├── db/           # Prisma ORM + Schema
 │   └── policy/       # Risikoklassen & Policy-Enforcement
 ├── scripts/          # Deploy- & Setup-Scripts
-├── docker-compose.yml    # Dev: PostgreSQL + Redis
+├── docker-compose.yml    # Dev: PostgreSQL
 ├── docker-compose.prod.yml  # Prod-Konfiguration
 ├── Caddyfile         # Reverse Proxy
 └── Makefile          # Ein-Befehl-Entwicklung
@@ -98,6 +98,10 @@ Siehe `.env.example` für alle verfügbaren Variablen. Die wichtigsten:
 
 - **Frontend**: Vercel (automatisch bei Push auf `main`)
 - **Agents**: `scripts/deploy-agents.sh`
+
+## Hinweise
+
+- Die Python-Agents (`apps/agents`) benötigen einen `OPENAI_API_KEY` in `.env` für volle LLM-Funktionalität. Ohne API-Key laufen die Agents als Stubs, die Anfragen entgegennehmen aber nicht inhaltlich verarbeiten.
 - **Datenbank**: Neon (Managed PostgreSQL)
 
 ## Kontakt

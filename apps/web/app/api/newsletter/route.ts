@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
+import { rateLimit } from "../../../lib/rate-limit";
 
 /**
  * POST /api/newsletter — Speichert Newsletter-Anmeldungen in der DB.
@@ -7,20 +8,11 @@ import { prisma } from "@repo/db";
  */
 export async function POST(req: NextRequest) {
   try {
-    // Rate limiting: 5 requests per minute per IP
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const now = Date.now();
-    const windowMs = 60_000;
-    const maxReq = 5;
-    const key = `newsletter:${ip}`;
-    const g = globalThis as unknown as { __nlRL?: Map<string, number[]> };
-    if (!g.__nlRL) g.__nlRL = new Map();
-    const hits = (g.__nlRL.get(key) ?? []).filter(t => t > now - windowMs);
-    if (hits.length >= maxReq) {
+    const { ok } = rateLimit(ip, { maxRequests: 5, windowMs: 60_000 });
+    if (!ok) {
       return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 });
     }
-    hits.push(now);
-    g.__nlRL.set(key, hits);
 
     const { email } = await req.json();
 

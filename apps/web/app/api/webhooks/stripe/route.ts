@@ -78,7 +78,9 @@ export async function POST(req: NextRequest) {
             const piId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent.id;
             await stripe.refunds.create({ payment_intent: piId, metadata: { orderId: existingOrder.id, reason: "kulanz_erstattung_retry" } });
             await prisma.order.update({ where: { id: existingOrder.id }, data: { refundStatus: "COMPLETED", status: "REFUNDED" } });
-          } catch { /* still failed, will retry on next webhook */ }
+          } catch (retryErr) {
+            console.error(JSON.stringify({ level: "error", event: "webhook.refund.retry.failed", orderId: existingOrder.id, error: retryErr instanceof Error ? retryErr.message : String(retryErr), timestamp: new Date().toISOString() }));
+          }
         }
       }
       return NextResponse.json({ received: true, message: "Order already processed", orderId: existingOrder.id });
