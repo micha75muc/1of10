@@ -28,6 +28,8 @@ export async function GET(req: Request) {
       refundStatus: true,
       status: true,
       amountTotal: true,
+      licenseKey: true,
+      deliveredAt: true,
       product: { select: { name: true } },
     },
   });
@@ -41,5 +43,7 @@ export async function GET(req: Request) {
     isWinner: order.isWinner,
     refundStatus: order.refundStatus,
     productName: order.product.name,
+    licenseKey: order.licenseKey,
+    deliveredAt: order.deliveredAt,
   });
 }

@@ -47,6 +47,7 @@ export function orderConfirmationEmail(order: {
   productName: string;
   amountTotal: number;
   isWinner: boolean;
+  licenseKey?: string;
 }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
   const shareText = encodeURIComponent(
@@ -68,6 +69,19 @@ export function orderConfirmationEmail(order: {
       </div>`
     : "";
 
+  const keyBlock = order.licenseKey
+    ? `<div style="background:#f4f4f5;border:1px solid #e4e4e7;border-radius:12px;padding:20px;margin:24px 0;">
+        <h2 style="margin:0 0 8px;font-size:18px;">🔑 Dein Lizenzschlüssel</h2>
+        <p style="margin:0 0 12px;font-size:13px;color:#555;">Bitte speichere diesen Code sicher — er ist dein Produktschlüssel.</p>
+        <div style="background:#0f172a;color:#f8fafc;padding:16px;border-radius:8px;font-family:'Courier New',monospace;font-size:16px;word-break:break-all;letter-spacing:0.5px;text-align:center;">
+          ${order.licenseKey}
+        </div>
+        <p style="margin:12px 0 0;font-size:12px;color:#666;">Bewahre die E-Mail auf — du kannst den Schlüssel auch jederzeit unter <a href="${appUrl}/bestellstatus">${appUrl}/bestellstatus</a> einsehen.</p>
+      </div>`
+    : `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px;margin:24px 0;">
+        <p style="margin:0;font-size:14px;color:#92400e;">🕒 Dein Lizenzschlüssel wird in Kürze manuell zugestellt. Bei Fragen antworte einfach auf diese E-Mail.</p>
+      </div>`;
+
   return {
     to: order.customerEmail,
     subject: order.isWinner
@@ -77,6 +91,7 @@ export function orderConfirmationEmail(order: {
       <h1>Bestellbestätigung</h1>
       <p>Vielen Dank für deinen Kauf von <strong>${order.productName}</strong>.</p>
       <p>Betrag: ${(order.amountTotal / 100).toFixed(2).replace(".", ",")} €</p>
+      ${keyBlock}
       ${winnerBlock}
       <hr/>
       <p style="font-size:12px;color:#888;">
