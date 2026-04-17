@@ -22,6 +22,17 @@ interface DeliveryInput {
 const DELIVERY_TIMEOUT_MS = 45_000; // DSD can take 20-30s under load
 
 export async function deliverLicenseKey(input: DeliveryInput): Promise<DeliveryResult> {
+  // TEST_MODE: return a deterministic dummy key without calling the agents
+  // service. Used for end-to-end email-flow verification in Stripe test mode.
+  if (process.env.TEST_MODE === "true") {
+    const suffix = input.reference.slice(0, 8).toUpperCase();
+    return {
+      ok: true,
+      licenseKey: `DUMMY-TEST-${suffix}-XXXX`,
+      certificateId: `test_cert_${input.reference.slice(0, 12)}`,
+    };
+  }
+
   const agentsUrl = process.env.AGENTS_API_URL;
   const secret = process.env.AGENTS_INTERNAL_SECRET;
 
