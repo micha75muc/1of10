@@ -8,21 +8,27 @@ datasource db {
 }
 
 model Product {
-  id            String   @id @default(uuid())
-  sku           String   @unique
-  name          String
-  description   String?
-  category      String?
-  brand         String?
-  imageUrl      String?
-  costPrice     Decimal
-  sellPrice     Decimal
-  uvpPrice      Decimal?
-  minimumMargin Decimal
-  stockLevel    Int      @default(0)
-  orders        Order[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(uuid())
+  sku            String   @unique
+  name           String
+  description    String?
+  category       String?
+  brand          String?
+  imageUrl       String?
+  costPrice      Decimal
+  sellPrice      Decimal
+  uvpPrice       Decimal?
+  minimumMargin  Decimal
+  stockLevel     Int      @default(0)
+  /// DSD Europe product code (e.g. "DSD190048"). Required for automated
+  /// key delivery via DSD activateProduct.json — without this, orders fall
+  /// back to manual fulfilment.
+  dsdProductCode String?
+  orders         Order[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([dsdProductCode])
 }
 
 model Order {
@@ -32,13 +38,19 @@ model Order {
   product         Product  @relation(fields: [productId], references: [id])
   customerEmail   String
   amountTotal     Decimal
-  status          String   @default("PENDING") // PENDING, PAID, DELIVERED, REFUNDED
+  status          String   @default("PENDING") // PENDING, PAID, DELIVERED, REFUNDED, DELIVERY_FAILED
 
   // Compliance & Gamification Fields
   bgbWiderrufOptIn Boolean @default(false)
   dsgvoOptIn       Boolean @default(false)
   isWinner         Boolean @default(false)
   refundStatus     String? // INITIATED, COMPLETED, FAILED
+
+  // Key Delivery (E9) — populated after DSD activateProduct succeeds
+  licenseKey       String?
+  dsdCertificateId String?
+  deliveredAt      DateTime?
+  deliveryError    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,6 +61,7 @@ model Order {
   @@index([status])
   @@index([createdAt])
   @@index([productId])
+  @@index([deliveredAt])
 }
 
 model ApprovalItem {

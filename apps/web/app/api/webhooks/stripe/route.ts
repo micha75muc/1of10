@@ -4,6 +4,7 @@ import { stripe } from "../../../../lib/stripe";
 import { sendEmail, orderConfirmationEmail } from "../../../../lib/email";
 import { drawFromShuffleBag } from "../../../../lib/shuffle-bag";
 import { rateLimit } from "../../../../lib/rate-limit";
+import { deliverLicenseKey } from "../../../../lib/key-delivery";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -136,12 +137,63 @@ export async function POST(req: NextRequest) {
       data: { stockLevel: { decrement: 1 } },
     });
 
-    // Send confirmation email
+    // 🔑 E9 Key Delivery — activate product at DSD and store license key.
+    // Winners still get the key (they keep the product, refund is on top).
+    // Orders without a dsdProductCode fall back to manual fulfilment.
+    let licenseKey: string | undefined;
+    if (order.product.dsdProductCode) {
+      const delivery = await deliverLicenseKey({
+        productCode: order.product.dsdProductCode,
+        customerEmail,
+        reference: order.id,
+      });
+      if (delivery.ok && delivery.licenseKey) {
+        licenseKey = delivery.licenseKey;
+        await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            licenseKey: delivery.licenseKey,
+            dsdCertificateId: delivery.certificateId ?? null,
+            deliveredAt: new Date(),
+            // Winners keep REFUNDED status; non-winners move to DELIVERED
+            status: isWinner ? "REFUNDED" : "DELIVERED",
+          },
+        });
+      } else {
+        await prisma.order.update({
+          where: { id: order.id },
+          data: {
+            deliveryError: delivery.error ?? "Unknown delivery error",
+            status: isWinner ? "REFUNDED" : "DELIVERY_FAILED",
+          },
+        });
+        console.error(JSON.stringify({
+          level: "error",
+          event: "webhook.delivery.failed",
+          orderId: order.id,
+          productCode: order.product.dsdProductCode,
+          error: delivery.error,
+          timestamp: new Date().toISOString(),
+        }));
+      }
+    } else {
+      console.warn(JSON.stringify({
+        level: "warn",
+        event: "webhook.delivery.skipped",
+        orderId: order.id,
+        productId,
+        reason: "no_dsdProductCode",
+        timestamp: new Date().toISOString(),
+      }));
+    }
+
+    // Send confirmation email (includes license key if we got one)
     const emailParams = orderConfirmationEmail({
       customerEmail,
       productName: order.product.name,
       amountTotal,
       isWinner,
+      licenseKey,
     });
     await sendEmail(emailParams);
 
