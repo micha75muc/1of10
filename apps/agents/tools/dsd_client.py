@@ -181,11 +181,30 @@ class DSDClient:
     async def get_products(self, page: int = 1) -> dict:
         """Get paginated product catalog (100 products per page).
 
-        Returns product list with: id, name, productCode, brandName,
-        price (advisory), acquisitionPrice (our cost), stock, options, etc.
+        DSD returns:
+            {"products": [{"ProductArray": {...}}, ...], "pagination": {...}}
+
+        We unwrap each item so callers get a flat product list with fields:
+        id, name, nameDefault, productCode, brandName, productGroup,
+        supplierSKU, EAN1, EAN2, licenceType, numberOfUsers, yearsValid,
+        options, price, acquisitionPrice, stock, downloadCode, downloadLink.
         """
         await self._ensure_login()
-        return await self._request("GET", "index.json", params={"page": page})
+        raw = await self._request("GET", "index.json", params={"page": page})
+
+        products: list[dict] = []
+        pagination: dict = {}
+        if isinstance(raw, dict):
+            pagination = raw.get("pagination", {}) or {}
+            items = raw.get("products", [])
+            if isinstance(items, list):
+                for item in items:
+                    if isinstance(item, dict) and "ProductArray" in item:
+                        products.append(item["ProductArray"])
+                    elif isinstance(item, dict):
+                        products.append(item)
+
+        return {"products": products, "pagination": pagination, "count": len(products)}
 
     async def view_products(self, product_codes: list[str]) -> dict:
         """Get detailed info for specific products by their DSD product codes.
