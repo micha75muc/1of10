@@ -44,7 +44,7 @@ export async function generateMetadata({
       description,
       url: `${BASE_URL}/products/${product.sku}`,
       type: "website",
-      images: product.imageUrl ? [{ url: `${BASE_URL}${product.imageUrl}`, width: 400, height: 300, alt: product.name }] : undefined,
+      images: product.imageUrl ? [{ url: product.imageUrl.startsWith("http") ? product.imageUrl : `${BASE_URL}${product.imageUrl}`, width: 400, height: 300, alt: product.name }] : undefined,
     },
   };
 }
@@ -85,7 +85,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     brand: product.brand
       ? { "@type": "Brand", name: product.brand }
       : undefined,
-    image: product.imageUrl ? `${BASE_URL}${product.imageUrl}` : undefined,
+    image: product.imageUrl ? (product.imageUrl.startsWith("http") ? product.imageUrl : `${BASE_URL}${product.imageUrl}`) : undefined,
     // Note: aggregateRating/review removed — no real reviews exist yet.
     // Adding fabricated ratings violates Google Webmaster Guidelines.
     offers: {
