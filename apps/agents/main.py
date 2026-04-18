@@ -183,9 +183,12 @@ async def activate_product_endpoint(
             raw={"note": "DSD_DELIVERY_ENABLED is false — returning mock key"},
         )
 
-    from tools.dsd_client import DSDClient, DSDClientError
+    from tools.dsd_client import DSDClientError, get_dsd_client
     try:
-        client = DSDClient()
+        # Reuse the singleton client so cookies persist across activations.
+        # DSD requires the session cookie set during login.json to be sent on
+        # every subsequent call (Jody van Gils, 2026-04-18).
+        client = get_dsd_client()
         activation = await client.activate_product(
             product_code=req.product_code,
             quantity=1,
