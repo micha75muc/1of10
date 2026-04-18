@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "1of10.de",
       },
+      {
+        protocol: "https",
+        hostname: "www.dsdeurope.nl",
+        pathname: "/img/**",
+      },
     ],
   },
   async headers() {
