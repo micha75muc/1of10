@@ -112,8 +112,12 @@ class DSDClient:
 
                 response = await client.request(method, url, **kwargs)
 
-                # Capture session cookies
-                self._cookies.update(response.cookies)
+                # Capture ALL session cookies from the client jar.
+                # Using `response.cookies` would only capture Set-Cookie headers from
+                # the final response — losing cookies set during redirects (DSD login
+                # uses a 302 that sets the session cookie). Reading `client.cookies`
+                # gets every cookie httpx accumulated during the full request chain.
+                self._cookies = httpx.Cookies(client.cookies)
 
             except httpx.ConnectError as exc:
                 logger.error("DSD API connection error: %s", exc)
