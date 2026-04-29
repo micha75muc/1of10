@@ -1,4 +1,4 @@
-import { prisma } from "@repo/db";
+import { getCustomerOrderByLookup } from "../../../lib/services/orders";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle, AlertCircle, Mail, Search } from "lucide-react";
@@ -28,15 +28,12 @@ export default async function BestellstatusPage({ searchParams }: PageProps) {
     return <LookupForm />;
   }
 
-  const order = await prisma.order.findUnique({
-    where: { stripeSessionId: sessionId },
-    include: { product: { select: { name: true, requiresVendorAccount: true, vendorName: true, vendorActivationUrl: true } } },
-  });
+  const order = await getCustomerOrderByLookup(sessionId, email);
 
-  // Wir bestätigen NIE, ob eine Session-ID existiert, bevor die E-Mail passt
-  // (sonst wäre das Endpoint ein Order-ID-Enumerator). Bei Mismatch zeigen wir
-  // beide Fälle generisch.
-  if (!order || order.customerEmail.toLowerCase() !== email) {
+  // We never confirm whether a session-id exists before the email matches —
+  // otherwise the endpoint would be an order-id enumerator. The service
+  // returns null for both missing-order and email-mismatch.
+  if (!order) {
     return (
       <div className="mx-auto max-w-md py-8">
         <div className="mb-6 rounded-xl border border-[var(--destructive)]/30 bg-[var(--destructive)]/5 p-6">

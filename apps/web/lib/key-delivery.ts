@@ -6,6 +6,8 @@
  * When DSD_DELIVERY_ENABLED is "false" on agents, a mock key is returned.
  */
 
+import { KEY_DELIVERY_TIMEOUT_MS } from "./constants";
+
 export interface DeliveryResult {
   ok: boolean;
   licenseKey?: string;
@@ -23,8 +25,6 @@ interface DeliveryInput {
   phone?: string;
   company?: string;
 }
-
-const DELIVERY_TIMEOUT_MS = 45_000; // DSD can take 20-30s under load
 
 export async function deliverLicenseKey(input: DeliveryInput): Promise<DeliveryResult> {
   // TEST_MODE: return a deterministic dummy key without calling the agents
@@ -49,7 +49,7 @@ export async function deliverLicenseKey(input: DeliveryInput): Promise<DeliveryR
   }
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), DELIVERY_TIMEOUT_MS);
+  const timer = setTimeout(() => controller.abort(), KEY_DELIVERY_TIMEOUT_MS);
 
   try {
     const res = await fetch(`${agentsUrl.replace(/\/+$/, "")}/internal/procurement/activate`, {

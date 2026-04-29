@@ -5,13 +5,15 @@ import { sendEmail, orderConfirmationEmail } from "../../../../lib/email";
 import { drawFromShuffleBag } from "../../../../lib/shuffle-bag";
 import { rateLimit } from "../../../../lib/rate-limit";
 import { deliverLicenseKey } from "../../../../lib/key-delivery";
+import { RATE_LIMIT_WINDOW_MS } from "../../../../lib/constants";
+import { logEvent, logWarn, logError } from "../../../../lib/error-logger";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
   try {
     // Rate limit webhooks (Stripe retries are max 3/event, so 30/min is generous)
     const ip = req.headers.get("x-forwarded-for") ?? "stripe";
-    const { ok } = rateLimit(ip, { maxRequests: 30, windowMs: 60_000 });
+    const { ok } = rateLimit(ip, { maxRequests: 30, windowMs: RATE_LIMIT_WINDOW_MS });
     if (!ok) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
@@ -22,7 +24,7 @@ export async function POST(req: NextRequest) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
     if (!sig || !webhookSecret) {
-      console.error("[Webhook] Missing signature or webhook secret");
+      logWarn("webhook.signature.missing");
       return NextResponse.json({ error: "Missing signature" }, { status: 400 });
     }
 
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
     try {
       event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
     } catch (err) {
-      console.error("[Webhook] Signature verification failed:", err);
+      logError(err, { event: "webhook.signature.invalid" });
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
@@ -40,7 +42,7 @@ export async function POST(req: NextRequest) {
       if (dispute.payment_intent) {
         const piId = typeof dispute.payment_intent === "string" ? dispute.payment_intent : "";
         // Find order by payment intent via Stripe session lookup
-        console.log(JSON.stringify({ level: "warn", event: "webhook.dispute.created", paymentIntent: piId, timestamp: new Date().toISOString() }));
+        logWarn("webhook.dispute.created", { paymentIntent: piId });
       }
       return NextResponse.json({ received: true });
     }
@@ -76,7 +78,7 @@ export async function POST(req: NextRequest) {
     if (existingOrder) {
       // Already processed — check if refund needs retry
       if (existingOrder.isWinner && existingOrder.refundStatus === "FAILED") {
-        console.log(JSON.stringify({ level: "info", event: "webhook.refund.retry", orderId: existingOrder.id, timestamp: new Date().toISOString() }));
+        logEvent("webhook.refund.retry", { orderId: existingOrder.id });
         // Retry refund on duplicate webhook
         if (session.payment_intent) {
           try {
@@ -84,7 +86,7 @@ export async function POST(req: NextRequest) {
             await stripe.refunds.create({ payment_intent: piId, metadata: { orderId: existingOrder.id, reason: "kulanz_erstattung_retry" } });
             await prisma.order.update({ where: { id: existingOrder.id }, data: { refundStatus: "COMPLETED", status: "REFUNDED" } });
           } catch (retryErr) {
-            console.error(JSON.stringify({ level: "error", event: "webhook.refund.retry.failed", orderId: existingOrder.id, error: retryErr instanceof Error ? retryErr.message : String(retryErr), timestamp: new Date().toISOString() }));
+            logError(retryErr, { event: "webhook.refund.retry.failed", orderId: existingOrder.id });
           }
         }
       }
@@ -127,7 +129,7 @@ export async function POST(req: NextRequest) {
           data: { refundStatus: "COMPLETED", status: "REFUNDED" },
         });
       } catch (refundErr) {
-        console.error("[Webhook] Refund failed:", refundErr);
+        logError(refundErr, { event: "webhook.refund.failed", orderId: order.id });
         await prisma.order.update({
           where: { id: order.id },
           data: { refundStatus: "FAILED" },
@@ -178,24 +180,18 @@ export async function POST(req: NextRequest) {
             status: isWinner ? "REFUNDED" : "DELIVERY_FAILED",
           },
         });
-        console.error(JSON.stringify({
-          level: "error",
+        logError(delivery.error ?? "Unknown delivery error", {
           event: "webhook.delivery.failed",
           orderId: order.id,
           productCode: order.product.dsdProductCode,
-          error: delivery.error,
-          timestamp: new Date().toISOString(),
-        }));
+        });
       }
     } else {
-      console.warn(JSON.stringify({
-        level: "warn",
-        event: "webhook.delivery.skipped",
+      logWarn("webhook.delivery.skipped", {
         orderId: order.id,
         productId,
         reason: "no_dsdProductCode",
-        timestamp: new Date().toISOString(),
-      }));
+      });
     }
 
     // Send confirmation email (includes license key if we got one)
@@ -211,24 +207,16 @@ export async function POST(req: NextRequest) {
     });
     await sendEmail(emailParams);
 
-    console.log(JSON.stringify({
-      level: "info",
-      event: "webhook.order.created",
+    logEvent("webhook.order.created", {
       orderId: order.id,
       productId,
       isWinner,
       amount: amountTotal,
-      timestamp: new Date().toISOString(),
-    }));
+    });
 
     return NextResponse.json({ received: true, orderId: order.id });
   } catch (err) {
-    console.error(JSON.stringify({
-      level: "error",
-      event: "webhook.processing.failed",
-      error: err instanceof Error ? err.message : String(err),
-      timestamp: new Date().toISOString(),
-    }));
+    logError(err, { event: "webhook.processing.failed" });
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }

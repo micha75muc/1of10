@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@repo/db";
 import { rateLimit } from "../../../../../lib/rate-limit";
 import { sendEmail, orderConfirmationEmail } from "../../../../../lib/email";
+import {
+  RESEND_RATE_LIMIT_MAX,
+  RESEND_RATE_LIMIT_WINDOW_MS,
+} from "../../../../../lib/constants";
+import { logError } from "../../../../../lib/error-logger";
+import { getOrderForResend } from "../../../../../lib/services/orders";
 
 /**
  * Re-send the order confirmation email. Auth pattern: caller must supply
@@ -21,8 +26,8 @@ export async function POST(
   try {
     const ip = req.headers.get("x-forwarded-for") ?? "unknown";
     const { ok } = rateLimit(`resend:${ip}`, {
-      maxRequests: 3,
-      windowMs: 300_000,
+      maxRequests: RESEND_RATE_LIMIT_MAX,
+      windowMs: RESEND_RATE_LIMIT_WINDOW_MS,
     });
     if (!ok) {
       return NextResponse.json(
@@ -45,10 +50,7 @@ export async function POST(
       );
     }
 
-    const order = await prisma.order.findFirst({
-      where: { id: orderId, stripeSessionId: sessionId },
-      include: { product: true },
-    });
+    const order = await getOrderForResend(orderId, sessionId);
 
     // Generic 404 — bewusst KEIN Hinweis ob die ID existiert
     if (!order) {
@@ -73,14 +75,7 @@ export async function POST(
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error(
-      JSON.stringify({
-        level: "error",
-        event: "api.orders.resend.failed",
-        error: err instanceof Error ? err.message : String(err),
-        timestamp: new Date().toISOString(),
-      }),
-    );
+    logError(err, { event: "api.orders.resend.failed", url: req.url });
     return NextResponse.json(
       {
         error:

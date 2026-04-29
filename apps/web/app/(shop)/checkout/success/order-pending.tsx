@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Clock, Copy, Check } from "lucide-react";
-
-const POLL_INTERVAL_MS = 3_000;
-const MAX_POLLS = 20; // 60 Sekunden max
+import {
+  ORDER_PENDING_POLL_INTERVAL_MS,
+  ORDER_PENDING_MAX_POLLS,
+} from "../../../../lib/constants";
 
 export function OrderPending() {
   const router = useRouter();
@@ -13,14 +14,14 @@ export function OrderPending() {
   const sessionId = searchParams.get("session_id") ?? "";
   const [polls, setPolls] = useState(0);
   const [copied, setCopied] = useState(false);
-  const timedOut = polls >= MAX_POLLS;
+  const timedOut = polls >= ORDER_PENDING_MAX_POLLS;
 
   useEffect(() => {
     if (timedOut) return;
     const timer = setInterval(() => {
       setPolls((prev) => prev + 1);
       router.refresh();
-    }, POLL_INTERVAL_MS);
+    }, ORDER_PENDING_POLL_INTERVAL_MS);
     return () => clearInterval(timer);
   }, [router, timedOut]);
 
@@ -105,7 +106,7 @@ export function OrderPending() {
             musst nichts tun.
           </p>
           <p className="mt-4 text-xs text-[var(--muted-foreground)]" aria-live="polite">
-            Status wird alle {POLL_INTERVAL_MS / 1000} Sekunden geprüft… ({polls}/{MAX_POLLS})
+            Status wird alle {ORDER_PENDING_POLL_INTERVAL_MS / 1000} Sekunden geprüft… ({polls}/{ORDER_PENDING_MAX_POLLS})
           </p>
         </>
       )}
