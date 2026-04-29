@@ -98,6 +98,11 @@ class ActivationRequest(BaseModel):
     client_email: str
     reference: str  # typically the order.id for audit trail
     client_name: str | None = None
+    # Pflichtfelder für quickOrder.json bei DSD-Produkten mit
+    # client_mandatory=true (z.B. Trend Micro, ABBYY).
+    first_name: str | None = None
+    last_name: str | None = None
+    phone: str | None = None
 
 
 class ActivationResponse(BaseModel):
@@ -189,6 +194,55 @@ async def activate_product_endpoint(
         # DSD requires the session cookie set during login.json to be sent on
         # every subsequent call (Jody van Gils, 2026-04-18).
         client = get_dsd_client()
+
+        # Mode selection:
+        # - "quickorder" (default): order + activate + send to client in one
+        #   request. Required when we don't pre-purchase stock; also the path
+        #   the DSD sandbox supports for end-to-end smoke testing
+        #   (Jody van Gils, 2026-04-29).
+        # - "activate": activate from existing pre-purchased stock.
+        mode = os.getenv("DSD_FULFILMENT_MODE", "quickorder").lower()
+
+        if mode == "quickorder":
+            # Many DSD products mark client fields as mandatory. We always send
+            # them when present; DSD ignores the extras for products that
+            # don't require them.
+            split_name = (req.client_name or "").strip().rsplit(" ", 1)
+            inferred_first = split_name[0] if len(split_name) >= 1 and split_name[0] else None
+            inferred_last = split_name[1] if len(split_name) == 2 else None
+            order = await client.quick_order(
+                product_code=req.product_code,
+                email=req.client_email,
+                quantity=1,
+                reference=req.reference,
+                name=req.client_name or req.client_email.split("@")[0],
+                first_name=req.first_name or inferred_first,
+                last_name=req.last_name or inferred_last,
+                phone=req.phone,
+            )
+            cert_id = _extract_certificate_id(order)
+            if not cert_id:
+                return ActivationResponse(
+                    ok=False,
+                    error="No certificate_id in quickOrder response",
+                    raw={"order": order},
+                )
+            codes = await client.get_activation_codes(int(cert_id))
+            license_key = _extract_license_key(codes)
+            if not license_key:
+                return ActivationResponse(
+                    ok=False,
+                    certificate_id=cert_id,
+                    error="Certificate created but no activation code returned",
+                    raw={"codes": codes},
+                )
+            return ActivationResponse(
+                ok=True,
+                license_key=license_key,
+                certificate_id=cert_id,
+            )
+
+        # Legacy mode: activate from pre-purchased stock.
         activation = await client.activate_product(
             product_code=req.product_code,
             quantity=1,

@@ -56,6 +56,10 @@ export async function POST(req: NextRequest) {
     const customerEmail = session.customer_email;
     const amountTotal = session.amount_total;
     const productId = metadata.productId;
+    // Stripe collects these via customer_creation/billing_address_collection.
+    // first/last name parsed below for DSD quickOrder client_mandatory fields.
+    const customerName = session.customer_details?.name ?? undefined;
+    const customerPhone = session.customer_details?.phone ?? undefined;
 
     if (!sessionId || !productId || !customerEmail || !amountTotal) {
       return NextResponse.json(
@@ -142,10 +146,17 @@ export async function POST(req: NextRequest) {
     // Orders without a dsdProductCode fall back to manual fulfilment.
     let licenseKey: string | undefined;
     if (order.product.dsdProductCode) {
+      const nameParts = (customerName ?? "").trim().split(/\s+/);
+      const firstName = nameParts.length >= 1 ? nameParts[0] : undefined;
+      const lastName = nameParts.length >= 2 ? nameParts.slice(1).join(" ") : undefined;
       const delivery = await deliverLicenseKey({
         productCode: order.product.dsdProductCode,
         customerEmail,
         reference: order.id,
+        customerName,
+        firstName,
+        lastName,
+        phone: customerPhone,
       });
       if (delivery.ok && delivery.licenseKey) {
         licenseKey = delivery.licenseKey;
