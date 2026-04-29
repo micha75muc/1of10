@@ -146,6 +146,7 @@ export default function CheckoutForm({
         type="submit"
         disabled={!canSubmit}
         aria-busy={loading}
+        aria-describedby={!canSubmit && !loading ? "submit-hints" : undefined}
         className={`w-full rounded-xl px-6 py-4 text-center font-bold text-lg transition ${
           canSubmit
             ? "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 cursor-pointer"
@@ -164,6 +165,26 @@ export default function CheckoutForm({
           "Zahlungspflichtig bestellen"
         )}
       </button>
+
+      {/* Inline-Hinweis welche Voraussetzungen für Bestellung noch fehlen.
+          aria-live=polite, damit Screenreader Updates ankündigen ohne zu unterbrechen. */}
+      {!canSubmit && !loading && (
+        <div
+          id="submit-hints"
+          role="status"
+          aria-live="polite"
+          className="rounded-lg border border-[var(--muted)] bg-[var(--secondary)]/40 px-4 py-3 text-xs text-[var(--muted-foreground)]"
+        >
+          <p className="mb-1 font-medium text-[var(--foreground)]">
+            Noch zu erledigen, um zu bestellen:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5">
+            {!isValidEmail && <li>Gültige E-Mail-Adresse eingeben</li>}
+            {!agbAccepted && <li>AGB &amp; Datenschutz bestätigen</li>}
+            {!bgbAccepted && <li>Sofort-Auslieferung bestätigen (BGB §356)</li>}
+          </ul>
+        </div>
+      )}
 
       <p className="text-center text-xs text-[var(--muted-foreground)]">
         🔒 Sichere Zahlung über Stripe — deine Daten sind verschlüsselt.

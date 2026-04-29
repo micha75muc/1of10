@@ -82,7 +82,7 @@ export function orderConfirmationEmail(order: {
         <div style="background:#0f172a;color:#f8fafc;padding:16px;border-radius:8px;font-family:'Courier New',monospace;font-size:16px;word-break:break-all;letter-spacing:0.5px;text-align:center;">
           ${order.licenseKey}
         </div>
-        <p style="margin:12px 0 0;font-size:12px;color:#666;">Bewahre die E-Mail auf — du kannst den Schlüssel auch jederzeit unter <a href="${appUrl}/bestellstatus">${appUrl}/bestellstatus</a> einsehen.</p>
+        <p style="margin:12px 0 0;font-size:12px;color:#666;">Bewahre diese E-Mail auf — du kannst den Schlüssel jederzeit unter <a href="${appUrl}/bestellstatus">${appUrl}/bestellstatus</a> erneut einsehen (Session-ID + E-Mail erforderlich).</p>
       </div>`
     : `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px;margin:24px 0;">
         <p style="margin:0;font-size:14px;color:#92400e;">🕒 Dein Lizenzschlüssel wird in Kürze manuell zugestellt. Bei Fragen antworte einfach auf diese E-Mail.</p>

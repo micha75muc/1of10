@@ -2,6 +2,7 @@ import { prisma } from "@repo/db";
 import Link from "next/link";
 import { Trophy, CheckCircle, Mail, UserPlus, KeyRound } from "lucide-react";
 import { OrderPending } from "./order-pending";
+import { ResendButton } from "./resend-button";
 
 export const dynamic = "force-dynamic";
 
@@ -14,14 +15,35 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
 
   if (!session_id) {
     return (
-      <div className="mx-auto max-w-md text-center">
-        <h1 className="mb-4 text-3xl font-bold">Bestellung</h1>
-        <p className="text-[var(--muted-foreground)]">
-          Keine Session-ID gefunden.
+      <div className="mx-auto max-w-md py-8 text-center">
+        <div className="mb-6 text-5xl" aria-hidden="true">🤔</div>
+        <h1 className="mb-3 text-2xl font-bold">Keine Bestellung in dieser URL</h1>
+        <p className="mb-6 text-sm text-[var(--muted-foreground)]">
+          Du bist auf der Bestätigungsseite gelandet, aber wir können hier
+          keine Bestellung zuordnen.
         </p>
-        <Link href="/products" className="mt-4 inline-block underline">
-          Zurück zum Shop
-        </Link>
+        <div className="mb-6 rounded-xl border bg-[var(--card)] p-5 text-left text-sm">
+          <p className="mb-2 font-semibold">Wenn du gerade bezahlt hast:</p>
+          <p className="text-[var(--muted-foreground)]">
+            Die Bestätigungsmail kommt innerhalb der nächsten Minuten — bitte
+            auch im Spam-Ordner nachsehen. Mit der Session-ID aus der Mail
+            kannst du den Status hier prüfen:
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Link
+            href="/bestellstatus"
+            className="rounded-lg bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90"
+          >
+            Bestellstatus prüfen
+          </Link>
+          <Link
+            href="/products"
+            className="rounded-lg border px-5 py-2.5 text-sm font-medium hover:bg-[var(--secondary)]"
+          >
+            Zurück zum Shop
+          </Link>
+        </div>
       </div>
     );
   }
@@ -204,7 +226,26 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           </span>
           <span className="text-[var(--muted-foreground)]">E-Mail</span>
           <span>{order.customerEmail}</span>
+          <span className="text-[var(--muted-foreground)]">Session-ID</span>
+          <span className="font-mono text-xs break-all" title="Bei Support-Kontakt bitte angeben">
+            {order.stripeSessionId}
+          </span>
         </div>
+      </div>
+
+      {/* Resend Confirmation Email */}
+      <div className="mt-4 rounded-xl border border-[var(--secondary)] bg-[var(--secondary)]/30 p-4 text-sm">
+        <div className="mb-2 flex items-center gap-2 font-medium">
+          <span aria-hidden="true">📧</span> Bestätigungsmail nicht angekommen?
+        </div>
+        <p className="mb-3 text-xs text-[var(--muted-foreground)]">
+          Wir können sie an{" "}
+          <span className="font-medium text-[var(--foreground)]">
+            {order.customerEmail}
+          </span>{" "}
+          erneut zustellen. Prüfe vorher bitte deinen Spam-Ordner.
+        </p>
+        <ResendButton orderId={order.id} sessionId={order.stripeSessionId} />
       </div>
 
       <div className="mt-6 text-center">
