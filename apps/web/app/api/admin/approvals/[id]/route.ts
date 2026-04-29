@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@repo/db";
-import { executeApprovedAction } from "../../../../../lib/action-dispatcher";
+import { prisma, Prisma } from "@repo/db";
+import {
+  executeApprovedAction,
+  type JsonPayload,
+} from "../../../../../lib/action-dispatcher";
 import { requireAdmin } from "../../../../../lib/auth";
 
 // PATCH /api/admin/approvals/[id] — Approve or Reject an approval item
@@ -51,7 +54,7 @@ export async function PATCH(
   if (action === "APPROVED") {
     const result = await executeApprovedAction(
       item.actionType,
-      item.payload as any
+      item.payload as JsonPayload,
     );
 
     const finalStatus = result.success ? "APPROVED" : "FAILED";
@@ -59,7 +62,7 @@ export async function PATCH(
       where: { id },
       data: {
         status: finalStatus,
-        executionResult: result as any,
+        executionResult: result as unknown as Prisma.InputJsonValue,
       },
     });
 

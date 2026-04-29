@@ -36,7 +36,15 @@ async function sendRealEmail(params: EmailParams) {
 }
 
 export async function sendEmail(params: EmailParams) {
+  // Production-Guard: EMAIL_MOCK darf NIE in Production aktiv sein —
+  // sonst gehen Bestätigungsmails (inkl. Lizenzschlüssel) ins Leere.
+  // Analoger Check zu lib/stripe.ts.
   if (process.env.EMAIL_MOCK === "true") {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "FATAL: EMAIL_MOCK=true ist in Production nicht erlaubt — Bestätigungsmails würden in console verschwinden.",
+      );
+    }
     return sendMockEmail(params);
   }
   return sendRealEmail(params);

@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { stripe } from "../../../lib/stripe";
 import { rateLimit } from "../../../lib/rate-limit";
+import { RATE_LIMIT_WINDOW_MS } from "../../../lib/constants";
+import { logError } from "../../../lib/error-logger";
 
 export async function POST(req: NextRequest) {
   try {
     const ip = req.headers.get("x-forwarded-for") ?? "unknown";
     const maxReq = process.env.TEST_MODE === "true" ? 50 : 5;
-    const { ok } = rateLimit(ip, { maxRequests: maxReq, windowMs: 60_000 });
+    const { ok } = rateLimit(ip, { maxRequests: maxReq, windowMs: RATE_LIMIT_WINDOW_MS });
     if (!ok) {
       return NextResponse.json({ error: "Zu viele Anfragen. Bitte warte kurz." }, { status: 429 });
     }

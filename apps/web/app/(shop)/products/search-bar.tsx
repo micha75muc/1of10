@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useTransition } from "react";
+import { SEARCH_DEBOUNCE_MS } from "../../../lib/constants";
 
 export function SearchBar() {
   const router = useRouter();
@@ -9,9 +10,9 @@ export function SearchBar() {
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [isPending, startTransition] = useTransition();
 
-  // Debounce: URL erst nach 300ms Tippruhe aktualisieren. useTransition
-  // markiert das Update als low-priority, sodass das Eingabefeld responsiv
-  // bleibt und wir einen Pending-Indicator zeigen können.
+  // Debounce: URL erst nach SEARCH_DEBOUNCE_MS Tippruhe aktualisieren.
+  // useTransition markiert das Update als low-priority, sodass das
+  // Eingabefeld responsiv bleibt und wir einen Pending-Indicator zeigen.
   useEffect(() => {
     const timer = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
@@ -23,7 +24,7 @@ export function SearchBar() {
       startTransition(() => {
         router.push(`/products?${params.toString()}`);
       });
-    }, 300);
+    }, SEARCH_DEBOUNCE_MS);
 
     return () => clearTimeout(timer);
   }, [query, router, searchParams]);

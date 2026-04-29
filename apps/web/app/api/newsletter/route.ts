@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { rateLimit } from "../../../lib/rate-limit";
+import { RATE_LIMIT_WINDOW_MS } from "../../../lib/constants";
+import { logEvent, logError } from "../../../lib/error-logger";
 
 /**
  * POST /api/newsletter — Speichert Newsletter-Anmeldungen in der DB.
@@ -9,7 +11,7 @@ import { rateLimit } from "../../../lib/rate-limit";
 export async function POST(req: NextRequest) {
   try {
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-    const { ok } = rateLimit(ip, { maxRequests: 5, windowMs: 60_000 });
+    const { ok } = rateLimit(ip, { maxRequests: 5, windowMs: RATE_LIMIT_WINDOW_MS });
     if (!ok) {
       return NextResponse.json({ error: "Zu viele Anfragen" }, { status: 429 });
     }
@@ -27,16 +29,13 @@ export async function POST(req: NextRequest) {
       create: { email },
     });
 
-    console.log(JSON.stringify({
-      level: "info",
-      event: "newsletter.signup",
+    logEvent("newsletter.signup", {
       email: email.replace(/(.{2}).*(@.*)/, "$1***$2"),
-      timestamp: new Date().toISOString(),
-    }));
+    });
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("[Newsletter] Error:", err);
+    logError(err, { event: "api.newsletter.failed" });
     return NextResponse.json({ error: "Fehler" }, { status: 500 });
   }
 }

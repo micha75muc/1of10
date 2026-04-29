@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { enforcePolicy } from "@repo/policy";
 import { requireAdmin } from "../../../../lib/auth";
+import { logError } from "../../../../lib/error-logger";
 
 // GET /api/admin/approvals — List all approval items (optionally filtered by status)
 export async function GET(req: NextRequest) {
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
         : "Action blocked — requires human approval",
     });
   } catch (err) {
-    console.error("[Admin Approvals API] Error:", err);
+    logError(err, { event: "api.admin.approvals.failed" });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

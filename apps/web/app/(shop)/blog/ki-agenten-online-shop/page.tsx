@@ -37,7 +37,11 @@ export default function BlogPost() {
     <article className="mx-auto max-w-2xl py-8">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        // Escape `</` to prevent any future dynamic JSON-LD payload from
+        // breaking out of the <script> block (defense in depth).
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
 
       {/* Breadcrumb */}

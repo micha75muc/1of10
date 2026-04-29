@@ -1,4 +1,4 @@
-import { prisma } from "@repo/db";
+import { getOrderBySessionId } from "../../../../lib/services/orders";
 import Link from "next/link";
 import { Trophy, CheckCircle, Mail, UserPlus, KeyRound } from "lucide-react";
 import { OrderPending } from "./order-pending";
@@ -48,10 +48,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     );
   }
 
-  const order = await prisma.order.findUnique({
-    where: { stripeSessionId: session_id },
-    include: { product: true },
-  });
+  const order = await getOrderBySessionId(session_id);
 
   if (!order) {
     return <OrderPending />;

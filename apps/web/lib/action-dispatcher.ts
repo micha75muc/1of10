@@ -1,7 +1,23 @@
 import { prisma } from "@repo/db";
 import { sendEmail } from "./email";
+import { logEvent, logError } from "./error-logger";
 
-type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+/**
+ * Internal JSON shape we pass between the approval queue and the action
+ * handlers. Mirrors `Prisma.JsonValue` so callers can hand us the raw
+ * `ApprovalItem.payload` field without an `any` cast — but kept as a
+ * separate alias so we don't depend on Prisma's exact runtime types in
+ * test mocks.
+ */
+export type JsonPayload =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonPayload | undefined }
+  | JsonPayload[];
+
+type JsonValue = JsonPayload;
 
 interface ActionResult {
   success: boolean;
@@ -63,7 +79,9 @@ async function handleSendOutreach(payload: JsonValue): Promise<ActionResult> {
 }
 
 async function handleFlagForReview(payload: JsonValue): Promise<ActionResult> {
-  console.log("[FlagForReview] Audit-Log-Eintrag:", JSON.stringify(payload));
+  // Strukturierter Audit-Log statt console.log — landet in Vercel Logs
+  // und ist nach `event:agents.flagged` durchsuchbar.
+  logEvent("agents.flagged_for_review", { payload });
   return { success: true, result: { logged: true } };
 }
 
@@ -88,6 +106,7 @@ export async function executeApprovedAction(
   try {
     return await handler(payload);
   } catch (err) {
+    logError(err, { event: "action-dispatcher.handler.failed", actionType });
     const message = err instanceof Error ? err.message : String(err);
     return { success: false, error: message };
   }
