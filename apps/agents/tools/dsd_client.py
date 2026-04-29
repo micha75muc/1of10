@@ -355,14 +355,16 @@ class DSDClient:
         first_name: str | None = None,
         last_name: str | None = None,
         phone: str | None = None,
+        company: str | None = None,
     ) -> dict:
         """Order + activate + send to client — all in one request.
 
         ⚠️ Risk Class: 4 (HIGH_RISK_EXECUTION) — MUST go through approval queue!
 
-        Many DSD products require client_mandatory fields (first_name, last_name,
-        phone). Pass them via the keyword arguments; missing mandatory fields
-        produce 'The above client fields are mandatory' errors.
+        Many DSD products require client_mandatory fields. Different products
+        require different combinations (e.g. DSD150002 wants phone, DSD300031
+        wants company). Pass everything we have; DSD ignores fields that the
+        product doesn't require.
 
         Returns order_id, certificate_id, and optionally client_id.
         """
@@ -389,6 +391,8 @@ class DSDClient:
             params["last_name"] = last_name
         if phone:
             params["phone"] = phone
+        if company:
+            params["company"] = company
 
         return await self._request("GET", "quickOrder.json", params=params)
 

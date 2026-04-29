@@ -21,6 +21,7 @@ interface DeliveryInput {
   firstName?: string;
   lastName?: string;
   phone?: string;
+  company?: string;
 }
 
 const DELIVERY_TIMEOUT_MS = 45_000; // DSD can take 20-30s under load
@@ -65,6 +66,7 @@ export async function deliverLicenseKey(input: DeliveryInput): Promise<DeliveryR
         first_name: input.firstName,
         last_name: input.lastName,
         phone: input.phone,
+        company: input.company,
       }),
       signal: controller.signal,
     });
