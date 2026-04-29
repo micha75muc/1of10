@@ -48,6 +48,12 @@ export function orderConfirmationEmail(order: {
   amountTotal: number;
   isWinner: boolean;
   licenseKey?: string;
+  /** True for Trend Micro, AVG, Norton etc. — customer needs to create
+   * a vendor account before redeeming the key. We render an explainer
+   * block so they don't bounce when they see the unknown sign-up step. */
+  requiresVendorAccount?: boolean;
+  vendorName?: string;
+  vendorActivationUrl?: string;
 }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
   const shareText = encodeURIComponent(
@@ -82,6 +88,28 @@ export function orderConfirmationEmail(order: {
         <p style="margin:0;font-size:14px;color:#92400e;">🕒 Dein Lizenzschlüssel wird in Kürze manuell zugestellt. Bei Fragen antworte einfach auf diese E-Mail.</p>
       </div>`;
 
+  const vendorName = order.vendorName ?? "der Hersteller";
+  const vendorBlock = order.requiresVendorAccount
+    ? `<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:20px;margin:24px 0;">
+        <h2 style="margin:0 0 8px;font-size:16px;color:#1e3a8a;">So aktivierst du deine Lizenz</h2>
+        <p style="margin:0 0 14px;font-size:13px;color:#334155;">
+          ${vendorName} verlangt für die Aktivierung ein <strong>kostenloses
+          Konto</strong> — das ist bei Antiviren-Software branchenüblich und
+          dauert ca. 2 Minuten. Keine zusätzlichen Kosten, kein Abo.
+        </p>
+        <ol style="margin:0;padding:0 0 0 20px;font-size:13px;color:#334155;line-height:1.6;">
+          <li><strong>E-Mail von My-ESD prüfen.</strong> Du bekommst gleich ein zweites Mail mit dem 20-stelligen Aktivierungs-Code (PDF-Zertifikat). Absender: noreply@my-esd.com.</li>
+          <li><strong>Kostenloses ${vendorName}-Konto anlegen.</strong> Über den Link im Zertifikat oder direkt unten.</li>
+          <li><strong>Aktivierungs-Code eingeben.</strong> Software wird heruntergeladen und automatisch lizenziert.</li>
+        </ol>
+        ${
+          order.vendorActivationUrl
+            ? `<p style="margin:14px 0 0;"><a href="${order.vendorActivationUrl}" style="display:inline-block;background:#2563eb;color:white;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">Zur ${vendorName}-Aktivierungsseite ↗</a></p>`
+            : ""
+        }
+      </div>`
+    : "";
+
   return {
     to: order.customerEmail,
     subject: order.isWinner
@@ -92,6 +120,7 @@ export function orderConfirmationEmail(order: {
       <p>Vielen Dank für deinen Kauf von <strong>${order.productName}</strong>.</p>
       <p>Betrag: ${(order.amountTotal / 100).toFixed(2).replace(".", ",")} €</p>
       ${keyBlock}
+      ${vendorBlock}
       ${winnerBlock}
       <hr/>
       <p style="font-size:12px;color:#888;">

@@ -328,6 +328,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               SSL-verschlüsselt
             </div>
           </div>
+
+          {/* Vendor-Account Hinweis (Trend Micro, AVG, Norton, …) */}
+          {product.requiresVendorAccount && (
+            <p className="mt-3 rounded-lg border border-[var(--brand-blue)]/30 bg-[var(--brand-blue)]/5 px-3 py-2 text-xs text-[var(--muted-foreground)]">
+              <strong className="text-[var(--foreground)]">Aktivierung:</strong>{" "}
+              {product.vendorName ?? "Der Hersteller"} verlangt ein kostenloses
+              Konto (branchenüblich, ca. 2 Min). Wir führen dich nach dem Kauf
+              Schritt für Schritt durch den Aktivierungsprozess.
+            </p>
+          )}
         </div>
       </div>
 

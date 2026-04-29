@@ -205,6 +205,9 @@ export async function POST(req: NextRequest) {
       amountTotal,
       isWinner,
       licenseKey,
+      requiresVendorAccount: order.product.requiresVendorAccount,
+      vendorName: order.product.vendorName ?? undefined,
+      vendorActivationUrl: order.product.vendorActivationUrl ?? undefined,
     });
     await sendEmail(emailParams);
 
