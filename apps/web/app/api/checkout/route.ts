@@ -76,6 +76,13 @@ export async function POST(req: NextRequest) {
       success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/products`,
       customer_email: customerEmail,
+      // DSD requires first_name, last_name and phone for client_mandatory
+      // products (e.g. Trend Micro). Stripe collects them via:
+      //   - billing_address_collection: "required" → name + address
+      //   - phone_number_collection.enabled: true   → phone
+      // Both end up on session.customer_details for the webhook to read.
+      billing_address_collection: "required",
+      phone_number_collection: { enabled: true },
       metadata: {
         productId: product.id,
         dsgvoOptIn: String(dsgvoOptIn),

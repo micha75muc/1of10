@@ -352,10 +352,17 @@ class DSDClient:
         reference: str = "",
         name: str = "",
         purchase_type: int = 0,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        phone: str | None = None,
     ) -> dict:
         """Order + activate + send to client — all in one request.
 
         ⚠️ Risk Class: 4 (HIGH_RISK_EXECUTION) — MUST go through approval queue!
+
+        Many DSD products require client_mandatory fields (first_name, last_name,
+        phone). Pass them via the keyword arguments; missing mandatory fields
+        produce 'The above client fields are mandatory' errors.
 
         Returns order_id, certificate_id, and optionally client_id.
         """
@@ -376,6 +383,12 @@ class DSDClient:
             params["reference"] = reference
         if name:
             params["name"] = name
+        if first_name:
+            params["first_name"] = first_name
+        if last_name:
+            params["last_name"] = last_name
+        if phone:
+            params["phone"] = phone
 
         return await self._request("GET", "quickOrder.json", params=params)
 
