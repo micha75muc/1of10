@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 
 const CATEGORIES = [
   { value: "", label: "Alle" },
@@ -18,6 +19,7 @@ const CATEGORIES = [
 export function CategoryFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
   const active = searchParams.get("category") ?? "";
 
   function handleFilter(category: string) {
@@ -27,16 +29,25 @@ export function CategoryFilter() {
     } else {
       params.delete("category");
     }
-    router.push(`/products?${params.toString()}`);
+    startTransition(() => {
+      router.push(`/products?${params.toString()}`);
+    });
   }
 
   return (
-    <div className="flex flex-wrap gap-2" role="group" aria-label="Kategorie-Filter">
+    <div
+      className={`flex flex-wrap gap-2 transition-opacity ${isPending ? "opacity-60" : ""}`}
+      role="group"
+      aria-label="Kategorie-Filter"
+      aria-busy={isPending}
+    >
       {CATEGORIES.map((cat) => (
         <button
           key={cat.value}
+          type="button"
           onClick={() => handleFilter(cat.value)}
-          className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+          disabled={isPending}
+          className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition disabled:cursor-wait ${
             active === cat.value
               ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
               : "bg-[var(--secondary)] text-[var(--muted-foreground)] hover:bg-[var(--primary)]/10 hover:text-[var(--primary)]"

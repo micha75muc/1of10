@@ -92,10 +92,26 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ url: session.url, sessionId: session.id });
   } catch (err) {
-    console.error("[Checkout API] Error:", err);
+    // Generate a short error-id customers can quote when contacting support
+    const errorId =
+      "CHK-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+    console.error(
+      JSON.stringify({
+        level: "error",
+        event: "api.checkout.failed",
+        errorId,
+        error: err instanceof Error ? err.message : String(err),
+        timestamp: new Date().toISOString(),
+      }),
+    );
     return NextResponse.json(
-      { error: "Interner Serverfehler." },
-      { status: 500 }
+      {
+        error:
+          "Wir konnten dich gerade nicht zur Bezahlung weiterleiten. Bitte versuche es in einer Minute erneut. Wenn das Problem bestehen bleibt, schreib uns an info@medialess.de — bitte gib diese Fehler-ID an: " +
+          errorId,
+        errorId,
+      },
+      { status: 500 },
     );
   }
 }

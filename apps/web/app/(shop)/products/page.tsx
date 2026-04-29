@@ -59,18 +59,6 @@ export default async function ProductsPage({
     select: { id: true, sku: true, name: true, description: true, sellPrice: true, uvpPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true },
   });
 
-  if (products.length === 0) {
-    return (
-      <div className="py-12 text-center">
-        <div className="mb-6 text-6xl">📦</div>
-        <h1 className="mb-4 text-3xl font-bold">Produkte</h1>
-        <p className="mb-8 text-[var(--muted-foreground)]">
-          Noch keine Produkte vorhanden. Bitte kontaktieren Sie den Administrator.
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className="py-4">
       {/* Winner Ticker — Social Proof */}
@@ -123,22 +111,30 @@ export default async function ProductsPage({
       {/* Product Grid */}
       <div className="mb-4 flex items-center justify-between">
         <p className="text-sm text-[var(--muted-foreground)]">
-          {products.length} Produkte verfügbar
+          {products.length === 1 ? "1 Produkt" : `${products.length} Produkte`} verfügbar
         </p>
       </div>
-      {products.length === 0 && (q || category) ? (
+      {products.length === 0 ? (
         <div className="py-12 text-center">
-          <div className="mb-4 text-5xl">🔍</div>
-          <p className="text-lg font-medium">Keine Produkte gefunden</p>
-          <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-            Versuche einen anderen Suchbegriff oder entferne den Filter.
+          <div className="mb-4 text-5xl" aria-hidden="true">🔍</div>
+          <p className="text-lg font-medium">
+            {q || category
+              ? "Keine Produkte gefunden"
+              : "Aktuell keine Produkte verfügbar"}
           </p>
-          <Link
-            href="/products"
-            className="mt-4 inline-block rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)]"
-          >
-            Alle Produkte anzeigen
-          </Link>
+          <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+            {q || category
+              ? "Versuche einen anderen Suchbegriff oder entferne den Filter."
+              : "Wir füllen das Sortiment gerade auf — schau in Kürze wieder rein."}
+          </p>
+          {(q || category) && (
+            <Link
+              href="/products"
+              className="mt-4 inline-block rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)]"
+            >
+              Alle Produkte anzeigen
+            </Link>
+          )}
         </div>
       ) : (
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
