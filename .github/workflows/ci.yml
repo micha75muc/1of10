@@ -1,10 +1,22 @@
 name: CI
 
+# Auto-Trigger deaktiviert: Pusher-Account ist Microsoft EMU
+# (mhahnel_microsoft) → Enterprise-Policy blockiert Actions in
+# externen Repos wie gim-home/1of10 → jeder Push erzeugte
+# "startup_failure" + Notification-Mail.
+#
+# Deployment läuft sowieso via:
+#   - scripts/deploy-vercel.py (Web)
+#   - rsync + docker compose (Agents auf Hetzner)
+#
+# Tests laufen lokal: cd apps/web && npx vitest run
+#
+# Workflow ist via "Actions"-Tab → "Run workflow" weiterhin
+# manuell auslösbar — falls wir das Repo später unter einem
+# Nicht-EMU-Account migrieren, einfach push/pull_request wieder
+# einkommentieren.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
