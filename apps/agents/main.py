@@ -99,10 +99,12 @@ class ActivationRequest(BaseModel):
     reference: str  # typically the order.id for audit trail
     client_name: str | None = None
     # Pflichtfelder für quickOrder.json bei DSD-Produkten mit
-    # client_mandatory=true (z.B. Trend Micro, ABBYY).
+    # client_mandatory=true. Verschiedene Produkte verlangen verschiedene
+    # Kombinationen (z.B. Trend Micro = phone, AVG TuneUp = company).
     first_name: str | None = None
     last_name: str | None = None
     phone: str | None = None
+    company: str | None = None
 
 
 class ActivationResponse(BaseModel):
@@ -210,6 +212,9 @@ async def activate_product_endpoint(
             split_name = (req.client_name or "").strip().rsplit(" ", 1)
             inferred_first = split_name[0] if len(split_name) >= 1 and split_name[0] else None
             inferred_last = split_name[1] if len(split_name) == 2 else None
+            # company defaults to "Privatkunde" — required by some products
+            # (e.g. DSD300031) and harmless when unused.
+            company = req.company or "Privatkunde"
             order = await client.quick_order(
                 product_code=req.product_code,
                 email=req.client_email,
@@ -219,6 +224,7 @@ async def activate_product_endpoint(
                 first_name=req.first_name or inferred_first,
                 last_name=req.last_name or inferred_last,
                 phone=req.phone,
+                company=company,
             )
             cert_id = _extract_certificate_id(order)
             if not cert_id:

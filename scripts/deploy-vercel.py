@@ -58,7 +58,7 @@ def main():
 
     # 3. Fix imports
     say("Step 3: Fixing imports")
-    for rootroot, dirs, files in os.walk(DEPLOY_DIR):
+    for root, dirs, files in os.walk(DEPLOY_DIR):
         if "node_modules" in root or ".next" in root:
             continue
         for fname in files:
