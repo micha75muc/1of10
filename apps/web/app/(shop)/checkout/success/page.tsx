@@ -1,6 +1,6 @@
 import { prisma } from "@repo/db";
 import Link from "next/link";
-import { Trophy, CheckCircle } from "lucide-react";
+import { Trophy, CheckCircle, Mail, UserPlus, KeyRound } from "lucide-react";
 import { OrderPending } from "./order-pending";
 
 export const dynamic = "force-dynamic";
@@ -118,6 +118,71 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Vendor Activation Explainer (Trend Micro, AVG, Norton, …) */}
+      {order.product.requiresVendorAccount && (
+        <div className="mb-6 rounded-xl border border-[var(--brand-blue)]/30 bg-[var(--brand-blue)]/5 p-6">
+          <h2 className="mb-1 font-semibold text-[var(--foreground)]">
+            So aktivierst du deine Lizenz
+          </h2>
+          <p className="mb-5 text-sm text-[var(--muted-foreground)]">
+            {order.product.vendorName ?? "Der Hersteller"} verlangt für die
+            Aktivierung ein kostenloses Konto — das ist bei
+            Antiviren-Software branchenüblich und dauert ca. 2 Minuten.
+          </p>
+          <ol className="space-y-3 text-sm">
+            <li className="flex items-start gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--brand-blue)]/15 text-[var(--brand-blue)]">
+                <Mail className="h-4 w-4" />
+              </span>
+              <div>
+                <strong>1. E-Mail von My-ESD prüfen.</strong>{" "}
+                <span className="text-[var(--muted-foreground)]">
+                  Du bekommst gleich ein Lizenzzertifikat (PDF) mit deinem
+                  20-stelligen Aktivierungs-Code. Absender: noreply@my-esd.com.
+                </span>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--brand-blue)]/15 text-[var(--brand-blue)]">
+                <UserPlus className="h-4 w-4" />
+              </span>
+              <div>
+                <strong>
+                  2. Kostenloses {order.product.vendorName ?? "Hersteller"}-Konto
+                  anlegen.
+                </strong>{" "}
+                <span className="text-[var(--muted-foreground)]">
+                  Über den Link in der E-Mail oder direkt unten — keine
+                  zusätzlichen Kosten, keine Abo-Falle.
+                </span>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--brand-blue)]/15 text-[var(--brand-blue)]">
+                <KeyRound className="h-4 w-4" />
+              </span>
+              <div>
+                <strong>3. Aktivierungs-Code eingeben.</strong>{" "}
+                <span className="text-[var(--muted-foreground)]">
+                  Software wird heruntergeladen und automatisch lizenziert.
+                </span>
+              </div>
+            </li>
+          </ol>
+          {order.product.vendorActivationUrl && (
+            <a
+              href={order.product.vendorActivationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[var(--brand-blue)] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition"
+            >
+              Zur Aktivierungsseite von {order.product.vendorName ?? "Hersteller"}
+              <span aria-hidden="true">↗</span>
+            </a>
+          )}
+        </div>
+      )}
 
       {/* Order Details */}
       <div className="rounded-xl border bg-[var(--card)] p-6 space-y-3">

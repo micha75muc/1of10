@@ -24,6 +24,21 @@ model Product {
   /// key delivery via DSD activateProduct.json — without this, orders fall
   /// back to manual fulfilment.
   dsdProductCode String?
+
+  /// Vendor activation flow metadata — used in confirm page + email to
+  /// prepare the customer for the manufacturer's account creation step
+  /// (Trend Micro, AVG, Norton, Kaspersky, etc. all require a vendor
+  /// account before the activation code can be used).
+  /// `vendorName` is the human-friendly vendor (e.g. "Trend Micro"), used
+  /// in copy ("Du legst gleich ein kostenloses Trend-Micro-Konto an…").
+  /// `vendorActivationUrl` is a deep-link to the vendor's activation page
+  /// (e.g. https://account.trendmicro.com/setup/landing).
+  /// `requiresVendorAccount` toggles the explainer block — false for
+  /// products like G DATA that activate without a vendor login.
+  requiresVendorAccount Boolean @default(false)
+  vendorName            String?
+  vendorActivationUrl   String?
+
   orders         Order[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
