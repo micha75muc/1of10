@@ -25,6 +25,14 @@ model Product {
   /// back to manual fulfilment.
   dsdProductCode String?
 
+  /// CSV of `mandatoryClientFields` returned by DSD `view.json` for this
+  /// SKU (e.g. "email,first_name,last_name" or
+  /// "email,name,company,first_name,last_name"). Populated from the
+  /// distributor catalog (see scripts/backfill-dsd-mandatory-fields.mjs)
+  /// — confirmed by DSD support 2026-04-30: the field is per-product, not
+  /// per-vendor, so we cannot generalise.
+  dsdMandatoryClientFields String?
+
   /// Vendor activation flow metadata — used in confirm page + email to
   /// prepare the customer for the manufacturer's account creation step
   /// (Trend Micro, AVG, Norton, Kaspersky, etc. all require a vendor

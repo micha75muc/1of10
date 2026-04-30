@@ -26,6 +26,11 @@ zwischen Produkten — DSD150002 verlangt `phone`, DSD300031 hingegen
 irgendwo eine Übersicht der Pflichtfelder pro Produktgruppe gibt, wäre das
 für uns hilfreich.
 
+> **Update 30. April:** Danke für den Hinweis auf `mandatoryClientFields` in
+> `view.json` (Handbuch §3.2) — wir lesen das Feld jetzt pro Produkt und
+> validieren vor jedem `quickOrder`, ob alle Pflichtfelder vorhanden sind.
+> Hat sich erledigt.
+
 **Eine Bitte zum Thema Produktbilder:** Wir haben für 41 unserer Produkte
 die `packshotImage`-URLs aus dem Katalog automatisch synchronisiert
 (super, vielen Dank!). Für folgende SKUs liefert die API allerdings ein

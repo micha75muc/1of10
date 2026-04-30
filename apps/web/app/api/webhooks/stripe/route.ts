@@ -159,6 +159,7 @@ export async function POST(req: NextRequest) {
         firstName,
         lastName,
         phone: customerPhone,
+        mandatoryFields: order.product.dsdMandatoryClientFields,
       });
       if (delivery.ok && delivery.licenseKey) {
         licenseKey = delivery.licenseKey;
