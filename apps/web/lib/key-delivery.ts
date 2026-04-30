@@ -24,6 +24,42 @@ interface DeliveryInput {
   lastName?: string;
   phone?: string;
   company?: string;
+  /**
+   * Optional CSV from `Product.dsdMandatoryClientFields` (e.g.
+   * "email,first_name,last_name,phone"). When present we validate that the
+   * input actually carries those fields before calling the agents service —
+   * a missing required field would otherwise surface as a generic DSD
+   * 400 deep inside fulfilment, which is harder to debug.
+   */
+  mandatoryFields?: string | null;
+}
+
+/**
+ * Map from DSD field name (as returned by `view.json`) to the property on
+ * our `DeliveryInput`. Anything outside this map is logged but not
+ * enforced (DSD occasionally adds new fields).
+ */
+const DSD_FIELD_MAP: Record<string, keyof DeliveryInput> = {
+  email: "customerEmail",
+  name: "customerName",
+  first_name: "firstName",
+  last_name: "lastName",
+  phone: "phone",
+  company: "company",
+};
+
+function findMissingMandatoryFields(input: DeliveryInput): string[] {
+  if (!input.mandatoryFields) return [];
+  return input.mandatoryFields
+    .split(",")
+    .map((f) => f.trim())
+    .filter(Boolean)
+    .filter((f) => {
+      const key = DSD_FIELD_MAP[f];
+      if (!key) return false; // unknown field — let DSD reject it
+      const v = input[key];
+      return typeof v !== "string" || v.trim() === "";
+    });
 }
 
 export async function deliverLicenseKey(input: DeliveryInput): Promise<DeliveryResult> {
@@ -45,6 +81,17 @@ export async function deliverLicenseKey(input: DeliveryInput): Promise<DeliveryR
     return {
       ok: false,
       error: "AGENTS_API_URL or AGENTS_INTERNAL_SECRET not configured",
+    };
+  }
+
+  // Defense-in-depth — if we know which fields DSD requires for this SKU
+  // and a required value is missing locally, bail out with a precise error
+  // before round-tripping to the agents service.
+  const missing = findMissingMandatoryFields(input);
+  if (missing.length > 0) {
+    return {
+      ok: false,
+      error: `Missing DSD-mandatory client fields for ${input.productCode}: ${missing.join(", ")}`,
     };
   }
 
