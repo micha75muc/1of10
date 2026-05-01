@@ -52,9 +52,7 @@ export default function ShopLayout({
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <Link href="/" className="inline-flex items-center gap-2 mb-4">
-                <span className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-                  <span className="opacity-50">1</span>of<span>10</span>
-                </span>
+                <Logo size="md" />
               </Link>
               <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
                 Autorisierte Software-Keys mit sofortiger Lieferung. Als freiwillige Kulanz erstatten wir jeden zehnten Kauf.
