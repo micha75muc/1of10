@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { timingSafeEqual } from "crypto";
 
 const SESSION_COOKIE = "1of10_session";
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24h
@@ -127,6 +128,13 @@ export async function destroySession(): Promise<void> {
  */
 export async function requireAdmin(req: Request): Promise<boolean> {
   const apiKey = req.headers.get("x-admin-api-key");
-  if (apiKey && apiKey === process.env.ADMIN_API_KEY) return true;
+  const expected = process.env.ADMIN_API_KEY;
+  if (apiKey && expected) {
+    // Sven (Security): timing-safe Vergleich — sonst kann ein Angreifer den
+    // Schlüssel zeichenweise per Response-Time-Analyse erraten.
+    const a = Buffer.from(apiKey);
+    const b = Buffer.from(expected);
+    if (a.length === b.length && timingSafeEqual(a, b)) return true;
+  }
   return await verifySession();
 }

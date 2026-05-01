@@ -75,6 +75,17 @@ model Order {
   deliveredAt      DateTime?
   deliveryError    String?
 
+  // Billing address — Stripe collects via billing_address_collection.
+  // Required for Kleinunternehmer-Kaufbeleg + Steuerprüfung audit trail
+  // (§147 AO 10-Jahre-Aufbewahrungsfrist).
+  customerName        String?
+  customerPhone       String?
+  customerAddressLine1 String?
+  customerAddressLine2 String?
+  customerCity        String?
+  customerPostalCode  String?
+  customerCountry     String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -117,7 +128,19 @@ model ShuffleBag {
 model NewsletterSignup {
   id        String   @id @default(uuid())
   email     String   @unique
+  /// DSGVO Art. 7(1) Beweispflicht — wir speichern, ob der Nutzer eine
+  /// explizite Zustimmungs-Checkbox aktiviert hat, dazu Zeitpunkt, IP und
+  /// User-Agent als Audit-Trail. Doppel-Opt-In wird über `confirmedAt`
+  /// abgebildet — unconfirmed Signups dürfen NICHT angeschrieben werden.
+  consentGiven      Boolean   @default(false)
+  consentTimestamp  DateTime?
+  consentIp         String?
+  consentUserAgent  String?
+  confirmToken      String?   @unique
+  confirmedAt       DateTime?
+  unsubscribedAt    DateTime?
   createdAt DateTime @default(now())
 
   @@index([createdAt])
+  @@index([confirmedAt])
 }

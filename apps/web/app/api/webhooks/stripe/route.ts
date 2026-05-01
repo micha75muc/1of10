@@ -62,6 +62,9 @@ export async function POST(req: NextRequest) {
     // first/last name parsed below for DSD quickOrder client_mandatory fields.
     const customerName = session.customer_details?.name ?? undefined;
     const customerPhone = session.customer_details?.phone ?? undefined;
+    // Adresse für Kaufbeleg (Anlage 1 Art. 246a EGBGB) — Stripe liefert sie
+    // wenn billing_address_collection im Checkout aktiviert ist.
+    const billingAddress = session.customer_details?.address ?? null;
 
     if (!sessionId || !productId || !customerEmail || !amountTotal) {
       return NextResponse.json(
@@ -83,7 +86,10 @@ export async function POST(req: NextRequest) {
         if (session.payment_intent) {
           try {
             const piId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent.id;
-            await stripe.refunds.create({ payment_intent: piId, metadata: { orderId: existingOrder.id, reason: "kulanz_erstattung_retry" } });
+            await stripe.refunds.create(
+              { payment_intent: piId, metadata: { orderId: existingOrder.id, reason: "kulanz_erstattung_retry" } },
+              { idempotencyKey: `refund-retry-${existingOrder.id}` },
+            );
             await prisma.order.update({ where: { id: existingOrder.id }, data: { refundStatus: "COMPLETED", status: "REFUNDED" } });
           } catch (retryErr) {
             logError(retryErr, { event: "webhook.refund.retry.failed", orderId: existingOrder.id });
@@ -102,6 +108,13 @@ export async function POST(req: NextRequest) {
         stripeSessionId: sessionId,
         productId,
         customerEmail,
+        customerName: customerName ?? null,
+        customerPhone: customerPhone ?? null,
+        customerAddressLine1: billingAddress?.line1 ?? null,
+        customerAddressLine2: billingAddress?.line2 ?? null,
+        customerCity: billingAddress?.city ?? null,
+        customerPostalCode: billingAddress?.postal_code ?? null,
+        customerCountry: billingAddress?.country ?? null,
         amountTotal: amountTotal / 100, // Convert from cents
         status: "PAID",
         bgbWiderrufOptIn: metadata.bgbWiderrufOptIn === "true",
@@ -118,11 +131,17 @@ export async function POST(req: NextRequest) {
         const paymentIntentId = typeof session.payment_intent === "string"
           ? session.payment_intent
           : session.payment_intent.id;
-        await stripe.refunds.create({
-          payment_intent: paymentIntentId,
-          amount: amountTotal ?? undefined,
-          metadata: { orderId: order.id, reason: "kulanz_erstattung" },
-        });
+        // idempotencyKey schützt gegen Doppel-Refund bei Stripe-Retries.
+        // Stripe garantiert: gleicher Key + gleicher Body = gleiche Antwort,
+        // gleicher Key + anderer Body = 400. Deshalb feste, deterministische Form.
+        await stripe.refunds.create(
+          {
+            payment_intent: paymentIntentId,
+            amount: amountTotal ?? undefined,
+            metadata: { orderId: order.id, reason: "kulanz_erstattung" },
+          },
+          { idempotencyKey: `refund-${order.id}` },
+        );
 
         await prisma.order.update({
           where: { id: order.id },
@@ -205,6 +224,9 @@ export async function POST(req: NextRequest) {
       requiresVendorAccount: order.product.requiresVendorAccount,
       vendorName: order.product.vendorName ?? undefined,
       vendorActivationUrl: order.product.vendorActivationUrl ?? undefined,
+      orderId: order.id,
+      orderDate: order.createdAt,
+      customerName,
     });
     await sendEmail(emailParams);
 

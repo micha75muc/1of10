@@ -19,14 +19,14 @@
 
 ## Post 1 — r/de_EDV (Deutsch, Tech-Community)
 
-**Titel:** Ich habe einen Software-Shop gebaut der von 22 KI-Agenten gesteuert wird — AMA
+**Titel:** Ich habe einen Software-Shop gebaut der von 21 KI-Agenten gesteuert wird — AMA
 
 **Body:**
 Hi zusammen,
 
 ich betreibe seit kurzem 1of10.de — einen Software-Lizenz-Shop mit einer Besonderheit: Jeder 10. Kauf wird vollständig erstattet.
 
-Das technisch Interessante: Der gesamte Shop wird von 22 KI-Agenten betrieben. Nicht als Gimmick, sondern als Kernarchitektur:
+Das technisch Interessante: Der gesamte Shop wird von 21 KI-Agenten betrieben. Nicht als Gimmick, sondern als Kernarchitektur:
 
 - **Nestor** kauft bei Distributoren ein und prüft Margen
 - **Elena** erstellt Finanzberichte und Profitabilitäts-Analysen
