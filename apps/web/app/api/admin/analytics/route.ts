@@ -57,7 +57,7 @@ export async function GET(req: Request) {
   const revenue = Number(totalRevenue._sum.amountTotal ?? 0);
   const refundEstimate = winnerCount > 0 ? revenue * (winnerCount / Math.max(totalOrders, 1)) : 0;
 
-  // Elena: Product margin analysis
+  // Product margin analysis
   const allProducts = await prisma.product.findMany({
     select: { sku: true, name: true, costPrice: true, sellPrice: true, stockLevel: true },
   });

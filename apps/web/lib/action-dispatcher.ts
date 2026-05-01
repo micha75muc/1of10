@@ -37,7 +37,7 @@ async function handlePurchaseKeys(payload: JsonValue): Promise<ActionResult> {
 
   if (!res.ok) {
     const errorBody = await res.text();
-    return { success: false, error: `Nestor API error ${res.status}: ${errorBody}` };
+    return { success: false, error: `Agent API error ${res.status}: ${errorBody}` };
   }
 
   const data = await res.json();

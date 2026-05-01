@@ -54,7 +54,7 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      {/* Elena (Finance): Margin Overview */}
+      {/* Margin Overview */}
       <h2 className="mt-8 mb-4 text-xl font-bold">Margen-Übersicht</h2>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

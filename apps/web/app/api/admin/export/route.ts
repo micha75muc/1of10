@@ -4,7 +4,7 @@ import { requireAdmin } from "../../../../lib/auth";
 
 /**
  * GET /api/admin/export — CSV-Export aller Bestellungen für den Steuerberater.
- * Elena (Finance): EÜR-tauglicher Export mit allen relevanten Feldern.
+ * Finance: EÜR-tauglicher Export mit allen relevanten Feldern.
  */
 export async function GET(req: NextRequest) {
   if (!(await requireAdmin(req))) {

@@ -9,7 +9,7 @@ import { sendEmail } from "../../../lib/email";
 /**
  * POST /api/newsletter — Newsletter-Anmeldung mit Doppel-Opt-In.
  *
- * Denny (Compliance):
+ * Compliance:
  *   1. Server-side Validierung der DSGVO-Checkbox (`consent: true`).
  *      Ohne diese Bestätigung weisen wir den Request ab — Beweispflicht
  *      gem. Art. 7(1) DSGVO.

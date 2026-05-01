@@ -7,7 +7,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Sven (Security): Admin-Bereich nur mit gültiger Session zugänglich
+  // Security: Admin-Bereich nur mit gültiger Session zugänglich
   const isLoggedIn = await verifySession();
   if (!isLoggedIn) {
     redirect("/admin/login");

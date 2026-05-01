@@ -1,5 +1,5 @@
 /**
- * Clara (Content) + Sophie (SEO): Rich product data for PDPs.
+ * Rich product data for PDPs (Content + SEO).
  * Features, highlights, system requirements, FAQ — keyed by SKU.
  * This enriches the minimal DB data without requiring schema changes.
  *

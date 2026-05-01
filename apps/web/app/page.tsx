@@ -323,14 +323,9 @@ export default async function HomePage() {
             <p className="text-xs text-[var(--muted-foreground)]">
               © {new Date().getFullYear()} 1of10 · München
             </p>
-            <div className="flex items-center gap-4">
-              <a href="https://de.trustpilot.com/review/1of10.de" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition flex items-center gap-1">
-                ★ Trustpilot
-              </a>
-              <p className="text-xs text-[var(--muted-foreground)]">
-                Endpreise · gem. §19 UStG keine USt.
-              </p>
-            </div>
+            <p className="text-xs text-[var(--muted-foreground)]">
+              Endpreise · gem. §19 UStG keine USt.
+            </p>
           </div>
         </div>
       </footer>

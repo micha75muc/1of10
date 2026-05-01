@@ -11,7 +11,7 @@ import { RATE_LIMIT_WINDOW_MS } from "../../../lib/constants";
  * because we need the refund/delivery columns the customer-facing service
  * intentionally does not surface elsewhere.
  *
- * Sven (Security): Both sessionId AND customerEmail are required. Without the
+ * Security: Both sessionId AND customerEmail are required. Without the
  * email gate an attacker can enumerate orders by guessing `cs_*` IDs and
  * exfiltrate license keys + refund status. Comparison is case-insensitive
  * and timing-safe-ish (all returns happen the same way).

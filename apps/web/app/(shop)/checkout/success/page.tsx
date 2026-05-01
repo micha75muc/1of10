@@ -58,7 +58,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
     <div className="mx-auto max-w-lg py-4">
       {order.isWinner ? (
         <>
-        {/* Bea: Confetti animation for winners */}
+        {/* Confetti animation for winners */}
         <div className="winner-confetti" aria-hidden="true" />
         <div className="mb-8 rounded-xl border-2 border-[var(--gold)] bg-[var(--gold)]/10 p-8 text-center animate-slide-in">
           <div className="mb-4"><Trophy className="h-16 w-16 mx-auto text-[var(--gold)]" /></div>
@@ -88,7 +88,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             kein Rechtsanspruch, kein Gewinnspiel. Dein Produkt behältst du in
             jedem Fall.
           </p>
-          {/* Bea: Share buttons for viral loop */}
+          {/* Share buttons for viral loop */}
           <div className="mt-6 space-y-2">
             <p className="text-sm text-[var(--muted-foreground)]">Erzähl es weiter:</p>
             <div className="flex justify-center gap-3">

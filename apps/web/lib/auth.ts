@@ -36,7 +36,7 @@ export async function createSession(): Promise<void> {
   cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    // Sven (Security): "strict" → Cookie wird bei cross-site Requests NICHT mitgesendet.
+    // Security: "strict" → Cookie wird bei cross-site Requests NICHT mitgesendet.
     // Damit ist CSRF auf Admin-Endpoints praktisch unmöglich. Login flow funktioniert
     // weiter, weil die Login-POST-Action vom selben Origin (1of10.de/admin/login)
     // ausgeht. Trade-off: ein Klick auf einen Admin-Link aus einer fremden Domain
@@ -100,7 +100,7 @@ export async function verifySession(): Promise<boolean> {
 
 /**
  * Verifiziert Admin-Credentials.
- * Sven (Security): bcrypt statt Klartext-Vergleich.
+ * Security: bcrypt statt Klartext-Vergleich.
  * ADMIN_PASSWORD_HASH muss ein bcrypt-Hash sein (z.B. via: npx bcryptjs hash "password")
  */
 export async function verifyCredentials(email: string, password: string): Promise<boolean> {
@@ -110,7 +110,7 @@ export async function verifyCredentials(email: string, password: string): Promis
   if (!adminEmail || !adminPasswordHash) return false;
   if (email !== adminEmail) return false;
 
-  // Sven (Security): Nur bcrypt-Hashes erlaubt — kein Plaintext-Fallback
+  // Security: Nur bcrypt-Hashes erlaubt — kein Plaintext-Fallback
   if (!adminPasswordHash.startsWith("$2")) {
     console.error("[Auth] ADMIN_PASSWORD_HASH is not a bcrypt hash. Login disabled. Generate one: npx bcryptjs hash 'yourpassword'");
     return false;
@@ -135,7 +135,7 @@ export async function requireAdmin(req: Request): Promise<boolean> {
   const apiKey = req.headers.get("x-admin-api-key");
   const expected = process.env.ADMIN_API_KEY;
   if (apiKey && expected) {
-    // Sven (Security): timing-safe Vergleich — sonst kann ein Angreifer den
+    // Security: timing-safe Vergleich — sonst kann ein Angreifer den
     // Schlüssel zeichenweise per Response-Time-Analyse erraten.
     const a = Buffer.from(apiKey);
     const b = Buffer.from(expected);

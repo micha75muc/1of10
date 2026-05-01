@@ -112,8 +112,7 @@ export default function BlogPost() {
                 Preiskalkulation:
               </strong>{" "}
               Verkaufspreise datenbasiert kalkulieren — unter Berücksichtigung
-              von Einkaufskosten, Marge, Marktpreisen und der
-              10&nbsp;%-Erstattungsquote.
+              von Einkaufskosten, Marge, Marktpreisen und der Kulanz-Erstattungen.
             </li>
             <li>
               <strong className="text-[var(--foreground)]">

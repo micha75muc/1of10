@@ -8,7 +8,7 @@ import { logEvent, logWarn } from "../../../../lib/error-logger";
  * Doppel-Opt-In bestätigen — der Klick im Confirm-Mail-Link landet hier.
  * Wir setzen `confirmedAt` und löschen das Token (Replay-Schutz).
  *
- * Denny (Compliance): Erst nach diesem Klick darf der Datensatz für
+ * Compliance: Erst nach diesem Klick darf der Datensatz für
  * Werbe-Mails verwendet werden.
  */
 export async function GET(req: NextRequest) {
