@@ -108,7 +108,7 @@ export default function CheckoutForm({
           </span>
         </label>
 
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex items-start gap-3 cursor-pointer rounded-xl border-2 border-[var(--gold)] bg-[var(--gold)]/10 p-4">
           <input
             type="checkbox"
             checked={bgbAccepted}
@@ -117,12 +117,18 @@ export default function CheckoutForm({
             aria-required="true"
           />
           <span className="text-sm">
-            Ich stimme ausdrücklich zu, dass mit der Ausführung des Vertrags vor
-            Ablauf der Widerrufsfrist begonnen wird, und bestätige meine
-            Kenntnis, dass ich durch diese Zustimmung mein Widerrufsrecht
-            verliere{" "}
-            <span className="font-medium">(BGB §356 Abs. 5)</span> —{" "}
-            <Link href="/widerruf" className="underline text-[var(--primary)]" target="_blank">Widerrufsbelehrung lesen</Link>.
+            <span className="block font-semibold mb-1">
+              ⚠️ Widerrufsverzicht (Pflichtfeld bei digitalen Inhalten)
+            </span>
+            Ich stimme ausdrücklich zu, dass mit der Ausführung des Vertrags
+            (Lieferung des Lizenzschlüssels) <strong>vor Ablauf der
+            14-tägigen Widerrufsfrist</strong> begonnen wird, und bestätige
+            meine Kenntnis, dass ich durch diese Zustimmung mein{" "}
+            <strong>Widerrufsrecht verliere</strong>{" "}
+            <span className="font-medium">(BGB §356 Abs. 5)</span>.{" "}
+            <Link href="/widerruf" className="underline text-[var(--primary)]" target="_blank">
+              Vollständige Widerrufsbelehrung lesen ↗
+            </Link>
           </span>
         </label>
       </div>

@@ -9,6 +9,20 @@ interface EmailParams {
   html: string;
 }
 
+/**
+ * Verkäuferdaten (Impressum) — Anlage 1 Art. 246a EGBGB verlangt vollständige
+ * Identität des Unternehmers in der Bestellbestätigung. Hier zentral, damit
+ * Impressum & Mail nicht auseinanderdriften.
+ */
+const SELLER = {
+  name: "Michael Hahnel",
+  street: "Nederlinger Str. 83",
+  city: "80638 München",
+  country: "Deutschland",
+  email: "info@medialess.de",
+  phone: "0152 25389619",
+} as const;
+
 async function sendMockEmail(params: EmailParams) {
   console.log("[Email Mock] Sending email:");
   console.log(`  To: ${params.to}`);
@@ -50,10 +64,28 @@ export async function sendEmail(params: EmailParams) {
   return sendRealEmail(params);
 }
 
+/**
+ * Format-Helper für deutsche Datum/Beträge in der Mail.
+ * Bewusst keine Intl-Aufrufe in HTML-Strings — Resend liefert nicht in
+ * jedem Render-Kontext eine TZ-aware Locale.
+ */
+function formatEur(cents: number): string {
+  return (cents / 100).toFixed(2).replace(".", ",") + " €";
+}
+
+function formatDate(d: Date): string {
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yyyy = d.getFullYear();
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mi = String(d.getMinutes()).padStart(2, "0");
+  return `${dd}.${mm}.${yyyy}, ${hh}:${mi} Uhr`;
+}
+
 export function orderConfirmationEmail(order: {
   customerEmail: string;
   productName: string;
-  amountTotal: number;
+  amountTotal: number; // in Cent
   isWinner: boolean;
   licenseKey?: string;
   /** True for Trend Micro, AVG, Norton etc. — customer needs to create
@@ -62,18 +94,52 @@ export function orderConfirmationEmail(order: {
   requiresVendorAccount?: boolean;
   vendorName?: string;
   vendorActivationUrl?: string;
+  /** Receipt-relevante Pflichtfelder (Anlage 1 Art. 246a EGBGB + §19 UStG). */
+  orderId: string;
+  orderDate: Date;
+  customerName?: string;
 }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
   const shareText = encodeURIComponent(
-    `Gerade ${order.productName} bei 1of10 gekauft und den vollen Kaufpreis zurückbekommen! Die erstatten wirklich jeden 10. Kauf. 🎉`
+    `Gerade ${order.productName} bei 1of10 gekauft und den vollen Kaufpreis zurückbekommen! Die erstatten wirklich jeden 10. Kauf. 🎉`,
   );
   const shareUrl = encodeURIComponent(appUrl);
+  const orderShortId = order.orderId.slice(0, 8).toUpperCase();
+
+  // ---------- Header / Greeting ----------
+  const greetingName = order.customerName?.trim()
+    ? `Hallo ${order.customerName.trim().split(/\s+/)[0]},`
+    : "Hallo,";
+
+  // ---------- Receipt / Kaufbeleg-Block ----------
+  // Pflicht laut §19 UStG: Hinweis "ohne Ausweis der Umsatzsteuer". Pflicht
+  // laut Art. 246a EGBGB Anlage 1: Identität des Unternehmers, Gesamtpreis,
+  // Datum, Vertragsgegenstand. Wir packen alles in einen klar abgesetzten
+  // Block, damit der Kunde es als Kaufbeleg speichern kann.
+  const receiptBlock = `
+    <div style="background:#fafafa;border:1px solid #e5e5e5;border-radius:12px;padding:20px;margin:24px 0;">
+      <h2 style="margin:0 0 12px;font-size:16px;">Kaufbeleg</h2>
+      <table role="presentation" style="width:100%;font-size:13px;color:#333;border-collapse:collapse;">
+        <tr><td style="padding:4px 0;color:#666;">Bestell-Nr.</td><td style="padding:4px 0;font-family:'Courier New',monospace;">${orderShortId}</td></tr>
+        <tr><td style="padding:4px 0;color:#666;">Datum</td><td style="padding:4px 0;">${formatDate(order.orderDate)}</td></tr>
+        <tr><td style="padding:4px 0;color:#666;">Produkt</td><td style="padding:4px 0;">${order.productName} (digitale Lizenz)</td></tr>
+        <tr><td style="padding:4px 0;color:#666;">Gesamtbetrag</td><td style="padding:4px 0;font-weight:600;">${formatEur(order.amountTotal)}</td></tr>
+        <tr><td style="padding:4px 0;color:#666;">Zahlungsart</td><td style="padding:4px 0;">Stripe (Kreditkarte/SEPA/etc.)</td></tr>
+      </table>
+      <p style="margin:12px 0 0;font-size:11px;color:#777;line-height:1.5;">
+        Gemäß §19 UStG wird keine Umsatzsteuer erhoben und nicht ausgewiesen
+        (Kleinunternehmerregelung). Verkäufer:
+        <strong>${SELLER.name}</strong>, ${SELLER.street}, ${SELLER.city},
+        ${SELLER.country} · ${SELLER.email}.
+      </p>
+    </div>
+  `;
 
   const winnerBlock = order.isWinner
     ? `<div style="background:#22c55e;color:white;padding:24px;border-radius:12px;margin:24px 0;text-align:center;">
         <h2 style="margin:0 0 8px;">🎉 Dein Kauf wurde erstattet!</h2>
-        <p style="margin:0 0 16px;font-size:18px;">Wir haben dir <strong>${(order.amountTotal / 100).toFixed(2).replace(".", ",")} €</strong> zurückerstattet — als freiwillige Kulanzleistung.</p>
-        <p style="margin:0 0 4px;">Dein Produkt behältst du natürlich.</p>
+        <p style="margin:0 0 12px;font-size:18px;">Wir haben dir <strong>${formatEur(order.amountTotal)}</strong> als <strong>freiwillige Kulanzleistung</strong> zurückerstattet.</p>
+        <p style="margin:0 0 4px;font-size:13px;opacity:0.9;">Dein Produkt behältst du natürlich. Es besteht kein Rechtsanspruch auf Erstattung.</p>
       </div>
       <div style="text-align:center;margin:20px 0;">
         <p style="margin:0 0 12px;font-size:14px;color:#666;">Teile deine Erfahrung:</p>
@@ -90,7 +156,7 @@ export function orderConfirmationEmail(order: {
         <div style="background:#0f172a;color:#f8fafc;padding:16px;border-radius:8px;font-family:'Courier New',monospace;font-size:16px;word-break:break-all;letter-spacing:0.5px;text-align:center;">
           ${order.licenseKey}
         </div>
-        <p style="margin:12px 0 0;font-size:12px;color:#666;">Bewahre diese E-Mail auf — du kannst den Schlüssel jederzeit unter <a href="${appUrl}/bestellstatus">${appUrl}/bestellstatus</a> erneut einsehen (Session-ID + E-Mail erforderlich).</p>
+        <p style="margin:12px 0 0;font-size:12px;color:#666;">Bewahre diese E-Mail auf — du kannst den Schlüssel jederzeit unter <a href="${appUrl}/bestellstatus">${appUrl}/bestellstatus</a> erneut abrufen (Bestell-Nr. ${orderShortId} + deine E-Mail).</p>
       </div>`
     : `<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:12px;padding:16px;margin:24px 0;">
         <p style="margin:0;font-size:14px;color:#92400e;">🕒 Dein Lizenzschlüssel wird in Kürze manuell zugestellt. Bei Fragen antworte einfach auf diese E-Mail.</p>
@@ -118,25 +184,61 @@ export function orderConfirmationEmail(order: {
       </div>`
     : "";
 
+  // ---------- Widerrufsbelehrung (Anlage 1 Art. 246a EGBGB) ----------
+  // Vorzeitiges Erlöschen bei digitalen Inhalten — bewusst vollständig
+  // beigefügt, damit die Bestätigungsmail allein als Vertragsdokument
+  // ausreicht.
+  const widerrufBlock = `
+    <hr style="border:none;border-top:1px solid #e5e5e5;margin:32px 0 16px;"/>
+    <div style="font-size:12px;color:#444;line-height:1.6;">
+      <h3 style="font-size:14px;margin:0 0 8px;color:#222;">Widerrufsbelehrung</h3>
+      <p style="margin:0 0 8px;">
+        Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen
+        diesen Vertrag zu widerrufen. Die Widerrufsfrist beträgt vierzehn Tage
+        ab dem Tag des Vertragsabschlusses. Um Ihr Widerrufsrecht auszuüben,
+        müssen Sie uns (${SELLER.name}, ${SELLER.street}, ${SELLER.city},
+        E-Mail: ${SELLER.email}) mittels einer eindeutigen Erklärung über Ihren
+        Entschluss, diesen Vertrag zu widerrufen, informieren.
+      </p>
+      <p style="margin:0 0 8px;background:#fef9c3;border:1px solid #fde68a;border-radius:8px;padding:10px;">
+        <strong>Vorzeitiges Erlöschen bei digitalen Inhalten:</strong>
+        Das Widerrufsrecht erlischt bei Verträgen zur Lieferung digitaler
+        Inhalte, die nicht auf einem körperlichen Datenträger geliefert werden,
+        wenn der Unternehmer mit der Ausführung des Vertrags begonnen hat,
+        nachdem der Verbraucher (1) ausdrücklich zugestimmt hat, dass mit der
+        Ausführung vor Ablauf der Widerrufsfrist begonnen wird, und (2) seine
+        Kenntnis davon bestätigt hat, dass er durch seine Zustimmung mit Beginn
+        der Ausführung sein Widerrufsrecht verliert (§356 Abs. 5 BGB). Diese
+        beiden Bestätigungen hast du im Checkout abgegeben.
+      </p>
+      <p style="margin:0 0 8px;">
+        Vollständige Belehrung inkl. Muster-Widerrufsformular:
+        <a href="${appUrl}/widerruf">${appUrl}/widerruf</a>.
+      </p>
+    </div>
+  `;
+
   return {
     to: order.customerEmail,
     subject: order.isWinner
-      ? "🎉 Dein Kauf wurde erstattet — 1of10"
-      : "Bestellbestätigung — 1of10",
+      ? `🎉 Dein Kauf wurde erstattet — Bestellung ${orderShortId} (1of10)`
+      : `Bestellbestätigung — ${order.productName} (${orderShortId})`,
     html: `
-      <h1>Bestellbestätigung</h1>
-      <p>Vielen Dank für deinen Kauf von <strong>${order.productName}</strong>.</p>
-      <p>Betrag: ${(order.amountTotal / 100).toFixed(2).replace(".", ",")} €</p>
-      ${keyBlock}
-      ${vendorBlock}
-      ${winnerBlock}
-      <hr/>
-      <p style="font-size:12px;color:#888;">
-        Gemäß deiner Zustimmung zum Widerrufsverzicht nach BGB §356 Abs. 5 
-        bei digitalen Inhalten ist ein Widerruf für diese Bestellung ausgeschlossen.
-        Es gelten unsere <a href="${appUrl}/agb">AGB</a> und 
-        <a href="${appUrl}/datenschutz">Datenschutzerklärung</a>.
-      </p>
+      <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#222;max-width:640px;margin:0 auto;">
+        <h1 style="font-size:22px;margin:0 0 8px;">Bestellbestätigung</h1>
+        <p style="margin:0 0 16px;font-size:14px;">${greetingName}</p>
+        <p style="margin:0 0 16px;font-size:14px;">vielen Dank für deinen Kauf von <strong>${order.productName}</strong>. Hier sind die Details:</p>
+        ${receiptBlock}
+        ${keyBlock}
+        ${vendorBlock}
+        ${winnerBlock}
+        ${widerrufBlock}
+        <p style="font-size:11px;color:#888;margin:24px 0 0;line-height:1.6;">
+          Es gelten unsere <a href="${appUrl}/agb">AGB</a>,
+          <a href="${appUrl}/datenschutz">Datenschutzerklärung</a> und das
+          <a href="${appUrl}/impressum">Impressum</a>.
+        </p>
+      </div>
     `,
   };
 }

@@ -69,6 +69,9 @@ export async function POST(
       requiresVendorAccount: order.product.requiresVendorAccount,
       vendorName: order.product.vendorName ?? undefined,
       vendorActivationUrl: order.product.vendorActivationUrl ?? undefined,
+      orderId: order.id,
+      orderDate: order.createdAt,
+      customerName: order.customerName ?? undefined,
     });
 
     await sendEmail(emailParams);
