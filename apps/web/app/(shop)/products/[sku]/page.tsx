@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ProductImage, getCategoryLabel } from "../product-image";
 import { getProductEnrichment } from "../../../../lib/product-data";
-import { Check, Shield, Zap, Key, Gift, ChevronDown, Monitor } from "lucide-react";
+import { Check, Shield, Zap, Key, Monitor } from "lucide-react";
 
 interface ProductPageProps {
   params: Promise<{ sku: string }>;
@@ -176,7 +176,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       </nav>
 
       {/* Main Product Section */}
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         {/* Left: Image */}
         <div>
           <ProductImage
@@ -184,14 +184,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             brand={product.brand}
             category={product.category}
             imageUrl={product.imageUrl}
+            size="hero"
           />
 
           {/* Highlights under image (desktop) */}
           {enrichment?.highlights && (
-            <div className="hidden lg:flex flex-wrap gap-2 mt-4">
+            <div className="hidden lg:flex flex-wrap gap-2 mt-6">
               {enrichment.highlights.map((h, i) => (
-                <span key={i} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 px-3 py-1 text-xs font-medium text-[var(--gold)]">
-                  <Check className="h-3 w-3" />
+                <span key={i} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-medium text-[var(--foreground)]">
+                  <Check className="h-3 w-3 text-[var(--success)]" />
                   {h}
                 </span>
               ))}
@@ -201,44 +202,31 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
         {/* Right: Info */}
         <div className="flex flex-col">
-          {/* Badges */}
-          <div className="mb-3 flex flex-wrap items-center gap-1.5">
-            {product.brand && (
-              <span className="rounded-full bg-[var(--primary)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--primary)]">
-                {product.brand}
-              </span>
-            )}
-            {product.category && (
-              <span className="rounded-full bg-[var(--secondary)] px-2.5 py-0.5 text-xs font-medium text-[var(--muted-foreground)]">
-                {getCategoryLabel(product.category)}
-              </span>
-            )}
-            {product.requiresVendorAccount && (
-              <span
-                title="Aktivierung erfordert kostenloses Hersteller-Konto (ca. 2 Min)"
-                className="rounded-full border border-[var(--brand-blue)]/40 bg-[var(--brand-blue)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--brand-blue)]"
-              >
-                Hersteller-Konto nötig
-              </span>
-            )}
-          </div>
+          {/* Brand · Category — small caps, Apple-style */}
+          {(product.brand || product.category) && (
+            <p className="text-xs font-medium uppercase tracking-[0.08em] text-[var(--muted-foreground)]">
+              {product.brand}
+              {product.brand && product.category && <span className="mx-1.5">·</span>}
+              {product.category && getCategoryLabel(product.category)}
+            </p>
+          )}
 
-          <h1 className="mb-3 text-2xl font-bold leading-tight md:text-3xl">
+          <h1 className="mt-2 text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
             {product.name}
           </h1>
 
           {product.description && (
-            <p className="mb-4 leading-relaxed text-[var(--muted-foreground)]">
+            <p className="mt-4 text-lg leading-relaxed text-[var(--muted-foreground)]">
               {product.description}
             </p>
           )}
 
           {/* Highlights (mobile) */}
           {enrichment?.highlights && (
-            <div className="flex flex-wrap gap-2 mb-4 lg:hidden">
+            <div className="flex flex-wrap gap-2 mt-4 lg:hidden">
               {enrichment.highlights.map((h, i) => (
-                <span key={i} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 px-3 py-1 text-xs font-medium text-[var(--gold)]">
-                  <Check className="h-3 w-3" />
+                <span key={i} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-medium text-[var(--foreground)]">
+                  <Check className="h-3 w-3 text-[var(--success)]" />
                   {h}
                 </span>
               ))}
@@ -246,29 +234,27 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           )}
 
           {/* Price */}
-          <div className="mb-4">
-            {product.uvpPrice && Number(product.uvpPrice) > Number(product.sellPrice) && (
-              <div className="mb-2 flex items-center gap-2">
-                <span className="text-sm text-[var(--muted-foreground)] line-through">
-                  UVP {Number(product.uvpPrice).toFixed(2).replace(".", ",")} €
-                </span>
-                <span className="rounded-full bg-[var(--destructive)] px-2 py-0.5 text-xs font-bold text-white">
-                  Spare {Math.round((1 - Number(product.sellPrice) / Number(product.uvpPrice)) * 100)}%
-                </span>
-              </div>
-            )}
+          <div className="mt-8">
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-extrabold">
+              <span className="text-3xl font-semibold tracking-tight">
                 {Number(product.sellPrice).toFixed(2).replace(".", ",")}&nbsp;€
               </span>
-              <span className="text-sm text-[var(--muted-foreground)]">
-                Endpreis
-              </span>
+              {product.uvpPrice && Number(product.uvpPrice) > Number(product.sellPrice) && (
+                <>
+                  <span className="text-base text-[var(--muted-foreground)] line-through">
+                    {Number(product.uvpPrice).toFixed(2).replace(".", ",")} €
+                  </span>
+                  <span className="rounded-full bg-[var(--secondary)] px-2 py-0.5 text-xs font-semibold text-[var(--foreground)]">
+                    −{Math.round((1 - Number(product.sellPrice) / Number(product.uvpPrice)) * 100)}%
+                  </span>
+                </>
+              )}
             </div>
+            <p className="mt-1 text-sm text-[var(--muted-foreground)]">Endpreis · keine USt. nach §19 UStG</p>
           </div>
 
           {/* Stock */}
-          <p className="mb-5 text-sm">
+          <p className="mt-4 text-sm">
             {product.stockLevel > 0 ? (
               <span className="flex items-center gap-1.5 text-[var(--success)]">
                 <span className="inline-block h-2 w-2 rounded-full bg-[var(--success)]" />
@@ -284,8 +270,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
           {/* Feature List */}
           {enrichment?.features && (
-            <div className="mb-6 rounded-xl border bg-[var(--card)] p-4">
-              <h2 className="text-sm font-semibold mb-3">Im Paket enthalten:</h2>
+            <div className="mt-8">
+              <h2 className="text-sm font-semibold mb-3">Im Paket enthalten</h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {enrichment.features.map((f, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted-foreground)]">
@@ -297,22 +283,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
           )}
 
-          {/* Kulanz Badge */}
-          <div className="mb-6 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-4">
-            <div className="flex items-center gap-3">
-              <Gift className="h-6 w-6 text-[var(--gold)] shrink-0" />
-              <div>
-                <p className="font-semibold text-[var(--gold)]">
-                  Jeder 10. Kauf wird erstattet
-                </p>
-                <p className="text-xs text-[var(--muted-foreground)]">
-                  Freiwillige Kulanzleistung — du behältst dein Produkt in jedem Fall.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA */}
+          {/* CTA — Apple pill button */}
           <Link
             href={`/checkout?productId=${product.id}`}
             aria-label={
@@ -320,34 +291,40 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 ? `${product.name} jetzt kaufen`
                 : `${product.name} — ausverkauft`
             }
-            className={`mb-6 block rounded-lg px-6 py-4 text-center text-base font-semibold transition ${
+            className={`mt-8 block rounded-full px-6 py-3.5 text-center text-base font-medium transition ${
               product.stockLevel > 0
-                ? "bg-[var(--foreground)] text-[var(--primary-foreground)] hover:scale-[1.01] active:scale-[0.99]"
+                ? "bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 active:scale-[0.99]"
                 : "pointer-events-none bg-[var(--muted)] text-[var(--muted-foreground)]"
             }`}
           >
             {product.stockLevel > 0 ? "Jetzt kaufen" : "Ausverkauft"}
           </Link>
 
-          {/* Trust Signals */}
-          <div className="grid grid-cols-3 gap-3 text-center text-xs text-[var(--muted-foreground)]">
-            <div className="flex flex-col items-center gap-1.5 rounded-lg border bg-[var(--card)] p-3">
-              <Zap className="h-5 w-5 text-[var(--brand-teal)]" />
+          {/* Refund line — single quiet sentence, no banner. */}
+          <p className="mt-4 text-sm text-[var(--muted-foreground)]">
+            <span className="text-[var(--gold)]">●</span>{" "}
+            Wir erstatten freiwillig jeden 10. Kauf — du behältst dein Produkt.
+          </p>
+
+          {/* Trust Signals — minimal, monochrome */}
+          <div className="mt-8 grid grid-cols-3 gap-x-2 text-center text-xs text-[var(--muted-foreground)] border-t border-[var(--border)] pt-6">
+            <div className="flex flex-col items-center gap-1.5">
+              <Zap className="h-5 w-5" />
               Sofort-Download
             </div>
-            <div className="flex flex-col items-center gap-1.5 rounded-lg border bg-[var(--card)] p-3">
-              <Key className="h-5 w-5 text-[var(--brand-blue)]" />
+            <div className="flex flex-col items-center gap-1.5">
+              <Key className="h-5 w-5" />
               Original-Key
             </div>
-            <div className="flex flex-col items-center gap-1.5 rounded-lg border bg-[var(--card)] p-3">
-              <Shield className="h-5 w-5 text-[var(--gold)]" />
+            <div className="flex flex-col items-center gap-1.5">
+              <Shield className="h-5 w-5" />
               SSL-verschlüsselt
             </div>
           </div>
 
-          {/* Vendor-Account Hinweis (Trend Micro, AVG, Norton, …) */}
+          {/* Vendor-Account Hinweis */}
           {product.requiresVendorAccount && (
-            <p className="mt-3 rounded-lg border border-[var(--brand-blue)]/30 bg-[var(--brand-blue)]/5 px-3 py-2 text-xs text-[var(--muted-foreground)]">
+            <p className="mt-4 rounded-lg bg-[var(--secondary)] px-3 py-2 text-xs text-[var(--muted-foreground)]">
               <strong className="text-[var(--foreground)]">Aktivierung:</strong>{" "}
               {product.vendorName ?? "Der Hersteller"} verlangt ein kostenloses
               Konto (branchenüblich, ca. 2 Min). Wir führen dich nach dem Kauf
@@ -427,18 +404,21 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
       {/* Related Products */}
       {related.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-xl font-bold mb-6">Ähnliche Produkte</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="mt-16 sm:mt-20">
+          <h2 className="text-2xl font-semibold tracking-tight mb-8">Ähnliche Produkte</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-8">
             {related.map((r) => (
               <Link
                 key={r.sku}
                 href={`/products/${r.sku}`}
-                className="rounded-xl border bg-[var(--card)] p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group block"
               >
-                <p className="text-[10px] font-medium uppercase tracking-wider text-[var(--muted-foreground)] mb-1">{r.brand}</p>
-                <p className="text-sm font-semibold leading-tight mb-2 line-clamp-2">{r.name}</p>
-                <p className="text-lg font-bold">{Number(r.sellPrice).toFixed(2).replace(".", ",")} €</p>
+                <div className="aspect-[4/3] w-full rounded-2xl bg-[var(--tile)] flex items-center justify-center transition group-hover:opacity-90">
+                  <span className="text-base sm:text-lg font-semibold tracking-tight">{r.brand ?? "Software"}</span>
+                </div>
+                <p className="mt-3 text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--muted-foreground)]">{r.brand}</p>
+                <p className="mt-1 text-sm font-semibold leading-tight line-clamp-2 group-hover:underline underline-offset-4">{r.name}</p>
+                <p className="mt-2 text-sm font-semibold">{Number(r.sellPrice).toFixed(2).replace(".", ",")} €</p>
               </Link>
             ))}
           </div>

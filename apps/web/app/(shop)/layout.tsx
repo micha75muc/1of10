@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "../components/logo";
 import { MobileNav } from "../components/mobile-nav";
-import { Gift, Mail, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
 
 export default function ShopLayout({
   children,
@@ -10,30 +10,32 @@ export default function ShopLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* USP Banner */}
-      <div className="bg-[var(--gold)]/10 border-b border-[var(--gold)]/20 text-center py-2.5 px-4">
-        <Gift className="inline-block h-4 w-4 mr-1.5 -mt-0.5 text-[var(--gold)]" />
-        <span className="text-sm font-medium">Wir erstatten jeden 10. Kauf</span>
-        <span className="text-sm text-[var(--foreground)]/60"> — freiwillige Kulanzleistung</span>
+      {/* Quiet top strip — Apple-style fine-print row, no gold flood. */}
+      <div className="border-b border-[var(--border)] bg-[var(--secondary)] text-center py-2 px-4">
+        <span className="text-[13px] text-[var(--foreground)]">
+          <span className="text-[var(--gold)]">●</span>{" "}
+          <span className="font-medium">Wir erstatten jeden 10. Kauf</span>
+          <span className="text-[var(--muted-foreground)]"> — freiwillige Kulanzleistung.</span>
+        </span>
       </div>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-[var(--background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--background)]/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/85 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="mr-8 hover:opacity-90 transition">
+            <Link href="/" className="mr-8 hover:opacity-80 transition">
               <Logo size="md" />
             </Link>
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-              <Link href="/products" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Produkte</Link>
-              <Link href="/blog" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Ratgeber</Link>
-              <Link href="/transparenz" className="text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors">Transparenz</Link>
+            <nav className="hidden md:flex items-center gap-7 text-[13px] font-medium">
+              <Link href="/products" className="text-[var(--foreground)]/85 hover:text-[var(--foreground)] transition-colors">Shop</Link>
+              <Link href="/blog" className="text-[var(--foreground)]/85 hover:text-[var(--foreground)] transition-colors">Ratgeber</Link>
+              <Link href="/transparenz" className="text-[var(--foreground)]/85 hover:text-[var(--foreground)] transition-colors">Transparenz</Link>
             </nav>
           </div>
           <div className="flex items-center gap-3">
             <Link
               href="/products"
-              className="hidden md:inline-flex items-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] hover:opacity-90 transition"
+              className="hidden md:inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-4 py-1.5 text-[13px] font-medium text-[var(--primary-foreground)] hover:opacity-90 transition"
             >
               Jetzt einkaufen
             </Link>
