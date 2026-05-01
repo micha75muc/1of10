@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Über uns — 1of10",
   description:
-    "Lerne 1of10 kennen: Ein AI-native Software-Shop aus Deutschland, betrieben mit Hilfe spezialisierter KI-Agenten. Gründer Michael Hahnel über die Mission hinter gamifiziertem Commerce.",
+    "Lerne 1of10 kennen: Ein AI-native Software-Shop aus Deutschland, betrieben mit Hilfe spezialisierter KI-Agenten. Die Mission hinter gamifiziertem Commerce.",
   alternates: { canonical: "/about" },
 };
 
@@ -44,26 +44,25 @@ export default function AboutPage() {
 
       {/* Gründer */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-bold">Der Gründer</h2>
+        <h2 className="mb-4 text-2xl font-bold">Wer hinter 1of10 steht</h2>
         <div className="rounded-xl border bg-[var(--card)] p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[var(--primary)]/10 text-3xl">
-              👤
-            </div>
-            <div>
-              <h3 className="text-lg font-bold">Michael Hahnel</h3>
-              <p className="text-sm text-[var(--muted-foreground)]">
-                Einzelunternehmer · Medialess · Deutschland
-              </p>
-              <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                Michael hat 1of10 als AI-native E-Commerce-Experiment gestartet:
-                Ein Unternehmen, bei dem KI-Agenten die täglichen
-                Geschäftsprozesse steuern — vom Einkauf über Marketing bis zur
-                Compliance-Prüfung. Michael trifft die strategischen
-                Entscheidungen, die Agenten erledigen die Arbeit.
-              </p>
-            </div>
-          </div>
+          <p className="text-sm text-[var(--muted-foreground)]">
+            1of10 wird als deutsches Einzelunternehmen unter der Marke
+            <strong className="text-[var(--foreground)]"> Medialess</strong> aus
+            München betrieben. Vollständige Anbieterangaben gemäß §5 DDG
+            findest du im{" "}
+            <a href="/impressum" className="text-[var(--primary)] underline">
+              Impressum
+            </a>
+            .
+          </p>
+          <p className="mt-3 text-sm text-[var(--muted-foreground)]">
+            1of10 ist ein AI-native E-Commerce-Experiment: Ein Unternehmen,
+            bei dem KI-Agenten die täglichen Geschäftsprozesse steuern — vom
+            Einkauf über Marketing bis zur Compliance-Prüfung. Strategische
+            Entscheidungen trifft der Mensch, die Agenten erledigen die
+            Arbeit.
+          </p>
         </div>
       </section>
 
@@ -108,7 +107,7 @@ export default function AboutPage() {
       <section>
         <h2 className="mb-4 text-2xl font-bold">Kontakt</h2>
         <div className="rounded-xl border bg-[var(--card)] p-6 text-sm text-[var(--muted-foreground)]">
-          <p>Michael Hahnel · Medialess</p>
+          <p>1of10 · Medialess</p>
           <p>E-Mail: info@medialess.de</p>
           <p className="mt-2">
             <a href="/impressum" className="text-[var(--primary)] underline">
@@ -127,11 +126,6 @@ export default function AboutPage() {
             "@type": "Organization",
             name: "1of10",
             url: "https://1of10.de",
-            founder: {
-              "@type": "Person",
-              name: "Michael Hahnel",
-              jobTitle: "Gründer",
-            },
             description:
               "AI-nativer Software-Shop mit Freiwillige Kaufpreiserstattung. Jeder 10. Kauf wird auf Kulanz erstattet.",
             contactPoint: {

@@ -22,10 +22,7 @@ export default function BlogPost() {
     description:
       "Wie spezialisierte KI-Agenten bei 1of10 Einkauf, Preise, Compliance und Inhalte steuern.",
     datePublished: "2026-03-21",
-    author: {
-      "@type": "Person",
-      name: "Michael Hahnel",
-    },
+    author: { "@type": "Organization", name: "1of10" },
     publisher: {
       "@type": "Organization",
       name: "1of10",

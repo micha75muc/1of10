@@ -14,7 +14,7 @@ const faqs = [
   },
   {
     q: "Ist 1of10 seriös?",
-    a: "Ja. 1of10 ist ein deutsches Unternehmen (Michael Hahnel, Einzelunternehmer), gehostet auf europäischen Servern, DSGVO-konform und mit transparenter Mechanik. Wir nutzen Stripe als Zahlungsdienstleister — deine Zahlungsdaten werden nie bei uns gespeichert.",
+    a: "Ja. 1of10 ist ein deutsches Unternehmen, gehostet auf europäischen Servern, DSGVO-konform und mit transparenter Mechanik. Wir nutzen Stripe als Zahlungsdienstleister — deine Zahlungsdaten werden nie bei uns gespeichert.",
   },
   {
     q: "Wo kann ich günstig Digitale Produkte kaufen?",

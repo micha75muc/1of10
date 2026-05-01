@@ -82,16 +82,10 @@ const organizationJsonLd = {
   },
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Nederlinger Str. 83",
     addressLocality: "München",
-    postalCode: "80638",
     addressCountry: "DE",
   },
   foundingDate: "2026",
-  founder: {
-    "@type": "Person",
-    name: "Michael Hahnel",
-  },
   sameAs: [],
   keywords: "Software kaufen, Antivirus, VPN, Erstattung, 1of10",
 };

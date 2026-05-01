@@ -91,7 +91,7 @@ export default function ShopLayout({
           </div>
           <div className="mt-12 border-t border-[var(--border)] pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-[var(--muted-foreground)]">
-              © {new Date().getFullYear()} 1of10 · Michael Hahnel · München
+              © {new Date().getFullYear()} 1of10 · München
             </p>
             <div className="flex items-center gap-4">
               <a href="https://de.trustpilot.com/review/1of10.de" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition flex items-center gap-1">

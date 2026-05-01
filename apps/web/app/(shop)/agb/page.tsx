@@ -17,7 +17,7 @@ export default function AGBPage() {
         <h2 className="mb-3 text-xl font-semibold">§1 Geltungsbereich</h2>
         <p>
           Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge,
-          die über den Online-Shop von Michael Hahnel (nachfolgend
+          die über den Online-Shop von 1of10 (nachfolgend
           &ldquo;Anbieter&rdquo;) geschlossen werden. Der Online-Shop richtet
           sich an Verbraucher und Unternehmer. Entgegenstehende oder abweichende
           Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter

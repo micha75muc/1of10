@@ -22,10 +22,7 @@ export default function BlogPost() {
     description:
       "Welcher Shop gibt freiwillig Geld zurück? 1of10 erstattet jeden 10. Kauf — komplett.",
     datePublished: "2026-03-21",
-    author: {
-      "@type": "Person",
-      name: "Michael Hahnel",
-    },
+    author: { "@type": "Organization", name: "1of10" },
     publisher: {
       "@type": "Organization",
       name: "1of10",
@@ -228,7 +225,7 @@ export default function BlogPost() {
       {/* Author / Footer */}
       <div className="mt-10 border-t pt-6">
         <p className="text-xs text-[var(--muted-foreground)]">
-          Geschrieben von Michael Hahnel, Gründer von 1of10. Fragen?{" "}
+          Verfasst vom 1of10-Team. Fragen?{" "}
           <a
             href="mailto:info@medialess.de"
             className="text-[var(--primary)] hover:underline"
