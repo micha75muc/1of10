@@ -1,55 +1,30 @@
 import { prisma } from "@repo/db";
-import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Transparenz — Unsere Erstattungen in Echtzeit",
+  title: "Transparenz — So funktioniert die Erstattung",
   description:
-    "Live-Statistik der 1of10-Kaufpreiserstattungen. Echte Zahlen, direkt aus unserem System. Jeder 10. Kauf wird erstattet — hier ist der Beweis.",
+    "Wie 1of10 die Kaufpreiserstattung umsetzt: ShuffleBag-Verfahren mit kryptografischer Hash-Verifikation. Provably fair, EU AI Act konform.",
   alternates: { canonical: "/transparenz" },
   openGraph: {
-    title: "Transparenz — 1of10 Erstattungen in Echtzeit",
+    title: "Transparenz — So funktioniert die 1of10-Erstattung",
     description:
-      "Echte Zahlen unserer Erstattungen. Nicht ausgedacht, nicht geschönt.",
+      "Provably-fair Erstattungs-Mechanik mit SHA-256 Hash-Verifikation.",
   },
 };
 
 export const dynamic = "force-dynamic";
 
 export default async function TransparenzPage() {
-  const [
-    totalOrders,
-    totalWinners,
-    totalRefundAmount,
-    recentWinners,
-    lastWinOrder,
-    activeBag,
-    pastBags,
-  ] = await Promise.all([
-    prisma.order.count(),
-    prisma.order.count({ where: { isWinner: true } }),
-    prisma.order.aggregate({
-      where: { isWinner: true, refundStatus: "COMPLETED" },
-      _sum: { amountTotal: true },
-    }),
-    prisma.order.findMany({
-      where: { isWinner: true },
-      orderBy: { createdAt: "desc" },
-      take: 10,
-      include: { product: true },
-    }),
-    prisma.order.findFirst({
-      where: { isWinner: true },
-      orderBy: { createdAt: "desc" },
-      select: { createdAt: true },
-    }),
-    // L8: Provably-fair — aktiver Beutel mit SHA-256 Hash öffentlich.
-    // slots werden NICHT angezeigt (das wäre ja der Witz weg) — nur
-    // Hash + Größe + aktueller Index. Nach Beutel-Ende kann der Hash
-    // gegen die offengelegten slots geprüft werden.
+  const [activeBag, pastBags] = await Promise.all([
+    // Provably-fair: aktiver Beutel mit SHA-256 Hash öffentlich.
+    // slots werden NICHT angezeigt (das wäre der Witz weg) — nur
+    // Hash + Größe + Erstellungsdatum. currentIndex wird bewusst
+    // weggelassen, weil er implizit das aktuelle Verkaufsvolumen
+    // im laufenden Beutel leakt.
     prisma.shuffleBag.findFirst({
       where: { isActive: true },
-      select: { id: true, slotsHash: true, currentIndex: true, createdAt: true, slots: true },
+      select: { id: true, slotsHash: true, createdAt: true, slots: true },
     }),
     prisma.shuffleBag.findMany({
       where: { isActive: false },
@@ -58,15 +33,6 @@ export default async function TransparenzPage() {
       select: { id: true, slotsHash: true, slots: true, createdAt: true },
     }),
   ]);
-
-  // Count orders since last winner (correct math, not assuming bag size 10)
-  const sinceLastWin = lastWinOrder
-    ? await prisma.order.count({ where: { createdAt: { gt: lastWinOrder.createdAt } } })
-    : totalOrders;
-
-  const refundRate =
-    totalOrders > 0 ? ((totalWinners / totalOrders) * 100).toFixed(1) : "—";
-  const totalRefunded = Number(totalRefundAmount._sum.amountTotal ?? 0);
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -117,40 +83,9 @@ export default async function TransparenzPage() {
       />
       <h1 className="mb-3 text-3xl font-bold">Transparenz</h1>
       <p className="mb-8 text-[var(--muted-foreground)]">
-        Echte Zahlen, direkt aus unserem System — nicht ausgedacht, nicht
-        geschönt. Diese Seite aktualisiert sich mit jedem Kauf automatisch.
+        So funktioniert die Kaufpreiserstattung bei 1of10 — kryptografisch
+        nachvollziehbar und unabhängig prüfbar.
       </p>
-
-      {/* Stats Grid — Bea: nur anzeigen wenn Käufe existieren, sonst "Coming Soon" */}
-      {totalOrders > 0 ? (
-        <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Gesamte Käufe" value={totalOrders.toString()} />
-          <StatCard label="Davon erstattet" value={totalWinners.toString()} />
-          <StatCard label="Erstattungsquote" value={`${refundRate} %`} highlight />
-          <StatCard
-            label="Erstattet (Gesamt)"
-            value={`${totalRefunded.toFixed(2).replace(".", ",")} €`}
-          />
-        </div>
-      ) : (
-        <div className="mb-10 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-8 text-center">
-          <div className="text-4xl mb-4">🚀</div>
-          <h2 className="text-xl font-bold text-[var(--gold)]">Wir sind fast live!</h2>
-          <p className="mt-2 text-[var(--muted-foreground)]">
-            Sobald die ersten Käufe eingehen, siehst du hier in Echtzeit wie viele Käufe erstattet wurden.
-            Jeder 10. Kauf wird garantiert erstattet — transparent und nachvollziehbar.
-          </p>
-        </div>
-      )}
-
-      {/* Bea (Gamification): Next refund teaser */}
-      {totalOrders > 0 && (
-        <div className="mb-10 rounded-xl border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-6 text-center">
-          <p className="text-sm text-[var(--muted-foreground)]">Seit der letzten Erstattung:</p>
-          <p className="text-4xl font-extrabold text-[var(--gold)]">{sinceLastWin} Käufe</p>
-          <p className="mt-1 text-sm text-[var(--muted-foreground)]">Statistisch kommt die nächste Erstattung bald!</p>
-        </div>
-      )}
 
       {/* How it works — ShuffleBag */}
       <div className="mb-10 rounded-xl border bg-[var(--card)] p-6">
@@ -211,8 +146,6 @@ export default async function TransparenzPage() {
                   <dd className="font-mono break-all">{activeBag.id}</dd>
                   <dt className="text-[var(--muted-foreground)]">Beutelgröße</dt>
                   <dd>{activeBag.slots.length} Lose</dd>
-                  <dt className="text-[var(--muted-foreground)]">Aktuelle Position</dt>
-                  <dd>{activeBag.currentIndex} / {activeBag.slots.length}</dd>
                   <dt className="text-[var(--muted-foreground)]">SHA-256 (slots)</dt>
                   <dd className="font-mono break-all text-[10px]">{activeBag.slotsHash}</dd>
                   <dt className="text-[var(--muted-foreground)]">Erstellt</dt>
@@ -224,10 +157,11 @@ export default async function TransparenzPage() {
                   </dd>
                 </dl>
                 <p className="mt-2 text-[10px] text-[var(--muted-foreground)]">
-                  Die Reihenfolge der Lose ist nicht öffentlich — das wäre
-                  Manipulation Tür und Tor. Sobald der Beutel leer ist, wird er
-                  unten in der „Verifizierbare Beutel"-Liste mit voller
-                  Reihenfolge offengelegt, und du kannst den Hash selbst nachrechnen.
+                  Die Reihenfolge der Lose ist nicht öffentlich — sonst wäre
+                  der Erstattungs-Slot vorhersehbar. Sobald der Beutel leer
+                  ist, wird er unten in der „Verifizierbare Beutel"-Liste mit
+                  voller Reihenfolge offengelegt, und du kannst den Hash
+                  selbst nachrechnen.
                 </p>
               </div>
             )}
@@ -348,89 +282,11 @@ export default async function TransparenzPage() {
         </div>
       </div>
 
-      {/* Recent refunds */}
-      {recentWinners.length > 0 && (
-        <div>
-          <h2 className="mb-4 text-xl font-semibold">
-            Letzte Erstattungen
-          </h2>
-          <div className="space-y-2">
-            {recentWinners.map((order) => (
-              <div
-                key={order.id}
-                className="flex items-center justify-between rounded-lg border bg-[var(--card)] px-4 py-3 text-sm"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-lg">🎉</span>
-                  <div>
-                    <p className="font-medium">{order.product.name}</p>
-                    <p className="text-xs text-[var(--muted-foreground)]">
-                      {order.createdAt.toLocaleDateString("de-DE", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                </div>
-                <span className="font-bold text-[var(--gold)]">
-                  {Number(order.amountTotal).toFixed(2).replace(".", ",")} € erstattet
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {totalOrders === 0 && (
-        <div className="rounded-xl border border-dashed p-8 text-center">
-          <p className="text-[var(--muted-foreground)]">
-            Noch keine Käufe — die Statistik füllt sich mit dem ersten
-            Kauf automatisch.
-          </p>
-          <Link
-            href="/products"
-            className="mt-4 inline-block rounded-lg bg-[var(--primary)] px-6 py-2 text-sm font-semibold text-[var(--primary-foreground)] hover:opacity-90 transition"
-          >
-            Zum Shop
-          </Link>
-        </div>
-      )}
-
+      {/* Bottom note */}
       <p className="mt-8 text-center text-xs text-[var(--muted-foreground)]">
-        Diese Daten werden in Echtzeit aus unserer Datenbank geladen und sind
-        nicht manuell editierbar.
-      </p>
-    </div>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  highlight,
-}: {
-  label: string;
-  value: string;
-  highlight?: boolean;
-}) {
-  return (
-    <div
-      className={`rounded-xl border p-5 ${
-        highlight
-          ? "border-[var(--gold)]/30 bg-[var(--gold)]/5"
-          : "bg-[var(--card)]"
-      }`}
-    >
-      <p className="text-xs text-[var(--muted-foreground)]">{label}</p>
-      <p
-        className={`mt-1 text-2xl font-extrabold ${
-          highlight ? "text-[var(--gold)]" : ""
-        }`}
-      >
-        {value}
+        Sobald ein Beutel abgeschlossen ist, wird seine vollständige
+        Reihenfolge oben offengelegt — der Hash lässt sich unabhängig
+        nachrechnen.
       </p>
     </div>
   );
