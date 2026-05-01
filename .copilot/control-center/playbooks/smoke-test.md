@@ -22,6 +22,23 @@ dass:
 - DSD Sandbox-Zugang (Jody van Gils — siehe `contacts.md`)
 - ADMIN_API_KEY oder Admin-Login
 
+## Test 0 — Deploy-Verifikation (vor allem anderen)
+
+> Round 7 — verhindert "wir testen die alte Version" wie am 2026-05-01 passiert.
+
+```powershell
+$ProgressPreference = 'SilentlyContinue'
+$expected = (git rev-parse main).Substring(0,7)
+$bi = Invoke-RestMethod "https://1of10.de/api/build-info" -TimeoutSec 30
+"expected (main): $expected"
+"live  (build-info): $($bi.shaShort)  ref=$($bi.ref)  env=$($bi.env)"
+if ($bi.shaShort -ne $expected) {
+  Write-Warning "DEPLOY-MISMATCH — Production läuft auf $($bi.shaShort), main ist auf $expected. STOP. → playbooks/vercel-reconnect.md"
+}
+```
+
+Erwartung: `shaShort` matcht main (oder einer der letzten 1-2 Commits). Wenn Endpoint 404 liefert oder SHA != main → siehe `vercel-reconnect.md`.
+
 ## Test 1 — Standard-Kauf (kein Winner)
 
 1. Browser öffnen: `https://<preview-url>/products`

@@ -2,9 +2,10 @@
 
 > **Status-Legende:** 🔴 blockiert / 🟡 in Arbeit / 🟢 fertig / ⚪ nicht prio
 
-**Stand:** 2026-05-01 (Round 6 hardening complete — 29 🟢 von 30 items)
+**Stand:** 2026-05-01 (Round 6 hardening complete — 29 🟢 / 1 ⚪ — **+ 1 🔴 P0 Deploy-Gap entdeckt im Smoke-Test**)
 
-> Einziger ⚪-Punkt: **C5** (Founder-Foto) — blockiert, braucht Asset vom User. Alle anderen Compliance-, Security- und CX-Items sind grün.
+> ⚪: **C5** (Founder-Foto) — blockiert, braucht Asset.
+> 🔴 **DEPLOY-GAP** (siehe O5): `gim-home/1of10` ist **nicht** mit Vercel verknüpft — `gh api .../deployments` liefert `[]`, keine Check-Runs auf Merge-Commits. Production (1of10.de) serviert eine Build-Version von **vor Round 1**. Alle Hardening-Merges (Round 1-6) sind **NICHT live**. User-Action im Vercel-Dashboard nötig.
 **Ziel:** Alles 100 % sauber, compliant und attraktiv aus **Kunden- & Betreiber-Sicht** — *bevor* live + Marketing.
 
 ---
@@ -67,6 +68,8 @@
 | O2 | Admin Health-Check Endpoint /api/admin/health | 🟢 | round-5 |
 | O3 | Admin-Alert bei DELIVERY_FAILED / refund.failed / email.failed | 🟢 | round-5 |
 | O4 | Backup/Restore-Plan für Neon-DB (.copilot/control-center/playbooks/db-backup.md) | 🟢 | round-5 |
+| O5 | **Vercel↔GitHub-Auto-Deploy reparieren** (Repo nicht verknüpft, Production stale seit vor Round 1) | 🔴 | round-7 / **User-Action im Vercel-Dashboard** — siehe `playbooks/vercel-reconnect.md` |
+| O6 | `/api/build-info` Endpoint + Test-0 (Deploy-SHA-Verifikation) im Smoke-Test | 🟢 | round-7 |
 
 ---
 
