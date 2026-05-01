@@ -65,3 +65,9 @@ coverage/
 
 # Local analysis scratchpad (margin scripts, plots)
 Scratchpad/
+
+# Secrets / temp files (added 2026-05-01 after .dburl.tmp leak)
+.dburl.tmp
+*.dburl*
+*.tmp
+.env.*.local
