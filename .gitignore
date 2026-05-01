@@ -58,3 +58,7 @@ coverage/
 .nyc_output/
 .vercel
 .env*.local
+
+# Control Center — local secrets (never commit!)
+.copilot/control-center/secrets.local.*
+.copilot/control-center/**/*.secret.*
