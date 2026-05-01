@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/db";
 import { stripe } from "../../../../lib/stripe";
-import { sendEmail, orderConfirmationEmail } from "../../../../lib/email";
+import { sendEmail, orderConfirmationEmail, notifyAdmin } from "../../../../lib/email";
 import { drawFromShuffleBag } from "../../../../lib/shuffle-bag";
 import { rateLimit } from "../../../../lib/rate-limit";
 import { deliverLicenseKey } from "../../../../lib/key-delivery";
@@ -165,6 +165,11 @@ export async function POST(req: NextRequest) {
           where: { id: order.id },
           data: { refundStatus: "FAILED" },
         });
+        await notifyAdmin({
+          event: "refund.failed",
+          orderId: order.id,
+          detail: refundErr instanceof Error ? refundErr.message : String(refundErr),
+        });
       }
     }
 
@@ -211,6 +216,11 @@ export async function POST(req: NextRequest) {
           orderId: order.id,
           productCode: order.product.dsdProductCode,
         });
+        await notifyAdmin({
+          event: "delivery.failed",
+          orderId: order.id,
+          detail: delivery.error,
+        });
       }
     } else {
       logWarn("webhook.delivery.skipped", {
@@ -251,6 +261,11 @@ export async function POST(req: NextRequest) {
       await prisma.order.update({
         where: { id: order.id },
         data: { emailError: errMsg },
+      });
+      await notifyAdmin({
+        event: "email.failed",
+        orderId: order.id,
+        detail: errMsg,
       });
     }
 
