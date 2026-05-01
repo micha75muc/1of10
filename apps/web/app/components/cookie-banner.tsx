@@ -37,9 +37,11 @@ export function CookieBanner() {
     >
       <div className="mx-auto flex max-w-4xl flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="leading-relaxed">
-          Diese Website nutzt ausschließlich technisch notwendige Cookies (z.B.
-          für die Admin-Anmeldung) und cookie-freies Analytics (Plausible). Kein
-          Tracking, kein Profiling.{" "}
+          <strong className="text-[var(--foreground)]">Hinweis (kein Cookie-Banner):</strong>{" "}
+          Diese Website nutzt ausschließlich technisch notwendige Cookies (z.&nbsp;B.
+          für die Admin-Anmeldung) — keine Einwilligung nötig nach
+          TTDSG §25 Abs.&nbsp;2. Analytics ist cookie-frei (Plausible). Kein
+          Tracking, kein Profiling, keine Drittanbieter-Cookies.{" "}
           <Link
             href="/datenschutz"
             className="underline text-[var(--primary)]"
@@ -51,7 +53,7 @@ export function CookieBanner() {
           onClick={dismiss}
           className="shrink-0 rounded-md bg-[var(--primary)] px-4 py-1.5 text-sm font-medium text-[var(--primary-foreground)] hover:opacity-90 transition-opacity"
         >
-          Verstanden
+          Zur Kenntnis genommen
         </button>
       </div>
     </div>

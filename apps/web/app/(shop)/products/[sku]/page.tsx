@@ -205,6 +205,14 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 {getCategoryLabel(product.category)}
               </span>
             )}
+            {product.requiresVendorAccount && (
+              <span
+                title="Aktivierung erfordert kostenloses Hersteller-Konto (ca. 2 Min)"
+                className="rounded-full border border-[var(--brand-blue)]/40 bg-[var(--brand-blue)]/10 px-2.5 py-0.5 text-xs font-medium text-[var(--brand-blue)]"
+              >
+                Hersteller-Konto nötig
+              </span>
+            )}
           </div>
 
           <h1 className="mb-3 text-2xl font-bold leading-tight md:text-3xl">
