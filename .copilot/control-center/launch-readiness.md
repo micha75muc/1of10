@@ -2,7 +2,7 @@
 
 > **Status-Legende:** 🔴 blockiert / 🟡 in Arbeit / 🟢 fertig / ⚪ nicht prio
 
-**Stand:** 2026-05-01 (Round 3 hardening complete) — initial nach 3 Audit-Agenten (CX, Legal, Backend)
+**Stand:** 2026-05-01 (Round 4 hardening complete)
 **Ziel:** Alles 100 % sauber, compliant und attraktiv aus **Kunden- & Betreiber-Sicht** — *bevor* live + Marketing.
 
 ---
@@ -14,8 +14,8 @@
 | S1 | `order-status` API: nur mit `sessionId` UND passender `customerEmail` | 🟢 | round-1 |
 | S2 | `ADMIN_API_KEY` timing-safe Vergleich (kein `===`) | 🟢 | round-1 |
 | S3 | Stripe-Refund mit `idempotencyKey` + DB-Update in Transaktion | 🟢 | round-1 |
-| S4 | DSD-Delivery-Retry (`DELIVERY_PENDING` Status + Background-Job) | ⚪ | — |
-| S5 | Email-Send Retry / dead-letter (Resend down → Order ohne Mail) | ⚪ | — |
+| S4 | DSD-Delivery-Retry: Admin-Endpoint /api/admin/orders/[id]/retry-delivery | 🟢 | round-4 |
+| S5 | Email-Send Retry: try/catch im Webhook + Admin-Endpoint /api/admin/orders/[id]/retry-email | 🟢 | round-4 |
 | S6 | Adress-Felder auf `Order` (Stripe sammelt, wir speichern nicht) | 🟢 | round-1 |
 | S7 | Rate-Limit auf Redis statt In-Memory (Vercel Cold-Start = bypass) | ⚪ | — |
 | S8 | CSRF: Admin-Cookie auf `sameSite: "strict"` | 🟢 | round-3 |
@@ -43,18 +43,18 @@
 | C1 | Agent-Count konsistent (21 statt mal 21/22) — alle Stellen | 🟢 | round-1 |
 | C2 | Tonale Konsistenz: durchgängig "du" (USP-Block formal "Sie/Ihrer") | 🟢 | round-2 |
 | C3 | Vendor-Account-Badge auf PDP-Header & Catalog-Tile | 🟢 | round-2 |
-| C4 | Trust-Bar above-the-fold (Home + Catalog) | ⚪ | — |
-| C5 | About-Page Founder-Avatar (Emoji → echtes Foto) | ⚪ | — |
+| C4 | Trust-Bar above-the-fold (Home + Catalog) | 🟢 | round-4 |
+| C5 | About-Page Founder-Avatar (Emoji → echtes Foto) | ⚪ | benötigt Foto |
 | C6 | Standard-FAQ-Block für jedes Produkt (auch ohne Enrichment) | 🟢 | round-3 |
 | C7 | Success-Page Winner-Block: "Kulanzleistung — kein Rechtsanspruch" | 🟢 | round-2 |
-| C8 | Mobile Vergleichs-Tabelle (3-col → grid stacked) | ⚪ | — |
+| C8 | Mobile Vergleichs-Tabelle (3-col → grid stacked) | 🟢 | round-4 |
 
 ## 💰 Pricing & Margin
 
 | # | Item | Status | PR |
 |---|------|--------|----|
 | P1 | Margen-Audit (Median 4,50 € — schwächste Cluster fixen: AVG/Panda/Norton) | ⚪ | — |
-| P2 | UVP durchgestrichen anzeigen wo > Sell-Preis | ⚪ | — |
+| P2 | UVP durchgestrichen anzeigen wo > Sell-Preis | 🟢 | bestand bereits (verifiziert round-4) |
 | P3 | Bundle/Cross-Sell auf PDP (untergeordnete Priorität) | ⚪ | — |
 
 ## 🛠️ Operations

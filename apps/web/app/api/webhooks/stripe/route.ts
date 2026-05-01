@@ -234,7 +234,25 @@ export async function POST(req: NextRequest) {
       orderDate: order.createdAt,
       customerName,
     });
-    await sendEmail(emailParams);
+    // S5 — sendEmail wrapped in try/catch. Wenn Resend down ist, scheitert
+    // der Webhook NICHT — die Order ist bereits in der DB, und wir markieren
+    // emailError, damit Admin via /api/admin/orders/[id]/retry-email retry'n kann.
+    // Vorher: Resend-Fehler ⇒ Webhook 500 ⇒ Stripe retry ⇒ Idempotenz-Skip ⇒
+    // Order ohne Mail.
+    try {
+      await sendEmail(emailParams);
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { emailSentAt: new Date(), emailError: null },
+      });
+    } catch (emailErr) {
+      const errMsg = emailErr instanceof Error ? emailErr.message : String(emailErr);
+      logError(emailErr, { event: "webhook.email.failed", orderId: order.id });
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { emailError: errMsg },
+      });
+    }
 
     logEvent("webhook.order.created", {
       orderId: order.id,
