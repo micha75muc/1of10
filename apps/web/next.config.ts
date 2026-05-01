@@ -3,6 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   transpilePackages: ["@repo/db", "@repo/policy"],
   serverExternalPackages: ["@prisma/client", ".prisma/client"],
+  outputFileTracingIncludes: {
+    "**/*": [
+      "../../node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/client/*.node",
+      "../../node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/client/schema.prisma",
+      "../../node_modules/.prisma/client/*.node",
+      "../../node_modules/.prisma/client/schema.prisma",
+    ],
+  },
   images: {
     remotePatterns: [
       {

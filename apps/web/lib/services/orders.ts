@@ -22,6 +22,7 @@ const customerOrderSelect = {
   id: true,
   stripeSessionId: true,
   customerEmail: true,
+  customerName: true,
   amountTotal: true,
   status: true,
   refundStatus: true,
