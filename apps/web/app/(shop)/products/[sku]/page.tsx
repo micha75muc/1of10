@@ -14,7 +14,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
 
 export async function generateStaticParams() {
   const products = await prisma.product.findMany({
-    where: { stockLevel: { gt: 0 } },
+    where: { stockLevel: { gt: 0 }, dsdProductCode: { not: null } },
     select: { sku: true },
   });
   return products.map((p) => ({ sku: p.sku }));
@@ -57,6 +57,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     notFound();
   }
 
+  // Treat products without a DSD product code as not-listed: even if they
+  // exist in the DB, we can't deliver them automatically, so don't expose
+  // a buy path. Same 404 as a missing SKU keeps the surface uniform.
+  if (!product.dsdProductCode) {
+    notFound();
+  }
+
   const enrichment = getProductEnrichment(sku);
 
   // Related products: same brand or category, exclude self
@@ -68,6 +75,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       ],
       NOT: { sku: product.sku },
       stockLevel: { gt: 0 },
+      dsdProductCode: { not: null },
     },
     take: 4,
     orderBy: { sellPrice: "asc" },

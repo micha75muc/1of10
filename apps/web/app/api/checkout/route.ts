@@ -86,6 +86,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Defense in depth: even if a product without a DSD code somehow makes
+    // it past the catalog filter (manual link, cached page, …), refuse the
+    // checkout instead of creating an order we can't fulfil.
+    if (!product.dsdProductCode) {
+      return NextResponse.json(
+        { error: "Dieses Produkt ist aktuell nicht bestellbar." },
+        { status: 400 }
+      );
+    }
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://1of10.de";
 
     const session = await stripe.checkout.sessions.create({

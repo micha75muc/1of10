@@ -235,10 +235,26 @@ export async function POST(req: NextRequest) {
         });
       }
     } else {
+      // No DSD code on this product — the catalog filter should have hidden
+      // it, but if an old order, a relinked SKU or a race got us here, mark
+      // the order as DELIVERY_FAILED so it surfaces in /admin/health and
+      // the operator gets paged. We never want a silent PAID-forever order.
+      await prisma.order.update({
+        where: { id: order.id },
+        data: {
+          status: isWinner ? "REFUNDED" : "DELIVERY_FAILED",
+          deliveryError: "Product has no dsdProductCode — manual fulfilment required",
+        },
+      });
       logWarn("webhook.delivery.skipped", {
         orderId: order.id,
         productId,
         reason: "no_dsdProductCode",
+      });
+      await notifyAdmin({
+        event: "delivery.skipped",
+        orderId: order.id,
+        detail: `Product ${productId} has no dsdProductCode — manual fulfilment required`,
       });
     }
 

@@ -51,8 +51,11 @@ export default async function ProductsPage({
     : sort === "price-desc" ? { sellPrice: "desc" }
     : { name: "asc" };
 
-  // Only show products with stock > 0
+  // Only show products with stock > 0 AND with a DSD product code so we can
+  // actually fulfill the order. Products without a code would land in
+  // MANUAL_FULFILLMENT and leave the customer waiting — invisible is safer.
   where.stockLevel = { gt: 0 };
+  where.dsdProductCode = { not: null };
 
   const products = await prisma.product.findMany({
     where,
