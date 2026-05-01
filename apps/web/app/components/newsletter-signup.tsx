@@ -6,10 +6,10 @@ import Link from "next/link";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
- * Newsletter-Signup — sammelt E-Mails für die Launch-Liste.
- * Gregor (Growth): Besucher die nicht kaufen → E-Mail statt verloren.
- * Denny (Compliance): DSGVO Art. 7(1) verlangt explizite, dokumentierte
- * Einwilligung — die Checkbox MUSS aktiv vom Nutzer gesetzt werden.
+ * Newsletter-Signup — collects emails for the launch list.
+ * Conversion: turn abandoning visitors into nurture-list contacts.
+ * Compliance: DSGVO Art. 7(1) requires explicit, documented consent —
+ * the checkbox MUST be actively set by the user.
  */
 export function NewsletterSignup({ variant = "inline" }: { variant?: "inline" | "footer" | "banner" }) {
   const [email, setEmail] = useState("");

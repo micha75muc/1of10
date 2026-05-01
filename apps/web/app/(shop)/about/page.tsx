@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Über uns — 1of10",
   description:
-    "Lerne 1of10 kennen: Ein AI-native Software-Shop aus Deutschland, betrieben von 21 KI-Agenten. Gründer Michael Hahnel über die Mission hinter Gamification-basierte Commerce.",
+    "Lerne 1of10 kennen: Ein AI-native Software-Shop aus Deutschland, betrieben mit Hilfe spezialisierter KI-Agenten. Gründer Michael Hahnel über die Mission hinter gamifiziertem Commerce.",
   alternates: { canonical: "/about" },
 };
 
@@ -57,7 +57,7 @@ export default function AboutPage() {
               </p>
               <p className="mt-2 text-sm text-[var(--muted-foreground)]">
                 Michael hat 1of10 als AI-native E-Commerce-Experiment gestartet:
-                Ein Unternehmen, bei dem 21 KI-Agenten die täglichen
+                Ein Unternehmen, bei dem KI-Agenten die täglichen
                 Geschäftsprozesse steuern — vom Einkauf über Marketing bis zur
                 Compliance-Prüfung. Michael trifft die strategischen
                 Entscheidungen, die Agenten erledigen die Arbeit.
@@ -69,40 +69,35 @@ export default function AboutPage() {
 
       {/* AI-Native */}
       <section className="mb-12">
-        <h2 className="mb-4 text-2xl font-bold">21 KI-Agenten, 1 Mission</h2>
+        <h2 className="mb-4 text-2xl font-bold">KI-betrieben, menschlich kontrolliert</h2>
         <p className="mb-4 text-[var(--muted-foreground)]">
-          1of10 wird von spezialisierten KI-Agenten betrieben, die jeweils eine
-          Domäne abdecken:
+          1of10 wird mit Hilfe spezialisierter KI-Agenten betrieben, die in
+          klar abgegrenzten Bereichen arbeiten:
         </p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { name: "Nestor", role: "Beschaffung", emoji: "📦" },
-            { name: "Elena", role: "Finanzen", emoji: "📊" },
-            { name: "Denny", role: "Compliance", emoji: "⚖️" },
-            { name: "Felix", role: "Frontend", emoji: "🎨" },
-            { name: "Sven", role: "Security", emoji: "🔒" },
-            { name: "Sophie", role: "SEO", emoji: "🔍" },
-            { name: "Gregor", role: "Growth", emoji: "🚀" },
-            { name: "Aria", role: "AI-Citation", emoji: "🔮" },
-            { name: "Mira", role: "Simulation", emoji: "🧠" },
-          ].map((agent) => (
+            "Einkauf & Lizenz-Beschaffung",
+            "Finanzen & Buchhaltung",
+            "Compliance (DSGVO, EU AI Act)",
+            "Frontend & UX",
+            "Sicherheit & Datenschutz",
+            "SEO & Auffindbarkeit",
+            "Wachstum & Marketing",
+            "Markt- und Trendanalyse",
+            "Simulation & A/B-Tests",
+          ].map((domain) => (
             <div
-              key={agent.name}
-              className="flex items-center gap-3 rounded-lg border bg-[var(--card)] p-3"
+              key={domain}
+              className="rounded-lg border bg-[var(--card)] p-3"
             >
-              <span className="text-xl">{agent.emoji}</span>
-              <div>
-                <p className="text-sm font-semibold">{agent.name}</p>
-                <p className="text-xs text-[var(--muted-foreground)]">
-                  {agent.role}
-                </p>
-              </div>
+              <p className="text-sm text-[var(--foreground)]">{domain}</p>
             </div>
           ))}
         </div>
         <p className="mt-4 text-sm text-[var(--muted-foreground)]">
-          Alle KI-Entscheidungen unterliegen einem 4-stufigen Risikoklassen-System.
-          Hochrisiko-Aktionen erfordern menschliche Genehmigung.{" "}
+          Wichtig: Keine KI entscheidet eigenständig über deine Erstattung,
+          deinen Preis oder kritische Bestellungen — sicherheitsrelevante
+          Aktionen werden grundsätzlich von einem Menschen freigegeben.{" "}
           <a href="/transparenz" className="text-[var(--primary)] underline">
             Mehr erfahren →
           </a>

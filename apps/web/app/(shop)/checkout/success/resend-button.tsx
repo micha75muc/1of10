@@ -68,7 +68,7 @@ export function ResendButton({ orderId, sessionId }: ResendButtonProps) {
         onClick={handleClick}
         disabled={state === "sending"}
         aria-busy={state === "sending"}
-        className="inline-flex items-center gap-2 rounded-lg bg-[var(--foreground)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 transition"
+        className="inline-flex items-center gap-2 rounded-lg bg-[var(--primary)] px-4 py-2 text-sm font-medium text-[var(--primary-foreground)] hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 transition"
       >
         <RefreshCw
           className={`h-4 w-4 ${state === "sending" ? "animate-spin" : ""}`}

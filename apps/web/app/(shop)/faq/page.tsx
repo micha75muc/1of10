@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     q: "Nutzt 1of10 künstliche Intelligenz?",
-    a: "Ja, wir nutzen KI-Agenten für Geschäftsprozesse wie Einkauf, Finanzen, Marketing und Compliance. Alle KI-Entscheidungen unterliegen einem 4-stufigen Risikoklassen-System. Hochrisiko-Aktionen erfordern menschliche Genehmigung. Details auf unserer Transparenz-Seite.",
+    a: "Ja, wir nutzen KI-Agenten für Geschäftsprozesse wie Einkauf, Finanzen, Marketing und Compliance. Kritische Aktionen werden grundsätzlich von einem Menschen freigegeben. Details auf unserer Transparenz-Seite.",
   },
 ];
 

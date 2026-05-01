@@ -194,9 +194,9 @@ export default function BlogPost() {
           </p>
           <p>
             Außerdem setzen wir KI-Agenten ein, um unsere internen Prozesse zu
-            steuern — vom Einkauf bis zur Compliance-Prüfung. Jede KI-Aktion
-            durchläuft ein Risikoklassen-System. Kritische Entscheidungen werden
-            immer von einem Menschen freigegeben. Mehr dazu auf unserer{" "}
+            steuern — vom Einkauf bis zur Compliance-Prüfung. Kritische
+            Entscheidungen werden grundsätzlich von einem Menschen freigegeben.
+            Mehr dazu auf unserer{" "}
             <Link
               href="/transparenz"
               className="font-medium text-[var(--primary)] hover:underline"

@@ -14,9 +14,9 @@ const features = [
   { feature: "Transparente Preise", us: "✅ Endpreis angezeigt", others: "Oft versteckte Gebühren" },
   { feature: "Zahlung via Stripe", us: "✅ PCI-DSS konform", others: "Variiert" },
   { feature: "DSGVO-konform", us: "✅ Deutsches Unternehmen", others: "Oft nicht-EU" },
-  { feature: "KI-gesteuerte Prozesse", us: "✅ 21 Agenten", others: "Nein" },
+  { feature: "KI-gesteuerte Prozesse", us: "✅ AI-Native Commerce", others: "Nein" },
   { feature: "EU AI Act Transparenz", us: "✅ Offengelegt", others: "N/A" },
-  { feature: "Risikoklassen-System", us: "✅ 4 Stufen", others: "Nein" },
+  { feature: "Menschliche Freigabe für kritische Aktionen", us: "✅", others: "Nein" },
   { feature: "Widerrufsverzicht dokumentiert", us: "✅ BGB §356 Abs. 5", others: "Oft unklar" },
 ];
 

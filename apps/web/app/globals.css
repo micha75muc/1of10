@@ -12,7 +12,7 @@
     --card-foreground: oklch(0.16 0.005 270);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.16 0.005 270);
-    --primary: oklch(0.16 0.005 270);        /* black-ish primary, used for CTAs */
+    --primary: oklch(0.59 0.18 256);         /* Apple Blue #0071e3 — primary CTA */
     --primary-foreground: oklch(0.985 0 0);
     --secondary: oklch(0.96 0.002 90);       /* #f5f5f7 — Apple product tile bg */
     --secondary-foreground: oklch(0.16 0.005 270);

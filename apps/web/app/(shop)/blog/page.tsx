@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Static blog posts — Inge can generate more via LLM
+// Static blog posts
 const POSTS = [
   {
     slug: "warum-jeder-10-kauf-kostenlos",

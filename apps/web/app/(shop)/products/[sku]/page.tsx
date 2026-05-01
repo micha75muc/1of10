@@ -445,7 +445,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
             <Link
               href={`/checkout?productId=${product.id}`}
-              className="shrink-0 rounded-lg bg-[var(--foreground)] px-5 py-3 text-sm font-bold text-[var(--primary-foreground)] hover:opacity-90 transition"
+              className="shrink-0 rounded-lg bg-[var(--primary)] px-5 py-3 text-sm font-bold text-[var(--primary-foreground)] hover:opacity-90 transition"
             >
               Kaufen
             </Link>
