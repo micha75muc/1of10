@@ -26,9 +26,9 @@ Letzter Stand: 2026-05-01 (post E2E dry-run)
 | `ADMIN_PASSWORD_HASH` | Admin-Login (bcrypt) | Vercel + `.env.local` | ✅ | ✅ Production |
 | `SESSION_SECRET` | HMAC für Admin-Session-Cookie | Vercel + `.env.local` | ✅ | ✅ Production |
 | `ADMIN_API_KEY` | Header-Auth für Deploy-Scripts | Vercel + `.env.local` | ❌ Placeholder | ❓ |
-| `DSD_API_USERNAME` | DSD Europe Login | Vercel + `.env.local` | ❌ | ❌ Sandbox-Creds noch nicht gesetzt (Live-Fulfillment offen) |
-| `DSD_API_PASSWORD` | DSD Europe Passwort | Vercel + `.env.local` | ❌ | ❌ siehe oben |
-| `DSD_API_BASE_URL` | DSD Endpoint (sandbox vs live) | Vercel + `.env.local` | ❌ | ❌ |
+| `DSD_API_USERNAME` | DSD Europe Login | **Hetzner agents container only** | n/a (Web nutzt Proxy) | ✅ Sandbox `medialess_apitest` aktiv auf Hetzner |
+| `DSD_API_PASSWORD` | DSD Europe Passwort | **Hetzner agents container only** | n/a | ✅ siehe oben |
+| `DSD_API_BASE_URL` | DSD Endpoint | Hetzner agents container | n/a | ✅ `https://www.dsdeurope.nl/api2s/` |
 | `DSD_FULFILMENT_MODE` | `quickorder` (default) | `.env.local` | n/a | ❌ Default OK, aber TEST_MODE liefert Dummy-Keys |
 | `MIROFISH_LLM_API_KEY` | Customer-Simulation (optional) | `.env.local` | ❌ Optional | n/a |
 | `GH_TOKEN` | GitHub CLI / API | Windows Credential Manager (via `gh auth login`) | ✅ (mhahnel_microsoft + micha75muc) | n/a |
@@ -45,14 +45,20 @@ Mit `STRIPE_MOCK=true`, `TEST_MODE=true`, `EMAIL_MOCK=true` sind **alle Pfade ge
 - ✅ Refund-Flow (Winner) → `isWinner=true`, `status=REFUNDED`, `refundStatus=COMPLETED`
 - ✅ CSV-Export, Admin-Analytics, Admin-Health (207 spiegelt 3 historische DELIVERY_FAILED korrekt)
 - ✅ Admin Orders-Liste (`/admin/orders`) mit Email-/Status-Filter
+- ✅ **DSD Sandbox-Roundtrip live verifiziert** (2026-05-01, 16:20 CET)
+  - Aufruf: `POST http://178.104.52.53:8000/internal/procurement/activate` mit Bearer `AGENTS_INTERNAL_SECRET`
+  - Produkt: `DSD150002`, vollständige client-Felder (first_name, last_name, phone, company)
+  - Antwort: `ok=true`, `certificate_id=5369169`, `license_key=XXXX-XXXX-XXXX-XXXX` (Sandbox maskiert echten Key)
+  - Bedeutet: Hetzner agents → DSD-Login → quickOrder → getActivationCodes funktioniert vollständig in Production-Wiring
+  - `DSD_DELIVERY_ENABLED=true` ist auf Hetzner aktiv (kein Mock-Fallback ausgelöst)
 
 **Was vor Live-Schaltung noch zwingend nötig ist:**
 
-1. **Resend Domain-Verify** für `medialess.de` (oder eigene `1of10.de` Domain)
-2. **DSD Sandbox-Creds** + ein echter `quickOrder`-Roundtrip mit echtem Lizenz-Key
+1. **Resend Domain-Verify** für `medialess.de` (oder eigene `1of10.de` Domain) — Playbook: `.copilot/control-center/playbooks/resend-domain-verify.md`
+2. **DSD Production-Account** statt Sandbox (`medialess` statt `medialess_apitest`) + IP-Whitelist für Hetzner-IP `178.104.52.53` (Mail an Jody van Gils — Draft: `content/email-dsd-2026-05-01-ip-whitelist-production.md`)
 3. `STRIPE_MOCK` und `EMAIL_MOCK` auf `false` setzen, echte Stripe-Keys hinterlegen, Webhook-Secret konfigurieren
-4. `TEST_MODE=false` — sonst werden Dummy-Keys ausgeliefert
-5. 52 Produkte ohne `dsdProductCode` aktuell ausgeblendet — entweder mappen (`packages/db/scripts/map-dsd-codes.mjs`) oder dauerhaft akzeptieren
+4. `TEST_MODE=false` — sonst werden Dummy-Keys ausgeliefert (TEST_MODE-Bypass in `lib/email.ts` und `key-delivery.ts`)
+5. 52 Produkte ohne `dsdProductCode` aktuell ausgeblendet — Mapper benötigt entweder Hetzner-Deploy eines Catalog-Endpoints oder direkte DSD-Creds auf einer Maschine mit Internet
 
 
 ## Externe Accounts (Owner-Zugang)
