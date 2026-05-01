@@ -7,6 +7,7 @@ import { SearchBar } from "./search-bar";
 import { CategoryFilter } from "./category-filter";
 import { SortDropdown } from "./sort-dropdown";
 import { Suspense } from "react";
+import { Zap, Shield, Server, Lock, Key } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Software kaufen — Antivirus, Office, Windows & mehr",
@@ -67,7 +68,7 @@ export default async function ProductsPage({
       </div>
 
       {/* Page Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="mb-3 text-3xl font-bold">Alle Produkte</h1>
         <p className="text-[var(--muted-foreground)]">
           Antivirus, Office, Windows &amp; mehr — alles wird{" "}
@@ -76,6 +77,33 @@ export default async function ProductsPage({
           </span>{" "}
           zugestellt.
         </p>
+      </div>
+
+      {/* C4 — Trust-Bar above-the-fold: kompakt, sofort sichtbar.
+          Auf <md scrollt der Strip horizontal, damit die Icons nicht zu klein werden. */}
+      <div className="mb-6 -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+        <ul className="flex min-w-max items-center gap-2 sm:min-w-0 sm:gap-3 sm:flex-wrap">
+          <li className="inline-flex items-center gap-1.5 rounded-full border bg-[var(--card)] px-3 py-1.5 text-xs font-medium">
+            <Zap className="h-3.5 w-3.5 text-[var(--brand-teal)]" />
+            Sofort-Lieferung
+          </li>
+          <li className="inline-flex items-center gap-1.5 rounded-full border bg-[var(--card)] px-3 py-1.5 text-xs font-medium">
+            <Shield className="h-3.5 w-3.5 text-[var(--brand-blue)]" />
+            Stripe-Zahlung
+          </li>
+          <li className="inline-flex items-center gap-1.5 rounded-full border bg-[var(--card)] px-3 py-1.5 text-xs font-medium">
+            <Server className="h-3.5 w-3.5 text-[var(--gold)]" />
+            Hosting in DE
+          </li>
+          <li className="inline-flex items-center gap-1.5 rounded-full border bg-[var(--card)] px-3 py-1.5 text-xs font-medium">
+            <Lock className="h-3.5 w-3.5 text-[var(--brand-blue)]" />
+            SSL-verschlüsselt
+          </li>
+          <li className="inline-flex items-center gap-1.5 rounded-full border bg-[var(--card)] px-3 py-1.5 text-xs font-medium">
+            <Key className="h-3.5 w-3.5 text-[var(--brand-teal)]" />
+            Original-Keys
+          </li>
+        </ul>
       </div>
 
       {/* Suche + Filter + Sort */}

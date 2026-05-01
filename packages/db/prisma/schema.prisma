@@ -75,6 +75,11 @@ model Order {
   deliveredAt      DateTime?
   deliveryError    String?
 
+  // S5 — Email send tracking. Webhook tries once, records success or error.
+  // Admin can retry via /api/admin/orders/[id]/retry-email when failed.
+  emailSentAt   DateTime?
+  emailError    String?
+
   // Billing address — Stripe collects via billing_address_collection.
   // Required for Kleinunternehmer-Kaufbeleg + Steuerprüfung audit trail
   // (§147 AO 10-Jahre-Aufbewahrungsfrist).

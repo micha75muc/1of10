@@ -28,8 +28,31 @@ export default function VergleichPage() {
         Was unterscheidet 1of10 von anderen Software-Shops?
       </p>
 
-      {/* Vergleichstabelle */}
-      <div className="overflow-x-auto rounded-xl border">
+      {/* Vergleich: Tabelle (md+) und Karten (mobile) — C8 */}
+      {/* Mobile: stacked cards */}
+      <div className="space-y-3 md:hidden">
+        {features.map((row, i) => (
+          <div
+            key={i}
+            className="rounded-xl border bg-[var(--card)] p-4"
+          >
+            <p className="mb-2 text-sm font-semibold">{row.feature}</p>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--primary)]">1of10</p>
+                <p className="text-[var(--primary)]">{row.us}</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Andere</p>
+                <p className="text-[var(--muted-foreground)]">{row.others}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: Tabelle */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-[var(--secondary)]">
