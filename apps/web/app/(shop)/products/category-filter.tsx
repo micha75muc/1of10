@@ -3,24 +3,28 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 
-const CATEGORIES = [
-  { value: "", label: "Alle" },
-  { value: "Antivirus", label: "Antivirus" },
-  { value: "Internet Security", label: "Internet Security" },
-  { value: "Total Security", label: "Total Security" },
-  { value: "Office", label: "Office" },
-  { value: "Windows", label: "Windows" },
-  { value: "VPN", label: "VPN" },
-  { value: "Utilities", label: "Utilities" },
-  { value: "Backup", label: "Backup" },
-  { value: "Mac", label: "Mac" },
-] as const;
+const CATEGORY_LABELS: Record<string, string> = {
+  Antivirus: "Antivirus",
+  "Internet Security": "Internet Security",
+  "Total Security": "Total Security",
+  Office: "Office",
+  Windows: "Windows",
+  VPN: "VPN",
+  Utilities: "Utilities",
+  Backup: "Backup",
+  Mac: "Mac",
+};
 
-export function CategoryFilter() {
+export function CategoryFilter({ categories }: { categories: string[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const active = searchParams.get("category") ?? "";
+
+  const options = [
+    { value: "", label: "Alle" },
+    ...categories.map((c) => ({ value: c, label: CATEGORY_LABELS[c] ?? c })),
+  ];
 
   function handleFilter(category: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -41,7 +45,7 @@ export function CategoryFilter() {
       aria-label="Kategorie-Filter"
       aria-busy={isPending}
     >
-      {CATEGORIES.map((cat) => (
+      {options.map((cat) => (
         <button
           key={cat.value}
           type="button"

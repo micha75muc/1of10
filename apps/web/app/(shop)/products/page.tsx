@@ -60,6 +60,19 @@ export default async function ProductsPage({
     select: { id: true, sku: true, name: true, sellPrice: true, uvpPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true },
   });
 
+  // Only surface category chips that actually have at least one fulfillable
+  // product — categories without DSD-mapped SKUs would otherwise lead to an
+  // empty results page.
+  const availableCategoryRows = await prisma.product.groupBy({
+    by: ["category"],
+    where: { stockLevel: { gt: 0 }, dsdProductCode: { not: null } },
+    _count: { _all: true },
+  });
+  const availableCategories = availableCategoryRows
+    .map((r) => r.category)
+    .filter((c): c is string => !!c)
+    .sort();
+
   return (
     <div className="py-2 sm:py-6">
       {/* Winner Ticker — quiet social proof, kept above the page header. */}
@@ -85,7 +98,7 @@ export default async function ProductsPage({
         <Suspense>
           <SearchBar />
           <div className="flex flex-wrap items-center gap-3">
-            <CategoryFilter />
+            <CategoryFilter categories={availableCategories} />
             <SortDropdown />
             <p className="ml-auto text-sm text-[var(--muted-foreground)]">
               {products.length === 1 ? "1 Produkt" : `${products.length} Produkte`}

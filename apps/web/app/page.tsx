@@ -31,6 +31,17 @@ export default async function HomePage() {
     where: { stockLevel: { gt: 0 }, dsdProductCode: { not: null } },
   });
 
+  // Only render category cards on the home page for categories that actually
+  // have at least one fulfillable product.
+  const availableCategoryRows = await prisma.product.groupBy({
+    by: ["category"],
+    where: { stockLevel: { gt: 0 }, dsdProductCode: { not: null } },
+    _count: { _all: true },
+  });
+  const availableCategories = new Set(
+    availableCategoryRows.map((r) => r.category).filter((c): c is string => !!c)
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Quiet top strip — same treatment as shop layout for consistency */}
@@ -189,7 +200,7 @@ export default async function HomePage() {
                   { cat: "Utilities", desc: "Tools" },
                   { cat: "Backup", desc: "Datensicherung" },
                   { cat: "Mac", desc: "Mac-Software" },
-                ].map((c) => (
+                ].filter((c) => availableCategories.has(c.cat)).map((c) => (
                   <Link
                     key={c.cat}
                     href={`/products?category=${encodeURIComponent(c.cat)}`}
