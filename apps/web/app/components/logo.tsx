@@ -1,69 +1,62 @@
 /**
- * 1of10 Logo — Uses the golden ball PNG logo.
- * Fallback to SVG if image not available.
+ * 1of10 Wordmark — clean monochrome typographic logo.
+ * Replaces the previous golden-ball PNG to match the Apple-style design.
  */
-
-import Image from "next/image";
 
 export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const sizes = {
-    sm: { icon: 28, text: "text-lg" },
-    md: { icon: 36, text: "text-xl" },
-    lg: { icon: 56, text: "text-4xl" },
+    sm: "text-base",
+    md: "text-[19px]",
+    lg: "text-3xl",
   };
-  const s = sizes[size];
 
   return (
-    <span className="inline-flex items-center gap-2">
-      <Image
-        src="/logo-icon.png"
-        alt="1of10"
-        width={s.icon}
-        height={s.icon}
-        priority
-        className="object-contain"
-      />
-      <span className={`${s.text} font-extrabold tracking-tight`}>
-        <span className="text-[var(--muted-foreground)] font-bold">of</span>
-        <span className="text-[var(--foreground)]">10</span>
-      </span>
+    <span
+      className={`inline-flex items-baseline font-semibold tracking-tight text-[var(--foreground)] ${sizes[size]}`}
+      aria-label="1of10"
+    >
+      <span className="text-[var(--muted-foreground)]">1</span>
+      <span className="mx-[0.05em] text-[var(--muted-foreground)]">of</span>
+      <span>10</span>
     </span>
   );
 }
 
 export function LogoIcon({ size = 32 }: { size?: number }) {
+  // Compact wordmark — used where only "1/10" makes sense (favicons, dense UI).
+  const fontSize = Math.round(size * 0.62);
   return (
-    <Image
-      src="/logo-icon.png"
-      alt="1of10"
-      width={size}
-      height={size}
-      priority
-      className="object-contain"
-    />
+    <span
+      className="inline-flex items-center justify-center font-semibold tracking-tight text-[var(--foreground)]"
+      style={{ width: size, height: size, fontSize }}
+      aria-label="1of10"
+    >
+      <span className="text-[var(--muted-foreground)]">1</span>
+      <span className="opacity-60">/</span>
+      <span>10</span>
+    </span>
   );
 }
 
 export function LogoFull({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const sizes = {
-    sm: { width: 150, height: 40 },
-    md: { width: 220, height: 58 },
-    lg: { width: 320, height: 85 },
-  };
-  const s = sizes[size];
+  const display = {
+    sm: "text-3xl",
+    md: "text-5xl",
+    lg: "text-7xl",
+  } as const;
 
   return (
     <span className="inline-flex flex-col items-center">
-      <Image
-        src="/logo.png"
-        alt="1of10 — Wir erstatten jeden 10. Kauf"
-        width={s.width}
-        height={s.height}
-        priority
-        className="object-contain"
-      />
+      <span
+        className={`font-semibold tracking-[-0.02em] text-[var(--foreground)] ${display[size]}`}
+        aria-label="1of10"
+      >
+        <span className="text-[var(--muted-foreground)]">1</span>
+        <span className="mx-[0.04em] text-[var(--muted-foreground)]">of</span>
+        <span>10</span>
+      </span>
       {size === "lg" && (
-        <span className="mt-2 text-xs tracking-widest text-[var(--muted-foreground)] uppercase">
+        <span className="mt-3 text-xs tracking-[0.18em] text-[var(--muted-foreground)] uppercase">
           Wir erstatten jeden 10. Kauf
         </span>
       )}
