@@ -305,132 +305,45 @@ export default async function TransparenzPage() {
         </div>
       </div>
 
-      {/* AI Transparency — EU AI Act */}
+      {/* AI Transparency — EU AI Act (customer-facing, generic disclosure) */}
       <div className="mb-10 rounded-xl border bg-[var(--card)] p-6">
         <h2 className="mb-4 text-xl font-semibold">
-          KI-gesteuerte Prozesse — EU AI Act Transparenz
+          Einsatz von KI
         </h2>
         <div className="space-y-3 text-sm text-[var(--muted-foreground)]">
           <p>
-            1of10 setzt KI-Agenten ein, um Geschäftsprozesse effizient und
-            transparent zu steuern. Gemäß dem EU AI Act informieren wir dich
-            offen darüber, wo und wie KI bei uns zum Einsatz kommt.
+            1of10 nutzt KI nur für interne Geschäftsprozesse — etwa Einkauf,
+            Marketing-Entwürfe, Buchhaltungs-Auswertungen und Compliance-Checks.
           </p>
-          <p className="font-medium text-[var(--foreground)]">
-            Unsere KI-Agenten und ihre Aufgaben:
+          <p className="text-[var(--foreground)] font-medium">
+            Was das für dich als Kunde bedeutet:
           </p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              {
-                name: "Nestor",
-                role: "Einkauf",
-                desc: "Vergleicht Distributoren-Preise und erstellt Preisvorschläge",
-              },
-              {
-                name: "Elena",
-                role: "Finanzen",
-                desc: "Analysiert Bestellungen, Gebühren und erstellt Berichte",
-              },
-              {
-                name: "Inge",
-                role: "Marketing",
-                desc: "Erstellt Content-Entwürfe und bereitet Erstattungskunde-Kommunikation vor",
-              },
-              {
-                name: "Martin",
-                role: "IT & Support",
-                desc: "Beantwortet Support-Anfragen auf Basis unserer Wissensdatenbank",
-              },
-              {
-                name: "Denny",
-                role: "Compliance",
-                desc: "Prüft Prozesse auf Rechtskonformität (DSGVO, BGB, EU AI Act)",
-              },
-            ].map((agent) => (
-              <div
-                key={agent.name}
-                className="rounded-lg border p-3"
-              >
-                <p className="text-xs font-semibold text-[var(--foreground)]">
-                  {agent.name}{" "}
-                  <span className="font-normal text-[var(--muted-foreground)]">
-                    — {agent.role}
-                  </span>
-                </p>
-                <p className="mt-1 text-xs">{agent.desc}</p>
-              </div>
-            ))}
-          </div>
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              <strong className="text-[var(--foreground)]">Keine KI</strong>{" "}
+              entscheidet, ob dein Kauf erstattet wird — das macht ausschließlich
+              unser deterministisches ShuffleBag-Verfahren (siehe oben).
+            </li>
+            <li>
+              <strong className="text-[var(--foreground)]">Keine KI</strong>{" "}
+              setzt Preise individuell für dich. Der Preis ist für alle gleich.
+            </li>
+            <li>
+              <strong className="text-[var(--foreground)]">Keine KI</strong>{" "}
+              entscheidet eigenständig über Bestellungen, Stornos oder
+              Auszahlungen — sicherheitskritische Aktionen werden grundsätzlich
+              von einem Menschen freigegeben.
+            </li>
+          </ul>
           <p className="text-xs">
-            <strong className="text-[var(--foreground)]">Wichtig:</strong> Keine
-            KI trifft eigenständig Entscheidungen, die dich als Kunden direkt
-            betreffen. Die finale Entscheidung über Erstattungen trifft unser
-            technisches System (ShuffleBag) — deterministisch und ohne KI-Einfluss.
-          </p>
-        </div>
-      </div>
-
-      {/* Risk Classes */}
-      <div className="mb-10 rounded-xl border bg-[var(--card)] p-6">
-        <h2 className="mb-4 text-xl font-semibold">
-          Risikoklassen: Wie wir KI kontrollieren
-        </h2>
-        <div className="space-y-3 text-sm text-[var(--muted-foreground)]">
-          <p>
-            Jede Aktion unserer KI-Agenten wird durch ein
-            4-stufiges Risikoklassen-System kontrolliert. Je höher das Risiko,
-            desto strenger die Kontrolle.
-          </p>
-          <div className="space-y-2">
-            {[
-              {
-                level: "1",
-                label: "Nur Lesen",
-                color: "text-green-500",
-                desc: "Datenabfragen — keine Genehmigung nötig",
-              },
-              {
-                level: "2",
-                label: "Entwurf",
-                color: "text-blue-500",
-                desc: "Vorschläge erstellen — wird geloggt, keine Blockierung",
-              },
-              {
-                level: "3",
-                label: "Schreibzugriff",
-                color: "text-purple-500",
-                desc: "Änderungen an Daten — wird in der Datenbank protokolliert",
-              },
-              {
-                level: "4",
-                label: "Hochrisiko",
-                color: "text-red-500",
-                desc: "Kritische Aktionen — blockiert bis ein Mensch genehmigt",
-              },
-            ].map((rc) => (
-              <div
-                key={rc.level}
-                className="flex items-start gap-3 rounded-lg border p-3"
-              >
-                <span
-                  className={`mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${rc.color} bg-current/10`}
-                >
-                  {rc.level}
-                </span>
-                <div>
-                  <p className="text-xs font-semibold text-[var(--foreground)]">
-                    {rc.label}
-                  </p>
-                  <p className="text-xs">{rc.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs">
-            Alle Aktionen der Stufe 4 — wie der Einkauf neuer Lizenzschlüssel
-            oder die Veröffentlichung von Erstattungskunden — landen in einer
-            Genehmigungswarteschlange und werden erst nach menschlicher
-            Freigabe ausgeführt.
+            Diese Offenlegung erfolgt im Sinne des EU&nbsp;AI&nbsp;Act
+            (Verordnung&nbsp;2024/1689). Hast du Fragen dazu?{" "}
+            <a
+              href="mailto:info@medialess.de"
+              className="text-[var(--gold)] underline-offset-4 hover:underline"
+            >
+              info@medialess.de
+            </a>
           </p>
         </div>
       </div>
