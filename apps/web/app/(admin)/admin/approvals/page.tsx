@@ -15,7 +15,7 @@ export default async function ApprovalsPage() {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Approval Queue</h1>
         {pending > 0 && (
-          <span className="rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-800">
+          <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-sm font-medium text-[var(--foreground)] ring-1 ring-[var(--border)]">
             {pending} ausstehend
           </span>
         )}

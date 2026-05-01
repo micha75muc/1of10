@@ -46,17 +46,17 @@ export default function WiderrufPage() {
         </p>
       </section>
 
-      <section className="rounded-lg border border-yellow-300 bg-yellow-50 p-6">
-        <h2 className="mb-3 text-xl font-semibold text-yellow-800">
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--secondary)] p-6">
+        <h2 className="mb-3 text-xl font-semibold text-[var(--foreground)]">
           Vorzeitiges Erlöschen des Widerrufsrechts bei digitalen Inhalten
         </h2>
-        <p className="text-yellow-900">
+        <p className="text-[var(--foreground)]">
           Das Widerrufsrecht erlischt bei Verträgen zur Lieferung von digitalen
           Inhalten, die nicht auf einem körperlichen Datenträger geliefert
           werden, wenn der Unternehmer mit der Ausführung des Vertrags begonnen
           hat, nachdem der Verbraucher
         </p>
-        <ol className="list-decimal pl-6 mt-3 space-y-2 text-yellow-900">
+        <ol className="list-decimal pl-6 mt-3 space-y-2 text-[var(--foreground)]">
           <li>
             ausdrücklich zugestimmt hat, dass der Unternehmer mit der Ausführung
             des Vertrags vor Ablauf der Widerrufsfrist beginnt, und
@@ -66,8 +66,8 @@ export default function WiderrufPage() {
             mit Beginn der Ausführung des Vertrags sein Widerrufsrecht verliert
           </li>
         </ol>
-        <p className="mt-3 text-yellow-900">(§356 Abs.&nbsp;5 BGB).</p>
-        <p className="mt-3 font-semibold text-yellow-800">
+        <p className="mt-3 text-[var(--foreground)]">(§356 Abs.&nbsp;5 BGB).</p>
+        <p className="mt-3 font-semibold text-[var(--foreground)]">
           Diese Zustimmung wird im Rahmen des Bestellvorgangs durch eine
           separate Checkbox eingeholt.
         </p>

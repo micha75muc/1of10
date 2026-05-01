@@ -398,7 +398,7 @@ export default async function TransparenzPage() {
               {
                 level: "3",
                 label: "Schreibzugriff",
-                color: "text-yellow-500",
+                color: "text-purple-500",
                 desc: "Änderungen an Daten — wird in der Datenbank protokolliert",
               },
               {

@@ -8,7 +8,7 @@ type SearchParams = { email?: string; status?: string };
 const STATUS_BADGE: Record<string, string> = {
   PAID: "bg-blue-500/15 text-blue-300",
   DELIVERED: "bg-green-500/15 text-green-300",
-  REFUNDED: "bg-amber-500/15 text-amber-300",
+  REFUNDED: "bg-blue-500/15 text-blue-300",
   DELIVERY_FAILED: "bg-red-500/15 text-red-300",
   REFUND_FAILED: "bg-red-500/15 text-red-300",
 };
