@@ -45,6 +45,51 @@ export async function GET(req: Request) {
     };
   }
 
+  // Optional: simulate the mock checkout end-to-end if ?probe=checkout is set.
+  if (url.searchParams.get("probe") === "checkout") {
+    try {
+      const { prisma } = await import("@repo/db");
+      const product = await prisma.product.findFirst({
+        where: { stockLevel: { gt: 0 } },
+        orderBy: { sellPrice: "asc" },
+      });
+      if (!product) {
+        out.checkoutProbe = { error: "no product with stock found" };
+      } else {
+        const probeRes = await fetch(`${url.origin}/api/checkout`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productId: product.id,
+            customerEmail: "diag+probe@1of10-dummy.local",
+            dsgvoOptIn: true,
+            bgbWiderrufOptIn: true,
+            customerName: "Diag Probe",
+            customerPhone: "+491700000000",
+            customerAddress: {
+              line1: "Teststr 1",
+              city: "Berlin",
+              postal_code: "10115",
+              country: "DE",
+            },
+          }),
+        });
+        const text = await probeRes.text();
+        out.checkoutProbe = {
+          status: probeRes.status,
+          body: text.slice(0, 1500),
+        };
+      }
+    } catch (e) {
+      const err = e as Error;
+      out.checkoutProbeError = {
+        name: err.name,
+        message: err.message,
+        stack: err.stack?.split("\n").slice(0, 10),
+      };
+    }
+  }
+
   return NextResponse.json(out, {
     headers: { "Cache-Control": "no-store" },
   });

@@ -36,9 +36,10 @@ export const mockStripe = {
         customer_email: string;
         metadata: Record<string, string>;
       }): Promise<MockCheckoutSession> => {
+        const sessionId = `cs_mock_${randomUUID()}`;
         const session: MockCheckoutSession = {
-          id: `cs_mock_${randomUUID()}`,
-          url: params.success_url.replace("{CHECKOUT_SESSION_ID}", `cs_mock_${randomUUID()}`),
+          id: sessionId,
+          url: params.success_url.replace("{CHECKOUT_SESSION_ID}", sessionId),
           metadata: params.metadata,
           amount_total: params.line_items.reduce(
             (sum, item) => sum + item.price_data.unit_amount * item.quantity,

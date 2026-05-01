@@ -13,10 +13,18 @@ function getStripeClient() {
   const useMock = process.env.STRIPE_MOCK === "true";
 
   if (useMock) {
-    if (process.env.NODE_ENV === "production") {
-      throw new Error("FATAL: STRIPE_MOCK=true in production is not allowed");
+    // Mock is allowed in development OR in production when TEST_MODE=true is
+    // explicitly set. The TEST_MODE flag is reserved for staging-style
+    // dummy-purchase E2E runs against the live deployment before the real
+    // launch. Without TEST_MODE, mock mode in production is a fatal misconfig.
+    if (
+      process.env.NODE_ENV === "production" &&
+      process.env.TEST_MODE !== "true"
+    ) {
+      throw new Error(
+        "FATAL: STRIPE_MOCK=true in production requires TEST_MODE=true",
+      );
     }
-    // Mock mode — only in development
     return mockStripe;
   }
 

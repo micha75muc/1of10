@@ -18,22 +18,34 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Too many requests" }, { status: 429 });
     }
 
-    // Verify Stripe webhook signature — prevents fake webhook calls
+    // Verify Stripe webhook signature — prevents fake webhook calls.
+    // In TEST_MODE+STRIPE_MOCK we skip the check so /api/checkout can fire
+    // synthetic events from the mock layer without holding a real signing secret.
     const rawBody = await req.text();
     const sig = req.headers.get("stripe-signature");
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-    if (!sig || !webhookSecret) {
-      logWarn("webhook.signature.missing");
-      return NextResponse.json({ error: "Missing signature" }, { status: 400 });
-    }
+    const mockMode =
+      process.env.STRIPE_MOCK === "true" && process.env.TEST_MODE === "true";
 
     let event: Stripe.Event;
-    try {
-      event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
-    } catch (err) {
-      logError(err, { event: "webhook.signature.invalid" });
-      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    if (mockMode && req.headers.get("x-mock-internal") === "1") {
+      try {
+        event = JSON.parse(rawBody) as Stripe.Event;
+      } catch (err) {
+        logError(err, { event: "webhook.mock.parse_failed" });
+        return NextResponse.json({ error: "Invalid mock body" }, { status: 400 });
+      }
+    } else {
+      if (!sig || !webhookSecret) {
+        logWarn("webhook.signature.missing");
+        return NextResponse.json({ error: "Missing signature" }, { status: 400 });
+      }
+      try {
+        event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+      } catch (err) {
+        logError(err, { event: "webhook.signature.invalid" });
+        return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+      }
     }
 
     if (event.type === "charge.dispute.created") {
@@ -279,8 +291,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true, orderId: order.id });
   } catch (err) {
     logError(err, { event: "webhook.processing.failed" });
+    const mockDebug =
+      process.env.STRIPE_MOCK === "true" &&
+      process.env.TEST_MODE === "true" &&
+      req.headers.get("x-mock-internal") === "1"
+        ? {
+            _testModeDebug: {
+              message: err instanceof Error ? err.message : String(err),
+              stack:
+                err instanceof Error
+                  ? err.stack?.split("\n").slice(0, 15)
+                  : undefined,
+            },
+          }
+        : {};
     return NextResponse.json(
-      { error: "Webhook processing failed" },
+      { error: "Webhook processing failed", ...mockDebug },
       { status: 500 }
     );
   }

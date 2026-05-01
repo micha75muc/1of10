@@ -15,7 +15,32 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { productId, customerEmail, dsgvoOptIn, bgbWiderrufOptIn } = body;
+    const {
+      productId,
+      customerEmail,
+      dsgvoOptIn,
+      bgbWiderrufOptIn,
+      // Optional in TEST_MODE: lets the dummy E2E supply a name/address/phone
+      // that real Stripe would normally collect via billing_address_collection.
+      customerName,
+      customerPhone,
+      customerAddress,
+    } = body as {
+      productId?: string;
+      customerEmail?: string;
+      dsgvoOptIn?: boolean;
+      bgbWiderrufOptIn?: boolean;
+      customerName?: string;
+      customerPhone?: string;
+      customerAddress?: {
+        line1?: string;
+        line2?: string | null;
+        city?: string;
+        postal_code?: string;
+        country?: string;
+        state?: string | null;
+      };
+    };
 
     // Server-side validation — compliance is non-negotiable
     if (!dsgvoOptIn || !bgbWiderrufOptIn) {
@@ -78,11 +103,6 @@ export async function POST(req: NextRequest) {
       success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/products`,
       customer_email: customerEmail,
-      // DSD requires first_name, last_name and phone for client_mandatory
-      // products (e.g. Trend Micro). Stripe collects them via:
-      //   - billing_address_collection: "required" → name + address
-      //   - phone_number_collection.enabled: true   → phone
-      // Both end up on session.customer_details for the webhook to read.
       billing_address_collection: "required",
       phone_number_collection: { enabled: true },
       metadata: {
@@ -91,6 +111,64 @@ export async function POST(req: NextRequest) {
         bgbWiderrufOptIn: String(bgbWiderrufOptIn),
       },
     });
+
+    // Mock + TEST_MODE: simulate a real Stripe webhook fire so the order
+    // actually gets created and the success page can render. Without this,
+    // mock checkout would always show OrderPending. Real Stripe (sk_test_*)
+    // does the same via the standard webhook path.
+    if (
+      process.env.STRIPE_MOCK === "true" &&
+      process.env.TEST_MODE === "true"
+    ) {
+      const synthEvent = {
+        id: `evt_mock_${Date.now()}`,
+        type: "checkout.session.completed",
+        data: {
+          object: {
+            id: session.id,
+            metadata: {
+              productId: product.id,
+              dsgvoOptIn: String(dsgvoOptIn),
+              bgbWiderrufOptIn: String(bgbWiderrufOptIn),
+            },
+            customer_email: customerEmail,
+            amount_total: Math.round(Number(product.sellPrice) * 100),
+            payment_intent: `pi_mock_${Date.now()}`,
+            customer_details: {
+              name: customerName ?? "Test Kunde",
+              phone: customerPhone ?? "+491700000000",
+              address: customerAddress ?? {
+                line1: "Teststrasse 1",
+                line2: null,
+                city: "Berlin",
+                postal_code: "10115",
+                country: "DE",
+                state: null,
+              },
+            },
+          },
+        },
+      };
+
+      // Fire the webhook synchronously so the order is committed before we
+      // return the success URL to the client. Failure here surfaces as 500
+      // so the operator sees the issue immediately during dummy runs.
+      const hookUrl = `${appUrl}/api/webhooks/stripe`;
+      const hookRes = await fetch(hookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-mock-internal": "1",
+        },
+        body: JSON.stringify(synthEvent),
+      });
+      if (!hookRes.ok) {
+        const txt = await hookRes.text().catch(() => "");
+        throw new Error(
+          `mock webhook fire failed: ${hookRes.status} ${txt.slice(0, 800)}`,
+        );
+      }
+    }
 
     return NextResponse.json({ url: session.url, sessionId: session.id });
   } catch (err) {
@@ -112,6 +190,19 @@ export async function POST(req: NextRequest) {
           "Wir konnten dich gerade nicht zur Bezahlung weiterleiten. Bitte versuche es in einer Minute erneut. Wenn das Problem bestehen bleibt, schreib uns an info@medialess.de — bitte gib diese Fehler-ID an: " +
           errorId,
         errorId,
+        // Detailed server error exposed only in TEST_MODE so the operator can
+        // debug dummy-purchase failures via the API directly.
+        ...(process.env.TEST_MODE === "true"
+          ? {
+              _testModeDebug: {
+                message: err instanceof Error ? err.message : String(err),
+                stack:
+                  err instanceof Error
+                    ? err.stack?.split("\n").slice(0, 12)
+                    : undefined,
+              },
+            }
+          : {}),
       },
       { status: 500 },
     );
