@@ -65,6 +65,40 @@ export async function sendEmail(params: EmailParams) {
 }
 
 /**
+ * O3 — Operations alert email an den Admin (ADMIN_EMAIL). Wird best-effort
+ * versandt, schluckt eigene Fehler — soll niemals den auslösenden Webhook /
+ * Endpoint scheitern lassen. Body bleibt generisch (Order-ID + Event-Code,
+ * keine sensiblen Kunden-PII), damit das Postfach nicht versehentlich zur
+ * Schatten-DB wird.
+ */
+export async function notifyAdmin(params: {
+  event: string; // z.B. "delivery.failed" / "refund.failed" / "email.failed"
+  orderId: string;
+  detail?: string;
+}): Promise<void> {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail) {
+    console.warn("[notifyAdmin] ADMIN_EMAIL not set — skipping alert", params);
+    return;
+  }
+  try {
+    const subject = `[1of10 Alert] ${params.event} — ${params.orderId}`;
+    const html = `
+      <p><strong>Operations-Alarm:</strong> ${params.event}</p>
+      <p>Order: <code>${params.orderId}</code></p>
+      ${params.detail ? `<p>Details: ${params.detail.slice(0, 500)}</p>` : ""}
+      <p>→ <a href="https://1of10.de/admin">Admin öffnen</a></p>
+      <hr/>
+      <p style="color:#888;font-size:12px;">Automatischer Alarm — keine PII enthalten.</p>
+    `;
+    await sendEmail({ to: adminEmail, subject, html });
+  } catch (err) {
+    // bewusst silent — wir wollen den auslösenden Flow nicht crashen
+    console.error("[notifyAdmin] alert email failed", err);
+  }
+}
+
+/**
  * Format-Helper für deutsche Datum/Beträge in der Mail.
  * Bewusst keine Intl-Aufrufe in HTML-Strings — Resend liefert nicht in
  * jedem Render-Kontext eine TZ-aware Locale.

@@ -2,7 +2,7 @@
 
 > **Status-Legende:** 🔴 blockiert / 🟡 in Arbeit / 🟢 fertig / ⚪ nicht prio
 
-**Stand:** 2026-05-01 (Round 4 hardening complete)
+**Stand:** 2026-05-01 (Round 5 hardening complete)
 **Ziel:** Alles 100 % sauber, compliant und attraktiv aus **Kunden- & Betreiber-Sicht** — *bevor* live + Marketing.
 
 ---
@@ -62,9 +62,9 @@
 | # | Item | Status | PR |
 |---|------|--------|----|
 | O1 | E2E-Test-Run im Sandbox (Dummy-Kauf → Key → Mail → Status-Page) | ⚪ | — |
-| O2 | Admin-Dashboard health-check (Approvals, Bag-State, Order-Counts) | ⚪ | — |
-| O3 | Monitoring/Alarm bei `DELIVERY_FAILED` | ⚪ | — |
-| O4 | Backup/Restore-Plan für Neon-DB | ⚪ | — |
+| O2 | Admin Health-Check Endpoint /api/admin/health | 🟢 | round-5 |
+| O3 | Admin-Alert bei DELIVERY_FAILED / refund.failed / email.failed | 🟢 | round-5 |
+| O4 | Backup/Restore-Plan für Neon-DB (.copilot/control-center/playbooks/db-backup.md) | 🟢 | round-5 |
 
 ---
 
