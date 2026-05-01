@@ -17,26 +17,47 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function TransparenzPage() {
-  const [totalOrders, totalWinners, totalRefundAmount, recentWinners, lastWinOrder] =
-    await Promise.all([
-      prisma.order.count(),
-      prisma.order.count({ where: { isWinner: true } }),
-      prisma.order.aggregate({
-        where: { isWinner: true, refundStatus: "COMPLETED" },
-        _sum: { amountTotal: true },
-      }),
-      prisma.order.findMany({
-        where: { isWinner: true },
-        orderBy: { createdAt: "desc" },
-        take: 10,
-        include: { product: true },
-      }),
-      prisma.order.findFirst({
-        where: { isWinner: true },
-        orderBy: { createdAt: "desc" },
-        select: { createdAt: true },
-      }),
-    ]);
+  const [
+    totalOrders,
+    totalWinners,
+    totalRefundAmount,
+    recentWinners,
+    lastWinOrder,
+    activeBag,
+    pastBags,
+  ] = await Promise.all([
+    prisma.order.count(),
+    prisma.order.count({ where: { isWinner: true } }),
+    prisma.order.aggregate({
+      where: { isWinner: true, refundStatus: "COMPLETED" },
+      _sum: { amountTotal: true },
+    }),
+    prisma.order.findMany({
+      where: { isWinner: true },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      include: { product: true },
+    }),
+    prisma.order.findFirst({
+      where: { isWinner: true },
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true },
+    }),
+    // L8: Provably-fair — aktiver Beutel mit SHA-256 Hash öffentlich.
+    // slots werden NICHT angezeigt (das wäre ja der Witz weg) — nur
+    // Hash + Größe + aktueller Index. Nach Beutel-Ende kann der Hash
+    // gegen die offengelegten slots geprüft werden.
+    prisma.shuffleBag.findFirst({
+      where: { isActive: true },
+      select: { id: true, slotsHash: true, currentIndex: true, createdAt: true, slots: true },
+    }),
+    prisma.shuffleBag.findMany({
+      where: { isActive: false },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: { id: true, slotsHash: true, slots: true, createdAt: true },
+    }),
+  ]);
 
   // Count orders since last winner (correct math, not assuming bag size 10)
   const sinceLastWin = lastWinOrder
@@ -179,6 +200,73 @@ export default async function TransparenzPage() {
               manipuliert wurde — ähnlich wie bei Blockchain-basierten
               Fairness-Beweisen.
             </p>
+
+            {activeBag && activeBag.slotsHash && (
+              <div className="mt-4 rounded-md border border-[var(--gold)]/30 bg-[var(--gold)]/5 p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--gold)]">
+                  Aktueller Beutel — live
+                </p>
+                <dl className="mt-2 grid gap-1 text-[11px] sm:grid-cols-[140px_1fr]">
+                  <dt className="text-[var(--muted-foreground)]">Beutel-ID</dt>
+                  <dd className="font-mono break-all">{activeBag.id}</dd>
+                  <dt className="text-[var(--muted-foreground)]">Beutelgröße</dt>
+                  <dd>{activeBag.slots.length} Lose</dd>
+                  <dt className="text-[var(--muted-foreground)]">Aktuelle Position</dt>
+                  <dd>{activeBag.currentIndex} / {activeBag.slots.length}</dd>
+                  <dt className="text-[var(--muted-foreground)]">SHA-256 (slots)</dt>
+                  <dd className="font-mono break-all text-[10px]">{activeBag.slotsHash}</dd>
+                  <dt className="text-[var(--muted-foreground)]">Erstellt</dt>
+                  <dd>
+                    {activeBag.createdAt.toLocaleDateString("de-DE", {
+                      day: "2-digit", month: "2-digit", year: "numeric",
+                      hour: "2-digit", minute: "2-digit",
+                    })}
+                  </dd>
+                </dl>
+                <p className="mt-2 text-[10px] text-[var(--muted-foreground)]">
+                  Die Reihenfolge der Lose ist nicht öffentlich — das wäre
+                  Manipulation Tür und Tor. Sobald der Beutel leer ist, wird er
+                  unten in der „Verifizierbare Beutel"-Liste mit voller
+                  Reihenfolge offengelegt, und du kannst den Hash selbst nachrechnen.
+                </p>
+              </div>
+            )}
+
+            {pastBags.length > 0 && (
+              <div className="mt-4">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+                  Verifizierbare Beutel (abgeschlossen)
+                </p>
+                <p className="mt-1 text-[10px] text-[var(--muted-foreground)]">
+                  Reihenfolge offengelegt. Verifikation:{" "}
+                  <code className="rounded bg-[var(--muted)] px-1 py-0.5">sha256(JSON.stringify(slots))</code>{" "}
+                  muss dem angezeigten Hash entsprechen.
+                </p>
+                <div className="mt-2 space-y-2">
+                  {pastBags.map((bag) => (
+                    <details key={bag.id} className="rounded-md border bg-[var(--background)]/50 p-2 text-[10px]">
+                      <summary className="cursor-pointer font-mono">
+                        {bag.id.slice(0, 8)}… ·{" "}
+                        {bag.createdAt.toLocaleDateString("de-DE")} ·{" "}
+                        {bag.slots.length} Lose
+                      </summary>
+                      <dl className="mt-2 space-y-1">
+                        <div>
+                          <dt className="text-[var(--muted-foreground)]">Hash</dt>
+                          <dd className="font-mono break-all">{bag.slotsHash}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-[var(--muted-foreground)]">Slots (1 = Erstattung)</dt>
+                          <dd className="font-mono break-all">
+                            [{bag.slots.join(", ")}]
+                          </dd>
+                        </div>
+                      </dl>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

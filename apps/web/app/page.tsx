@@ -249,7 +249,7 @@ export default async function HomePage() {
             <div className="text-center mb-14">
               <h2 className="text-3xl font-bold tracking-tight mb-4">So funktioniert 1of10</h2>
               <p className="text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Drei einfache Schritte zu Ihrer Software — und der Möglichkeit einer vollständigen Erstattung.
+                Drei einfache Schritte zu deiner Software — und der Möglichkeit einer vollständigen Erstattung.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -258,7 +258,7 @@ export default async function HomePage() {
                 <div className="h-1 w-12 rounded-full bg-[var(--brand-teal)] mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Produkt wählen</h3>
                 <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
-                  Wählen Sie aus über {totalProducts} Produkten: Antivirus, Office, Windows und mehr.
+                  Wähle aus über {totalProducts} Produkten: Antivirus, Office, Windows und mehr.
                 </p>
               </div>
               <div className="relative rounded-2xl border bg-[var(--card)] p-6 hover:shadow-md transition-all">
@@ -266,7 +266,7 @@ export default async function HomePage() {
                 <div className="h-1 w-12 rounded-full bg-[var(--brand-blue)] mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Sicher bezahlen</h3>
                 <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
-                  Bezahlen Sie sicher über Stripe. Ihr Lizenzschlüssel kommt sofort per E-Mail.
+                  Bezahle sicher über Stripe. Dein Lizenzschlüssel kommt sofort per E-Mail.
                 </p>
               </div>
               <div className="relative rounded-2xl border bg-[var(--card)] p-6 hover:shadow-md transition-all">
@@ -274,7 +274,7 @@ export default async function HomePage() {
                 <div className="h-1 w-12 rounded-full bg-[var(--gold)] mb-4" />
                 <h3 className="text-lg font-semibold mb-2">Erstattung prüfen</h3>
                 <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
-                  Nach dem Kauf erfahren Sie sofort, ob Ihr Kauf als Kulanz erstattet wird. Ihre Software behalten Sie in jedem Fall.
+                  Nach dem Kauf erfährst du sofort, ob dein Kauf als Kulanz erstattet wird. Deine Software behältst du in jedem Fall.
                 </p>
               </div>
             </div>
@@ -292,7 +292,7 @@ export default async function HomePage() {
               </div>
               <h2 className="text-2xl font-bold tracking-tight">Auf dem Laufenden bleiben</h2>
               <p className="mt-3 text-sm text-[var(--muted-foreground)] leading-relaxed">
-                Erhalten Sie Informationen zu neuen Produkten, Angeboten und Erstattungs-Updates.
+                Erhalte Infos zu neuen Produkten, Angeboten und Erstattungs-Updates.
               </p>
               <div className="mt-6 max-w-sm mx-auto">
                 <NewsletterSignup variant="banner" />
@@ -313,7 +313,7 @@ export default async function HomePage() {
                 </span>
               </Link>
               <p className="text-sm text-[var(--primary-foreground)]/60 leading-relaxed">
-                Ihr zuverlässiger Partner für günstige Software. Autorisierte Lizenzschlüssel zu fairen Preisen.
+                Dein zuverlässiger Partner für günstige Software. Autorisierte Lizenzschlüssel zu fairen Preisen.
               </p>
             </div>
             <div>

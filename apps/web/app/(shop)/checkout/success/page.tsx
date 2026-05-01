@@ -82,6 +82,12 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                   : order.refundStatus}
             </span>
           </p>
+          <p className="mt-3 rounded-lg border border-[var(--gold)]/40 bg-white/40 px-3 py-2 text-xs text-[var(--muted-foreground)]">
+            <strong className="text-[var(--foreground)]">Hinweis:</strong> Die
+            Erstattung ist eine <strong>freiwillige Kulanzleistung</strong> —
+            kein Rechtsanspruch, kein Gewinnspiel. Dein Produkt behältst du in
+            jedem Fall.
+          </p>
           {/* Bea: Share buttons for viral loop */}
           <div className="mt-6 space-y-2">
             <p className="text-sm text-[var(--muted-foreground)]">Erzähl es weiter:</p>

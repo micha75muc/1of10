@@ -56,7 +56,7 @@ export default async function ProductsPage({
   const products = await prisma.product.findMany({
     where,
     orderBy,
-    select: { id: true, sku: true, name: true, description: true, sellPrice: true, uvpPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true },
+    select: { id: true, sku: true, name: true, description: true, sellPrice: true, uvpPrice: true, brand: true, category: true, stockLevel: true, imageUrl: true, requiresVendorAccount: true, vendorName: true },
   });
 
   return (
@@ -164,6 +164,14 @@ export default async function ProductsPage({
                   {product.brand && (
                     <span className="rounded-full bg-[var(--primary)]/10 px-2 py-0.5 text-[10px] font-medium text-[var(--primary)]">
                       {product.brand}
+                    </span>
+                  )}
+                  {product.requiresVendorAccount && (
+                    <span
+                      title="Aktivierung erfordert kostenloses Hersteller-Konto"
+                      className="rounded-full border border-[var(--brand-blue)]/40 bg-[var(--brand-blue)]/10 px-2 py-0.5 text-[10px] font-medium text-[var(--brand-blue)]"
+                    >
+                      Hersteller-Konto nötig
                     </span>
                   )}
                   {product.stockLevel > 0 && product.stockLevel <= 5 && (

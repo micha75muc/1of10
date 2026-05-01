@@ -32,21 +32,21 @@
 | L4 | E-Mail-Confirmation: vollständige Widerrufsbelehrung beigefügt (Art. 246a EGBGB) | 🟢 | round-1 |
 | L5 | E-Mail-Confirmation: Bestellnummer, Datum, Verkäufer-Adresse | 🟢 | round-1 |
 | L6 | BGB §356 Abs. 5 Checkbox optisch separiert (gelbes Box) | 🟢 | round-1 |
-| L7 | Cookie-Banner Messaging klären (informational, nicht Consent) | ⚪ | — |
-| L8 | Provably-fair Hash auf `/transparenz` öffentlich anzeigen | ⚪ | — |
-| L9 | Winner-Page: explizit "Freiwillige Kulanzleistung" Hinweis | ⚪ | — |
+| L7 | Cookie-Banner Messaging klären (informational, nicht Consent) | 🟢 | round-2 |
+| L8 | Provably-fair Hash auf `/transparenz` öffentlich anzeigen | 🟢 | round-2 |
+| L9 | Winner-Page: explizit "Freiwillige Kulanzleistung" Hinweis | 🟢 | round-2 |
 
 ## 🛍️ Customer Experience
 
 | # | Item | Status | PR |
 |---|------|--------|----|
 | C1 | Agent-Count konsistent (21 statt mal 21/22) — alle Stellen | 🟢 | round-1 |
-| C2 | Tonale Konsistenz: durchgängig "du" (USP-Block formal "Sie/Ihrer") | ⚪ | — |
-| C3 | Vendor-Account-Badge auf PDP-Header & Catalog-Tile | ⚪ | — |
+| C2 | Tonale Konsistenz: durchgängig "du" (USP-Block formal "Sie/Ihrer") | 🟢 | round-2 |
+| C3 | Vendor-Account-Badge auf PDP-Header & Catalog-Tile | 🟢 | round-2 |
 | C4 | Trust-Bar above-the-fold (Home + Catalog) | ⚪ | — |
 | C5 | About-Page Founder-Avatar (Emoji → echtes Foto) | ⚪ | — |
 | C6 | Standard-FAQ-Block für jedes Produkt (auch ohne Enrichment) | ⚪ | — |
-| C7 | Success-Page Winner-Block: "Kulanzleistung — kein Rechtsanspruch" | ⚪ | — |
+| C7 | Success-Page Winner-Block: "Kulanzleistung — kein Rechtsanspruch" | 🟢 | round-2 |
 | C8 | Mobile Vergleichs-Tabelle (3-col → grid stacked) | ⚪ | — |
 
 ## 💰 Pricing & Margin
