@@ -106,7 +106,7 @@ function Stat({ label, value, highlight }: { label: string; value: number; highl
   );
 }
 
-function Table({ rows }: { rows: { sku: string; name: string; brand: string; category: string; current: string; target: string }[] }) {
+function Table({ rows }: { rows: { sku: string; name: string; brand: string | null; category: string | null; current: string; target: string }[] }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-neutral-200">
       <table className="min-w-full text-sm">
@@ -124,7 +124,7 @@ function Table({ rows }: { rows: { sku: string; name: string; brand: string; cat
             <tr key={r.sku} className="border-t border-neutral-100">
               <td className="px-3 py-2 font-mono text-xs">{r.sku}</td>
               <td className="px-3 py-2">{r.name}</td>
-              <td className="px-3 py-2 text-neutral-600">{r.brand}</td>
+              <td className="px-3 py-2 text-neutral-600">{r.brand ?? "—"}</td>
               <td className="px-3 py-2 font-mono text-xs text-neutral-500">{r.current}</td>
               <td className="px-3 py-2 font-mono text-xs font-medium text-blue-700">{r.target}</td>
             </tr>
