@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { verifyCredentials, createSession } from "../../../../lib/auth";
+import { verifyCredentials, createSession } from "../../../lib/auth";
 
 export default function AdminLoginPage() {
   async function login(formData: FormData) {
