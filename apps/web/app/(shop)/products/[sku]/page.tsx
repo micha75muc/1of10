@@ -79,7 +79,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     },
     take: 4,
     orderBy: { sellPrice: "asc" },
-    select: { sku: true, name: true, brand: true, sellPrice: true, category: true },
+    select: { sku: true, name: true, brand: true, sellPrice: true, category: true, imageUrl: true },
   });
 
   const jsonLd = {
@@ -413,9 +413,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 href={`/products/${r.sku}`}
                 className="group block"
               >
-                <div className="aspect-[4/3] w-full rounded-2xl bg-[var(--tile)] flex items-center justify-center transition group-hover:opacity-90">
-                  <span className="text-base sm:text-lg font-semibold tracking-tight">{r.brand ?? "Software"}</span>
-                </div>
+                <ProductImage
+                  name={r.name}
+                  brand={r.brand}
+                  category={r.category}
+                  imageUrl={r.imageUrl}
+                  size="card"
+                />
                 <p className="mt-3 text-[10px] font-medium uppercase tracking-[0.08em] text-[var(--muted-foreground)]">{r.brand}</p>
                 <p className="mt-1 text-sm font-semibold leading-tight line-clamp-2 group-hover:underline underline-offset-4">{r.name}</p>
                 <p className="mt-2 text-sm font-semibold">{Number(r.sellPrice).toFixed(2).replace(".", ",")} €</p>
