@@ -2,7 +2,7 @@
 
 > **Status-Legende:** 🔴 blockiert / 🟡 in Arbeit / 🟢 fertig / ⚪ nicht prio
 
-**Stand:** 2026-05-01 (Round 1 hardening complete) — initial nach 3 Audit-Agenten (CX, Legal, Backend)
+**Stand:** 2026-05-01 (Round 3 hardening complete) — initial nach 3 Audit-Agenten (CX, Legal, Backend)
 **Ziel:** Alles 100 % sauber, compliant und attraktiv aus **Kunden- & Betreiber-Sicht** — *bevor* live + Marketing.
 
 ---
@@ -18,9 +18,9 @@
 | S5 | Email-Send Retry / dead-letter (Resend down → Order ohne Mail) | ⚪ | — |
 | S6 | Adress-Felder auf `Order` (Stripe sammelt, wir speichern nicht) | 🟢 | round-1 |
 | S7 | Rate-Limit auf Redis statt In-Memory (Vercel Cold-Start = bypass) | ⚪ | — |
-| S8 | CSRF: Admin-Cookie auf `sameSite: "strict"` | ⚪ | — |
-| S9 | Stock-Decrement in Transaktion mit Order-Create | ⚪ | — |
-| S10 | 10 Dependabot-Vulnerabilities (7 high, 3 moderate) | ⚪ | — |
+| S8 | CSRF: Admin-Cookie auf `sameSite: "strict"` | 🟢 | round-3 |
+| S9 | Stock-Decrement in Transaktion mit Order-Create | 🟢 | round-3 |
+| S10 | Dependabot konfiguriert (npm + actions, weekly) | 🟢 | round-3 |
 
 ## ⚖️ Legal / Compliance
 
@@ -45,7 +45,7 @@
 | C3 | Vendor-Account-Badge auf PDP-Header & Catalog-Tile | 🟢 | round-2 |
 | C4 | Trust-Bar above-the-fold (Home + Catalog) | ⚪ | — |
 | C5 | About-Page Founder-Avatar (Emoji → echtes Foto) | ⚪ | — |
-| C6 | Standard-FAQ-Block für jedes Produkt (auch ohne Enrichment) | ⚪ | — |
+| C6 | Standard-FAQ-Block für jedes Produkt (auch ohne Enrichment) | 🟢 | round-3 |
 | C7 | Success-Page Winner-Block: "Kulanzleistung — kein Rechtsanspruch" | 🟢 | round-2 |
 | C8 | Mobile Vergleichs-Tabelle (3-col → grid stacked) | ⚪ | — |
 

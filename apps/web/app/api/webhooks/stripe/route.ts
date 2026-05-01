@@ -102,27 +102,39 @@ export async function POST(req: NextRequest) {
     // 🎲 Shuffle Bag — garantiert: jeder 10. Kauf ist kostenlos
     const isWinner = await drawFromShuffleBag();
 
-    // Create order
-    const order = await prisma.order.create({
-      data: {
-        stripeSessionId: sessionId,
-        productId,
-        customerEmail,
-        customerName: customerName ?? null,
-        customerPhone: customerPhone ?? null,
-        customerAddressLine1: billingAddress?.line1 ?? null,
-        customerAddressLine2: billingAddress?.line2 ?? null,
-        customerCity: billingAddress?.city ?? null,
-        customerPostalCode: billingAddress?.postal_code ?? null,
-        customerCountry: billingAddress?.country ?? null,
-        amountTotal: amountTotal / 100, // Convert from cents
-        status: "PAID",
-        bgbWiderrufOptIn: metadata.bgbWiderrufOptIn === "true",
-        dsgvoOptIn: metadata.dsgvoOptIn === "true",
-        isWinner,
-        refundStatus: isWinner ? "INITIATED" : null,
-      },
-      include: { product: true },
+    // S9 — Order-Create + Stock-Decrement atomar:
+    // Wenn der Stock-Decrement nach dem Order-Create fehlschlägt (DB-Disconnect,
+    // Constraint-Violation, …), bleibt der Bestand inkonsistent. Mit $transaction
+    // wird beides committed oder beides rolled back — und der Webhook returned
+    // 500, sodass Stripe automatisch retry'd. Idempotenz bleibt durch die
+    // unique constraint auf stripeSessionId gewahrt.
+    const order = await prisma.$transaction(async (tx) => {
+      const created = await tx.order.create({
+        data: {
+          stripeSessionId: sessionId,
+          productId,
+          customerEmail,
+          customerName: customerName ?? null,
+          customerPhone: customerPhone ?? null,
+          customerAddressLine1: billingAddress?.line1 ?? null,
+          customerAddressLine2: billingAddress?.line2 ?? null,
+          customerCity: billingAddress?.city ?? null,
+          customerPostalCode: billingAddress?.postal_code ?? null,
+          customerCountry: billingAddress?.country ?? null,
+          amountTotal: amountTotal / 100,
+          status: "PAID",
+          bgbWiderrufOptIn: metadata.bgbWiderrufOptIn === "true",
+          dsgvoOptIn: metadata.dsgvoOptIn === "true",
+          isWinner,
+          refundStatus: isWinner ? "INITIATED" : null,
+        },
+        include: { product: true },
+      });
+      await tx.product.update({
+        where: { id: productId },
+        data: { stockLevel: { decrement: 1 } },
+      });
+      return created;
     });
 
     // If winner → initiate refund
@@ -156,13 +168,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Decrement stock
-    await prisma.product.update({
-      where: { id: productId },
-      data: { stockLevel: { decrement: 1 } },
-    });
-
-    // 🔑 E9 Key Delivery — activate product at DSD and store license key.
+    // 🔑 E9 Key Delivery— activate product at DSD and store license key.
     // Winners still get the key (they keep the product, refund is on top).
     // Orders without a dsdProductCode fall back to manual fulfilment.
     let licenseKey: string | undefined;
