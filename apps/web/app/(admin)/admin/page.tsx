@@ -30,7 +30,15 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="mb-6 text-3xl font-bold">Admin Dashboard</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <Link
+          href="/admin/catalog-backfill"
+          className="rounded-full border border-neutral-300 px-4 py-2 text-sm hover:border-blue-500 hover:text-blue-600"
+        >
+          Katalog-Backfill →
+        </Link>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => {
           const content = (
