@@ -364,12 +364,43 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           </div>
         )}
 
-        {/* FAQ */}
-        {enrichment?.faq && enrichment.faq.length > 0 && (
+      {/* FAQ — falls Enrichment vorhanden, ansonsten Standard-FAQ (C6) */}
+      {(() => {
+        const enrichmentFaq = enrichment?.faq && enrichment.faq.length > 0 ? enrichment.faq : null;
+        const standardFaq = [
+          {
+            q: "Bekomme ich eine Original-Lizenz?",
+            a: `Ja. ${product.name} wird über autorisierte Distributoren bezogen — kein Grey Market, keine OEM-Restbestände aus Drittländern. Du erhältst einen offiziellen, beim Hersteller registrierbaren Aktivierungsschlüssel.`,
+          },
+          {
+            q: "Wann wird die Lizenz geliefert?",
+            a: "Sofort nach Zahlungseingang per E-Mail — typischerweise unter einer Minute. Falls die Mail nicht ankommt, prüfe bitte den Spam-Ordner oder kontaktiere uns über das Kontaktformular.",
+          },
+          {
+            q: "Wie aktiviere ich das Produkt?",
+            a: product.requiresVendorAccount
+              ? `${product.vendorName ?? "Der Hersteller"} verlangt ein kostenloses Konto (ca. 2 Min). Wir senden dir mit dem Schlüssel eine genaue Anleitung — Schritt für Schritt, mit Screenshots.`
+              : "Du kopierst den Aktivierungsschlüssel aus der E-Mail in das Hersteller-Programm. Eine kurze Anleitung liegt jeder Lieferung bei.",
+          },
+          {
+            q: "Was passiert, wenn die Aktivierung nicht klappt?",
+            a: "Schreib uns über das Kontaktformular — wir antworten innerhalb von 24 Stunden (werktags meist innerhalb weniger Stunden) und tauschen den Schlüssel im Zweifel kostenlos aus.",
+          },
+          {
+            q: "Wie funktioniert die Erstattung bei jedem 10. Kauf?",
+            a: "Wir nutzen ein nachvollziehbares Verfahren (siehe /transparenz): aus 10 Plätzen wird einer zufällig als Gewinner gezogen. Bei Treffer erstatten wir den vollen Kaufpreis automatisch über Stripe — du behältst die Lizenz. Es ist eine freiwillige Kulanzleistung, kein Rechtsanspruch.",
+          },
+          {
+            q: "Ist mein Kauf sicher?",
+            a: "Zahlung läuft komplett über Stripe (PCI-DSS Level 1, SSL-verschlüsselt). Wir sehen weder deine Kartendaten noch speichern wir sie. Hosting in Deutschland, DSGVO-konform.",
+          },
+        ];
+        const faq = enrichmentFaq ?? standardFaq;
+        return (
           <div className="rounded-xl border bg-[var(--card)] p-6 lg:col-span-2">
             <h2 className="text-base font-semibold mb-4">Häufige Fragen</h2>
             <div className="space-y-4">
-              {enrichment.faq.map((item, i) => (
+              {faq.map((item, i) => (
                 <div key={i} className="border-b border-[var(--border)] pb-4 last:border-b-0 last:pb-0">
                   <h3 className="text-sm font-semibold mb-1">{item.q}</h3>
                   <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">{item.a}</p>
@@ -377,12 +408,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               ))}
             </div>
           </div>
-        )}
+        );
+      })()}
 
-        {/* If no FAQ, system req takes full width */}
-        {(!enrichment?.faq || enrichment.faq.length === 0) && enrichment?.systemReq && (
-          <div className="lg:col-span-2" />
-        )}
+      {/* If no system req, FAQ takes full row */}
+      {!enrichment?.systemReq && (
+        <div className="hidden lg:block lg:col-span-1" />
+      )}
       </div>
 
       {/* Related Products */}

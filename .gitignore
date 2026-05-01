@@ -62,3 +62,6 @@ coverage/
 # Control Center — local secrets (never commit!)
 .copilot/control-center/secrets.local.*
 .copilot/control-center/**/*.secret.*
+
+# Local analysis scratchpad (margin scripts, plots)
+Scratchpad/

@@ -36,7 +36,12 @@ export async function createSession(): Promise<void> {
   cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    // Sven (Security): "strict" → Cookie wird bei cross-site Requests NICHT mitgesendet.
+    // Damit ist CSRF auf Admin-Endpoints praktisch unmöglich. Login flow funktioniert
+    // weiter, weil die Login-POST-Action vom selben Origin (1of10.de/admin/login)
+    // ausgeht. Trade-off: ein Klick auf einen Admin-Link aus einer fremden Domain
+    // (z.B. eine E-Mail) führt zur abgemeldeten Session — gewollt.
+    sameSite: "strict",
     path: "/",
     maxAge: SESSION_DURATION / 1000,
   });
